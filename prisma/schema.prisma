@@ -6,12 +6,83 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Topping {
+    id          Int       @id @default(autoincrement())
+    toppingName String    @unique
+    price       Int
+    Product     Product[]
+}
+
+model Ingredient {
+    id             Int       @id @default(autoincrement())
+    ingredientName String    @unique
+    optional       Boolean   @default(false)
+    included       Boolean   @default(true)
+    Product        Product[]
+}
+
+model Product {
+    id                  Int                     @id @default(autoincrement())
+    productName         String                  @unique
+    variations          ProductVariation[]
+    toppings            Topping[]
+    ingredients         Ingredient[]
+    availableInPosition MenuPosition_Category[] @relation("availableInPosition")
+    defaultInPosition   MenuPosition_Category[] @relation("defaultInPosition")
+}
+
+model ProductVariation {
+    id        Int      @id @default(autoincrement())
+    weight    String
+    size      String
+    price     Int
+    Product   Product? @relation(fields: [productId], references: [id])
+    productId Int?
+
+    @@unique([size, productId])
+}
+
+model MenuPosition {
+    id               Int                     @id @default(autoincrement())
+    menuPositionName String                  @unique
+    description      String?
+    category         Category                @relation(fields: [categoryId], references: [id])
+    categoryId       Int
+    categoryMap      MenuPosition_Category[]
+}
+
+model MenuPosition_Category {
+    id                 Int               @id @default(autoincrement())
+    menuPosition       MenuPosition      @relation(fields: [menuPositionId], references: [id])
+    menuPositionId     Int
+    category           Category          @relation(fields: [categoryId], references: [id])
+    categoryId         Int
+    categoryDiscount   CategoryDiscount? @relation(fields: [categoryDiscountId], references: [id])
+    categoryDiscountId Int?
+    products           Product[]         @relation("availableInPosition")
+    defaultProduct     Product           @relation(name: "defaultInPosition", fields: [productId], references: [id])
+    productId          Int
+
+    @@unique([menuPositionId, categoryId, productId])
+}
+
+model Category {
+    id                    Int                     @id @default(autoincrement())
+    categoryName          String                  @unique
+    listed                Boolean                 @default(true)
+    MenuPosition          MenuPosition[]
+    MenuPosition_Category MenuPosition_Category[]
+    CategoryDiscount      CategoryDiscount[]
+}
+
+model CategoryDiscount {
+    id                    Int                     @id @default(autoincrement())
+    discountSize          Int
+    category              Category                @relation(fields: [categoryId], references: [id])
+    categoryId            Int
+    MenuPosition_Category MenuPosition_Category[]
 }
