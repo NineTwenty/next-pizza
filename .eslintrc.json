@@ -23,8 +23,7 @@
     "plugin:promise/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/jsx-runtime",
-    "prettier",
-    "plugin:prettier/recommended"
+    "prettier"
   ],
   "rules": {
     "react/function-component-definition": [
