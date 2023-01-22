@@ -49,8 +49,10 @@ export function Navbar({ links, activeLink }: NavbarProps) {
         {links.map((path) => (
           <li
             key={path}
-            className={`m-1 h-8 rounded-2xl bg-gray-100 px-4 leading-8 text-gray-600 ${
-              path === activeLink ? 'bg-orange-100 text-orange-700' : ''
+            className={`m-1 h-8 rounded-2xl px-4 leading-8 ${
+              path === activeLink
+                ? 'bg-orange-100 text-orange-700'
+                : 'bg-gray-100 text-gray-600'
             }`}
           >
             <a href={`#${path}`}>{path}</a>
