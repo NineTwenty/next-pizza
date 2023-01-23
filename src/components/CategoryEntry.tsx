@@ -1,3 +1,4 @@
+import { MenuPosition } from 'components/MenuPosition';
 import { useEffect, useRef } from 'react';
 import { useMenuPositions } from 'utils/apiHooks';
 
@@ -34,10 +35,20 @@ export function CategoryEntry({ title, id, setActiveCategory }: CategoryProps) {
     return () => observer.disconnect();
   }, [setActiveCategory, title]);
 
-  function populateMenuPositions({ menuPositions }: NonNullable<typeof data>) {
-    return menuPositions.map((menuPosition) => (
-      // TODO: Replace with actual menuPosition component
-      <div>{menuPosition.menuPositionName}</div>
+  function populateMenuPositions({
+    menuPositions,
+    ingredients,
+    products,
+    toppings,
+  }: NonNullable<typeof data>) {
+    return menuPositions.map((position) => (
+      <MenuPosition
+        position={position}
+        ingredients={ingredients}
+        products={products}
+        toppings={toppings}
+        key={position.id}
+      />
     ));
   }
 
