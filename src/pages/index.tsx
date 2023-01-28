@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { type NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import { api } from 'utils/api';
 import { Navbar } from 'components/Navbar';
 import { CategoryEntry } from 'components/CategoryEntry';
+import { Header } from 'components/Header';
 
 // TODO: Use SSR
 const Home: NextPage = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>();
   const { isSuccess, data } = api.entities.getCategories.useQuery(undefined, {
     staleTime: Infinity,
@@ -22,18 +23,7 @@ const Home: NextPage = () => {
       </Head>
       {isSuccess ? (
         <>
-          <header className='flex px-4 py-3'>
-            <Image
-              className='mr-3'
-              src='logo.svg'
-              width={26}
-              height={26}
-              alt='Logo'
-            />
-            <h1 className='space-x-5 text-lg font-bold tracking-wider'>
-              NEXT PIZZA
-            </h1>
-          </header>
+          <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
           <Navbar
             activeLink={activeCategory}
             links={data
