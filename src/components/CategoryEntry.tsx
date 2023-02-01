@@ -41,15 +41,18 @@ export function CategoryEntry({ title, id, setActiveCategory }: CategoryProps) {
     products,
     toppings,
   }: NonNullable<typeof data>) {
-    return menuPositions.map((position) => (
-      <MenuPosition
-        position={position}
-        ingredients={ingredients}
-        products={products}
-        toppings={toppings}
-        key={position.id}
-      />
-    ));
+    return menuPositions.ids.map((positionId) => {
+      const position = menuPositions.entities[positionId];
+      return position ? (
+        <MenuPosition
+          position={position}
+          ingredients={ingredients}
+          products={products}
+          toppings={toppings}
+          key={positionId}
+        />
+      ) : null;
+    });
   }
 
   return (
