@@ -6,6 +6,7 @@ import type {
   DenormalizedProduct,
 } from 'types/server';
 import { capitalizeFirstLetter } from 'utils/common';
+import { MenuPositionModal } from 'components/MenuPositionModal';
 
 type MenuPositionProps = {
   position: DenormalizedMenuPosition;
@@ -20,6 +21,7 @@ export function MenuPosition({
   products,
   toppings,
 }: MenuPositionProps) {
+  const [isOpen, setIsOpen] = useState(false);
   // Find initialy displayed position price
   const [price] = useState(() =>
     position.categoryMap.reduce((minPositionPrice, map) => {
@@ -68,7 +70,12 @@ export function MenuPosition({
     );
 
   return (
-    <article className='flex border-b border-slate-100 py-6 last:border-b-0'>
+    <article
+      onClick={() => {
+        setIsOpen(true);
+      }}
+      className='flex border-b border-slate-100 py-6 last:border-b-0'
+    >
       <div className='m-2 mr-4 flex h-28 w-28 flex-shrink-0 items-center justify-center rounded-full bg-orange-200 p-4 text-center'>
         {/* TODO: Use actual position image */}
         {position.menuPositionName}
@@ -81,6 +88,19 @@ export function MenuPosition({
           className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm leading-8 text-orange-700'
         >{`от ${price} ₽`}</button>
       </main>
+      {typeof window === 'object' && isOpen && (
+        <MenuPositionModal
+          position={position}
+          ingredients={activeIngredients}
+          name={position.menuPositionName}
+          toppings={toppings}
+          products={products}
+          description={description}
+          closeCallback={() => {
+            setIsOpen(false);
+          }}
+        />
+      )}
     </article>
   );
 }
