@@ -126,21 +126,18 @@ export function MenuPositionModal({
             exit={{ y: '100%' }}
             className='relative top-0 h-full overflow-y-scroll overscroll-y-contain'
           >
+            <div className='fixed top-0 flex aspect-square w-full items-center justify-center  bg-orange-200 text-center'>
+              {`Photo${scrollYProgress.get()}`}
+            </div>
             <div
               ref={containerRef}
               className='flex h-[101vh] flex-col overflow-y-auto bg-white'
             >
-              <motion.div
-                style={{ opacity: scrollYProgress }}
-                className='bg-white'
-              >
-                <div className='fixed top-0 flex aspect-square w-full items-center justify-center  bg-orange-200 text-center'>
-                  {`Photo${scrollYProgress.get()}`}
-                </div>
-              </motion.div>
               <main className='z-10 h-full justify-between'>
-                <div className='h-[50vw] w-full' />
-                <div ref={targetRef} className='h-[50vw] w-full' />
+                <motion.div style={{ opacity: scrollYProgress }}>
+                  <div className='h-[50vw] w-full' />
+                  <div ref={targetRef} className='h-[50vw] w-full' />
+                </motion.div>
                 <section className='min-h-full bg-white/60 p-4 backdrop-blur'>
                   <h2 className='text-2xl'>{name}</h2>
                   {contentByCategory}
