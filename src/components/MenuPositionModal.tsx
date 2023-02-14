@@ -1,7 +1,7 @@
 import type { Ingredient } from '@prisma/client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'react-feather';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
 
@@ -24,8 +24,6 @@ export function MenuPositionModal({
   toppings,
   products,
 }: MenuPositionModalProps) {
-  const [inState, setInState] = useState(true);
-
   const contentByCategory =
     position.categoryMap.length === 1 ? (
       <>
@@ -61,7 +59,10 @@ export function MenuPositionModal({
         {description}
         <ul className='flex flex-col gap-4'>
           {position.categoryMap.map((categoryMap) => (
-            <li className='flex rounded-xl bg-white p-4 shadow-md'>
+            <li
+              key={categoryMap.id}
+              className='flex rounded-xl bg-white p-4 shadow-md'
+            >
               <div className='mr-4 flex aspect-square w-32 items-center justify-center rounded-full bg-orange-200 text-center'>
                 {products.entities[categoryMap.defaultProduct]?.productName}
               </div>
@@ -82,6 +83,19 @@ export function MenuPositionModal({
       </>
     );
 
+  const [inState, setInState] = useState(true);
+  const containerRef = useRef(null);
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    container: containerRef,
+    offset: ['end start', 'start'],
+  });
+
+  useEffect(() => {
+    if (inState) targetRef.current?.scrollIntoView(true);
+  }, [inState]);
+
   return (
     <AnimatePresence onExitComplete={closeCallback}>
       {inState && (
@@ -101,7 +115,7 @@ export function MenuPositionModal({
             exit={{ opacity: 0 }}
             className='absolute h-full w-full bg-black/60'
           />
-          <motion.div
+          <motion.section
             transition={{
               type: 'tween',
               ease: [0, 0, 0.25, 1],
@@ -112,21 +126,27 @@ export function MenuPositionModal({
             exit={{ y: '100%' }}
             className='relative top-0 h-full overflow-y-scroll overscroll-y-contain'
           >
-            <div className='flex h-[101vh] flex-col bg-white'>
-              <div className='bg-white'>
+            <div
+              ref={containerRef}
+              className='flex h-[101vh] flex-col overflow-y-auto bg-white'
+            >
+              <motion.div
+                style={{ opacity: scrollYProgress }}
+                className='bg-white'
+              >
                 <div className='fixed top-0 flex aspect-square w-full items-center justify-center  bg-orange-200 text-center'>
-                  {/* TODO: Use actual position image */}
-                  Photo
+                  {`Photo${scrollYProgress.get()}`}
                 </div>
-              </div>
-              <main className='z-10 h-full justify-between overflow-y-auto'>
-                <div className='aspect-square w-full' />
-                <section className='bg-white/60 p-4 backdrop-blur'>
+              </motion.div>
+              <main className='z-10 h-full justify-between'>
+                <div className='h-[50vw] w-full' />
+                <div ref={targetRef} className='h-[50vw] w-full' />
+                <section className='min-h-full bg-white/60 p-4 backdrop-blur'>
                   <h2 className='text-2xl'>{name}</h2>
                   {contentByCategory}
                 </section>
               </main>
-              <footer className='sticky bottom-0 z-10 flex h-min justify-center bg-white p-4'>
+              <footer className='absolute bottom-0 z-10 flex h-min w-full justify-center bg-white p-4'>
                 <button
                   type='button'
                   onClick={() => setInState(false)}
@@ -143,7 +163,7 @@ export function MenuPositionModal({
                 <ChevronDown className='h-12 w-12' />
               </button>
             </div>
-          </motion.div>
+          </motion.section>
         </div>
       )}
     </AnimatePresence>
