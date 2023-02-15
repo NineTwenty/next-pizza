@@ -130,7 +130,7 @@ export function MenuPositionModal({
               style={{ opacity: scrollYProgress }}
               className='fixed top-0 aspect-square w-full bg-white'
             >
-              <div className='flex h-full w-full items-center justify-center bg-orange-200 text-center'>
+              <div className='flex h-full w-full items-center justify-center rounded-full bg-orange-200 text-center'>
                 {`Photo${scrollYProgress.get()}`}{' '}
               </div>
             </motion.div>
