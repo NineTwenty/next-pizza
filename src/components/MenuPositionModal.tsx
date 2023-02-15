@@ -104,7 +104,7 @@ export function MenuPositionModal({
           onClick={(event) => event.stopPropagation()}
           className='fixed top-0 left-0 z-10 h-full w-full'
         >
-          <motion.div
+          <motion.div // Fade background
             transition={{
               type: 'tween',
               ease: [0, 0, 0.25, 1],
@@ -115,7 +115,7 @@ export function MenuPositionModal({
             exit={{ opacity: 0 }}
             className='absolute h-full w-full bg-black/60'
           />
-          <motion.section
+          <motion.section // Main modal
             transition={{
               type: 'tween',
               ease: [0, 0, 0.25, 1],
@@ -126,40 +126,43 @@ export function MenuPositionModal({
             exit={{ y: '100%' }}
             className='relative top-0 h-full overflow-y-scroll overscroll-y-contain'
           >
-            <div className='fixed top-0 flex aspect-square w-full items-center justify-center  bg-orange-200 text-center'>
-              {`Photo${scrollYProgress.get()}`}
-            </div>
-            <div
-              ref={containerRef}
-              className='flex h-[101vh] flex-col overflow-y-auto bg-white'
+            <motion.div // Position image, fixed in background in mobile layout
+              style={{ opacity: scrollYProgress }}
+              className='fixed top-0 aspect-square w-full bg-white'
             >
-              <main className='z-10 h-full justify-between'>
-                <motion.div style={{ opacity: scrollYProgress }}>
-                  <div className='h-[50vw] w-full' />
-                  <div ref={targetRef} className='h-[50vw] w-full' />
-                </motion.div>
-                <section className='min-h-full bg-white/60 p-4 backdrop-blur'>
-                  <h2 className='text-2xl'>{name}</h2>
-                  {contentByCategory}
-                </section>
-              </main>
-              <footer className='absolute bottom-0 z-10 flex h-min w-full justify-center bg-white p-4'>
-                <button
-                  type='button'
-                  onClick={() => setInState(false)}
-                  className='h-12 w-full rounded-full bg-orange-600 text-white'
-                >
-                  КОРЗИНА
-                </button>
-              </footer>
+              <div className='flex h-full w-full items-center justify-center bg-orange-200 text-center'>
+                {`Photo${scrollYProgress.get()}`}{' '}
+              </div>
+            </motion.div>
+            <main
+              ref={containerRef}
+              className='flex h-[101vh] flex-col justify-between overflow-y-auto overscroll-y-contain bg-white pb-24'
+            >
+              <div className='z-10'>
+                <div className='h-[50vw] w-full' />
+                <div ref={targetRef} className='h-[50vw] w-full' />
+              </div>
+              <section className='bg-white/60 px-4 pt-4 backdrop-blur'>
+                <h2 className='text-2xl'>{name}</h2>
+                {contentByCategory}
+              </section>
+            </main>
+            <footer className='fixed -bottom-2  flex h-min w-full justify-center bg-white p-3 pb-5'>
               <button
                 type='button'
                 onClick={() => setInState(false)}
-                className='fixed top-0 z-10 m-3 rounded-full bg-white shadow'
+                className='h-12 w-full rounded-full bg-orange-600 text-white'
               >
-                <ChevronDown className='h-12 w-12' />
+                КОРЗИНА
               </button>
-            </div>
+            </footer>
+            <button
+              type='button'
+              onClick={() => setInState(false)}
+              className='fixed top-0 z-10 m-3 rounded-full bg-white shadow'
+            >
+              <ChevronDown className='h-12 w-12' />
+            </button>
           </motion.section>
         </div>
       )}
