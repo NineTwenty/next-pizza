@@ -4,6 +4,7 @@ import { ChevronDown } from 'react-feather';
 import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
+import { PizzaForm } from 'components/PizzaForm';
 
 type MenuPositionModalProps = {
   description: string;
@@ -26,34 +27,12 @@ export function MenuPositionModal({
 }: MenuPositionModalProps) {
   const contentByCategory =
     position.categoryMap.length === 1 ? (
-      <>
-        {description}
-        <h4 className='my-2'>Добавить по вкусу</h4>
-        <ul className='grid grid-cols-3 gap-2'>
-          {products.entities[
-            position.categoryMap.reduce(
-              (acc, { defaultProduct }) => defaultProduct,
-              0
-            )
-          ]?.toppings
-            .map((toppingId) => toppings.entities[toppingId])
-            .map((topping) => {
-              if (!topping) return null;
-              return (
-                <li
-                  key={topping.id}
-                  className='flex flex-col items-center rounded-xl bg-white p-2 shadow-xl'
-                >
-                  <div className='aspect-square w-full bg-amber-200' />
-                  <span className='text-center text-xs'>
-                    {topping.toppingName}
-                  </span>
-                  <span>{topping.price}</span>
-                </li>
-              );
-            })}
-        </ul>
-      </>
+      <PizzaForm
+        description={description}
+        position={position}
+        products={products}
+        toppings={toppings}
+      />
     ) : (
       <>
         {description}
