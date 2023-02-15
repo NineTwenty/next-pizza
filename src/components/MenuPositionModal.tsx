@@ -147,7 +147,7 @@ export function MenuPositionModal({
                 {contentByCategory}
               </section>
             </main>
-            <footer className='fixed -bottom-2  flex h-min w-full justify-center bg-white p-3 pb-5'>
+            <footer className='fixed -bottom-2 flex h-min w-full justify-center bg-white/60 px-4 py-3 pb-5 backdrop-blur'>
               <button
                 type='button'
                 onClick={() => setInState(false)}
@@ -159,7 +159,7 @@ export function MenuPositionModal({
             <button
               type='button'
               onClick={() => setInState(false)}
-              className='fixed top-0 z-10 m-3 rounded-full bg-white shadow'
+              className='fixed top-0 z-10 m-4 rounded-full bg-white shadow'
             >
               <ChevronDown className='h-12 w-12' />
             </button>
