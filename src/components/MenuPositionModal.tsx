@@ -6,6 +6,7 @@ import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
 import { PizzaForm } from 'components/PizzaForm';
 import { ComboForm } from 'components/ComboForm';
+import { FormProvider, useForm } from 'react-hook-form';
 
 type MenuPositionModalProps = {
   description: string;
@@ -17,6 +18,14 @@ type MenuPositionModalProps = {
   products: ProductState;
 };
 
+export type PositionFormState = {
+  id: number;
+  product: number;
+  includedToppings: number[];
+  excludedIngredients: number[];
+  variation: number;
+};
+
 export function MenuPositionModal({
   description,
   closeCallback,
@@ -26,22 +35,7 @@ export function MenuPositionModal({
   toppings,
   products,
 }: MenuPositionModalProps) {
-  const contentByCategory =
-    position.categoryMap.length === 1 ? (
-      <PizzaForm
-        description={description}
-        position={position}
-        products={products}
-        toppings={toppings}
-      />
-    ) : (
-      <ComboForm
-        description={description}
-        position={position}
-        products={products}
-      />
-    );
-
+  // Animation related block
   const [inState, setInState] = useState(true);
   const containerRef = useRef(null);
   const targetRef = useRef<HTMLDivElement>(null);
@@ -54,6 +48,48 @@ export function MenuPositionModal({
   useEffect(() => {
     if (inState) targetRef.current?.scrollIntoView(true);
   }, [inState]);
+
+  // Form logic block
+  // Default form state for all included positions
+  const [categoryMapState, setCategoryMapState] = useState<
+    Record<number, PositionFormState>
+  >(
+    position.categoryMap.map((categoryMap) => {
+      const defaultProduct = products.entities[categoryMap.defaultProduct];
+
+      if (!defaultProduct) {
+        throw new Error('Attempt to access missing default product');
+      }
+
+      return {
+        id: categoryMap.id,
+        product: defaultProduct.id,
+        includedToppings: [],
+        excludedIngredients: [],
+        variation: defaultProduct.variations.length > 1 ? 2 : 1,
+      };
+    })
+  );
+
+  const methods = useForm();
+  const firstCategoryMap = categoryMapState[0];
+
+  const contentByCategory =
+    position.categoryMap.length === 1 && firstCategoryMap ? (
+      <PizzaForm
+        categoryMap={firstCategoryMap}
+        description={description}
+        position={position}
+        products={products}
+        toppings={toppings}
+      />
+    ) : (
+      <ComboForm
+        description={description}
+        position={position}
+        products={products}
+      />
+    );
 
   return (
     <AnimatePresence onExitComplete={closeCallback}>
@@ -102,8 +138,10 @@ export function MenuPositionModal({
                 <div ref={targetRef} className='h-[50vw] w-full' />
               </div>
               <section className='bg-white/60 px-4 pt-4 backdrop-blur'>
-                <h2 className='text-2xl'>{name}</h2>
-                {contentByCategory}
+                <FormProvider {...methods}>
+                  <h2 className='text-2xl'>{name}</h2>
+                  {contentByCategory}
+                </FormProvider>
               </section>
             </main>
             <footer className='fixed -bottom-2 flex h-min w-full justify-center bg-white/60 px-4 py-3 pb-5 backdrop-blur'>
@@ -117,7 +155,9 @@ export function MenuPositionModal({
             </footer>
             <button
               type='button'
-              onClick={() => setInState(false)}
+              onClick={() => {
+                setInState(false);
+              }}
               className='fixed top-0 z-10 m-4 rounded-full bg-white shadow'
             >
               <ChevronDown className='h-12 w-12' />
