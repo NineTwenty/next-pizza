@@ -1,23 +1,23 @@
 import type { Topping } from '@prisma/client';
+import { CheckCircle } from 'react-feather';
 import { useFormContext } from 'react-hook-form';
 
-type ToppingsProps = {
+type ToppingSectionProps = {
   toppings: Topping[];
 };
 
 const fieldName = 'includedIngredients';
-export function ToppingsSection({ toppings }: ToppingsProps) {
-  const { register, watch, getValues } = useFormContext();
-  const toppingsState = getValues(fieldName);
-  watch((data) => console.log(data));
+
+export function ToppingsSection({ toppings }: ToppingSectionProps) {
+  const { register } = useFormContext();
   return (
-    <div>
-      <span className='my-2'>Добавить по вкусу</span>
+    <section>
+      <div className='mb-3 mt-6 font-medium leading-5'>Добавить по вкусу</div>
       <ul className='grid w-full grid-cols-3 gap-2'>
         {toppings.map((topping) => {
           if (!topping) return null;
           return (
-            <li key={topping.id}>
+            <li key={topping.id} className='relative'>
               <label>
                 <input
                   type='checkbox'
@@ -25,19 +25,22 @@ export function ToppingsSection({ toppings }: ToppingsProps) {
                   {...register(fieldName)}
                   className='peer sr-only'
                 />
-                {/* <div className='aspect-square w-full bg-amber-200' /> */}
-                <div className='flex flex-col items-center rounded-xl border bg-white p-2 shadow-[rgba(6,5,50,0.12)_0px_4px_20px]  peer-checked:border-red-400'>
+                <div className='flex flex-col items-center rounded-xl border border-white bg-white p-2 shadow-[rgba(6,5,50,0.12)_0px_4px_20px] transition duration-150 ease-out peer-checked:border-orange-600  peer-checked:shadow-none'>
                   <img className='aspect-square w-full' alt='' />
                   <span className='h-8 text-center text-xs'>
                     {topping.toppingName}
                   </span>
-                  <span className=''>{`${topping.price}₽`}</span>
+                  <span className='tracking-wide'>{`${topping.price}₽`}</span>
                 </div>
+                <CheckCircle
+                  aria-hidden
+                  className='absolute top-2 right-2 h-5 w-5 text-orange-600 opacity-0 transition-opacity ease-out peer-checked:opacity-100'
+                />
               </label>
             </li>
           );
         })}
       </ul>
-    </div>
+    </section>
   );
 }
