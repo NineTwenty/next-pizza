@@ -1,23 +1,24 @@
-import type { Topping } from '@prisma/client';
+import type { Ingredient, Topping } from '@prisma/client';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
 import { ToppingsSection } from 'components/ToppingsSection';
 import type { PositionFormState } from 'components/MenuPositionModal';
 import { useFormContext } from 'react-hook-form';
+import { IngredientsSection } from 'components/IngredientsSection';
 
 export function PizzaForm({
   categoryMap,
   position,
-  description,
   products,
   toppings,
+  ingredients,
   formId,
 }: {
   categoryMap: PositionFormState;
   products: ProductState;
   toppings: ToppingState;
   position: DenormalizedMenuPosition;
-  description: string;
+  ingredients: Ingredient[];
   formId: string;
 }) {
   const methods = useFormContext();
@@ -34,7 +35,7 @@ export function PizzaForm({
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onSubmit={methods.handleSubmit((data) => console.log(data))}
     >
-      {description}
+      <IngredientsSection ingredients={ingredients} />
       <ToppingsSection toppings={productToppings} />
     </form>
   );

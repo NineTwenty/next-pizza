@@ -79,7 +79,7 @@ export function MenuPositionModal({
     position.categoryMap.length === 1 && firstCategoryMap ? (
       <PizzaForm
         categoryMap={firstCategoryMap}
-        description={description}
+        ingredients={ingredients}
         position={position}
         products={products}
         toppings={toppings}
