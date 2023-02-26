@@ -11,12 +11,14 @@ export function PizzaForm({
   description,
   products,
   toppings,
+  formId,
 }: {
   categoryMap: PositionFormState;
   products: ProductState;
   toppings: ToppingState;
   position: DenormalizedMenuPosition;
   description: string;
+  formId: string;
 }) {
   const methods = useFormContext();
   const product = products.entities[categoryMap.product];
@@ -27,8 +29,11 @@ export function PizzaForm({
     .filter((topping): topping is Topping => !!topping);
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    <form onSubmit={methods.handleSubmit((data) => console.log())}>
+    <form
+      id={formId}
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      onSubmit={methods.handleSubmit((data) => console.log(data))}
+    >
       {description}
       <ToppingsSection toppings={productToppings} />
     </form>

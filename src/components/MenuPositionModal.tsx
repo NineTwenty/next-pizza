@@ -73,6 +73,7 @@ export function MenuPositionModal({
 
   const methods = useForm();
   const firstCategoryMap = categoryMapState[0];
+  const formId = `${position.id}_${position.categoryId}`;
 
   const contentByCategory =
     position.categoryMap.length === 1 && firstCategoryMap ? (
@@ -82,6 +83,7 @@ export function MenuPositionModal({
         position={position}
         products={products}
         toppings={toppings}
+        formId={formId}
       />
     ) : (
       <ComboForm
@@ -146,8 +148,11 @@ export function MenuPositionModal({
             </main>
             <footer className='fixed -bottom-2 flex h-min w-full justify-center bg-white/60 px-4 py-3 pb-5 backdrop-blur'>
               <button
-                type='button'
-                onClick={() => setInState(false)}
+                type='submit'
+                form={formId}
+                onClick={() => {
+                  setInState(false);
+                }}
                 className='h-12 w-full rounded-full bg-orange-600 text-white'
               >
                 КОРЗИНА
