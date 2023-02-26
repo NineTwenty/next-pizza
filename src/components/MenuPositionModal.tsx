@@ -71,27 +71,30 @@ export function MenuPositionModal({
     })
   );
 
-  const methods = useForm();
   const firstCategoryMap = categoryMapState[0];
-  const formId = `${position.id}_${position.categoryId}`;
+  const isNotCombo = position.categoryMap.length === 1 && firstCategoryMap;
 
-  const contentByCategory =
-    position.categoryMap.length === 1 && firstCategoryMap ? (
-      <PizzaForm
-        categoryMap={firstCategoryMap}
-        ingredients={ingredients}
-        position={position}
-        products={products}
-        toppings={toppings}
-        formId={formId}
-      />
-    ) : (
-      <ComboForm
-        description={description}
-        position={position}
-        products={products}
-      />
-    );
+  const formId = `${position.id}_${position.categoryId}`;
+  const methods = useForm({
+    defaultValues: isNotCombo ? firstCategoryMap : {},
+  });
+
+  const contentByCategory = isNotCombo ? (
+    <PizzaForm
+      categoryMap={firstCategoryMap}
+      ingredients={ingredients}
+      position={position}
+      products={products}
+      toppings={toppings}
+      formId={formId}
+    />
+  ) : (
+    <ComboForm
+      description={description}
+      position={position}
+      products={products}
+    />
+  );
 
   return (
     <AnimatePresence onExitComplete={closeCallback}>
