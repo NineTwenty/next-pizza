@@ -21,10 +21,13 @@ export function PizzaForm({
   ingredients: Ingredient[];
   formId: string;
 }) {
-  const methods = useFormContext();
-  const product = products.entities[categoryMap.product];
+  const formContext = useFormContext<PositionFormState>();
+  const product = products.entities[formContext.getValues('product')];
 
   if (!product) return null;
+  const variation = product.variations.find(
+    ({ id }) => id === formContext.getValues('variation')
+  );
   const productToppings = product.toppings
     .map((toppingId) => toppings.entities[toppingId])
     .filter((topping): topping is Topping => !!topping);
@@ -33,8 +36,9 @@ export function PizzaForm({
     <form
       id={formId}
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      onSubmit={methods.handleSubmit((data) => console.log(data))}
+      onSubmit={formContext.handleSubmit((data) => console.log(data))}
     >
+      <div className='mb-1 text-sm text-gray-500'>{`${variation?.size}, ${variation?.weight}`}</div>
       <IngredientsSection ingredients={ingredients} />
       <ToppingsSection toppings={productToppings} />
     </form>
