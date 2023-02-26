@@ -6,7 +6,7 @@ type ToppingSectionProps = {
   toppings: Topping[];
 };
 
-const fieldName = 'includedIngredients';
+const fieldName = 'includedToppings';
 
 export function ToppingsSection({ toppings }: ToppingSectionProps) {
   const { register } = useFormContext();
