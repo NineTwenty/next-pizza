@@ -5,6 +5,7 @@ import { ToppingsSection } from 'components/ToppingsSection';
 import type { PositionFormState } from 'components/MenuPositionModal';
 import { useFormContext } from 'react-hook-form';
 import { IngredientsSection } from 'components/IngredientsSection';
+import { VariationsSection } from 'components/VariationsSection';
 
 export function PizzaForm({
   categoryMap,
@@ -26,7 +27,8 @@ export function PizzaForm({
 
   if (!product) return null;
   const variation = product.variations.find(
-    ({ id }) => id === formContext.getValues('variation')
+    // getValues is lying about type and its actually always 'string'
+    ({ id }) => id === Number(formContext.getValues('variation'))
   );
   const productToppings = product.toppings
     .map((toppingId) => toppings.entities[toppingId])
@@ -40,6 +42,7 @@ export function PizzaForm({
     >
       <div className='mb-1 text-sm text-gray-500'>{`${variation?.size}, ${variation?.weight}`}</div>
       <IngredientsSection ingredients={ingredients} />
+      <VariationsSection variations={product.variations} />
       <ToppingsSection toppings={productToppings} />
     </form>
   );
