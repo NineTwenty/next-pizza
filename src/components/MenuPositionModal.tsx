@@ -166,7 +166,7 @@ export function MenuPositionModal({
               onClick={() => {
                 setInState(false);
               }}
-              className='fixed top-0 z-10 m-4 rounded-full bg-white shadow'
+              className='fixed top-0 z-10 m-4 rounded-full bg-white shadow-[rgba(0,0,0,0.12)_0px_0px_12px]'
             >
               <ChevronDown className='h-12 w-12' />
             </button>
