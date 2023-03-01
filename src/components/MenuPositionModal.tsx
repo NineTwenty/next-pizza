@@ -142,7 +142,7 @@ export function MenuPositionModal({
                 <div className='h-[50vw] w-full' />
                 <div ref={targetRef} className='h-[50vw] w-full' />
               </div>
-              <section className='bg-white/60 px-4 pt-4 backdrop-blur'>
+              <section className='bg-white/60 px-4 pt-4 backdrop-blur-xl'>
                 <FormProvider {...methods}>
                   <h2 className='text-2xl'>{name}</h2>
                   {contentByCategory}
