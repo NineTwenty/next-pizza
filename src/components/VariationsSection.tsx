@@ -7,8 +7,8 @@ type VariationSectionProps = {
 };
 
 export function VariationsSection({ variations }: VariationSectionProps) {
-  const { register, getValues } = useFormContext<PositionFormState>();
-  const variationId = getValues('variation');
+  const { register, watch } = useFormContext<PositionFormState>();
+  const variationId = watch('variation');
   const animationPosition = [
     '-translate-x-full',
     'translate-x-0',
