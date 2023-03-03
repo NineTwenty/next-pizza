@@ -26,10 +26,11 @@ export function PizzaForm({
   const product = products.entities[formContext.getValues('product')];
 
   if (!product) return null;
-  const variation = product.variations.find(
-    // getValues is lying about type and its actually always 'string'
-    ({ id }) => id === Number(formContext.getValues('variation'))
-  );
+  const variation =
+    product.variations[
+      // getValues is lying about type and its actually always 'string'
+      Number(formContext.getValues('variation'))
+    ];
   const productToppings = product.toppings
     .map((toppingId) => toppings.entities[toppingId])
     .filter((topping): topping is Topping => !!topping);

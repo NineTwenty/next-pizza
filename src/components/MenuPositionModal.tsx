@@ -66,7 +66,7 @@ export function MenuPositionModal({
         product: defaultProduct.id,
         includedToppings: [],
         excludedIngredients: [],
-        variation: defaultProduct.variations.length > 1 ? 2 : 1,
+        variation: defaultProduct.variations.length > 1 ? 1 : 0,
       };
     })
   );
