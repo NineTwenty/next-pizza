@@ -1,25 +1,31 @@
 import type { Ingredient } from '@prisma/client';
+import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
-import type { IngredientState, ProductState, ToppingState } from 'types/client';
+import type { IngredientState, ProductState } from 'types/client';
 import type {
   DenormalizedMenuPosition,
   DenormalizedProduct,
 } from 'types/server';
 import { capitalizeFirstLetter } from 'utils/common';
-import { MenuPositionModal } from 'components/MenuPositionModal';
 
 type MenuPositionProps = {
+  name: DenormalizedMenuPosition['menuPositionName'];
   position: DenormalizedMenuPosition;
   products: ProductState;
   ingredients: IngredientState;
-  toppings: ToppingState;
+  children: (props: {
+    positionIngredients: Ingredient[];
+    description: string;
+    closeCallback: () => void;
+  }) => ReactNode;
 };
 
 export function MenuPosition({
+  name,
   position,
   ingredients,
   products,
-  toppings,
+  children,
 }: MenuPositionProps) {
   const [isOpen, setIsOpen] = useState(false);
   // Find initialy displayed position price
@@ -69,6 +75,17 @@ export function MenuPosition({
       activeIngredients.map(({ ingredientName }) => ingredientName).join(', ')
     );
 
+  const Modal =
+    typeof window === 'object' &&
+    isOpen &&
+    children({
+      positionIngredients: activeIngredients,
+      description,
+      closeCallback: () => {
+        setIsOpen(false);
+      },
+    });
+
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <article
@@ -79,29 +96,17 @@ export function MenuPosition({
     >
       <div className='m-2 mr-4 flex h-28 w-28 flex-shrink-0 items-center justify-center rounded-full bg-orange-200 p-4 text-center'>
         {/* TODO: Use actual position image */}
-        {position.menuPositionName}
+        {name}
       </div>
       <main className='flex flex-col'>
-        <h3 className='text-lg'>{position.menuPositionName}</h3>
+        <h3 className='text-lg'>{name}</h3>
         <p className='text-xs text-gray-600'>{description}</p>
         <button
           type='button'
           className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm leading-8 text-orange-700'
         >{`от ${price} ₽`}</button>
       </main>
-      {typeof window === 'object' && isOpen && (
-        <MenuPositionModal
-          position={position}
-          ingredients={activeIngredients}
-          name={position.menuPositionName}
-          toppings={toppings}
-          products={products}
-          description={description}
-          closeCallback={() => {
-            setIsOpen(false);
-          }}
-        />
-      )}
+      {Modal}
     </article>
   );
 }
