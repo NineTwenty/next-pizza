@@ -1,14 +1,18 @@
 import type { ProductVariation } from '@prisma/client';
-import type { PositionFormState } from 'components/MenuPositionModal';
 import { useFormContext } from 'react-hook-form';
 
 type VariationSectionProps = {
   variations: ProductVariation[];
+  fieldGroupId: number;
 };
 
-export function VariationsSection({ variations }: VariationSectionProps) {
-  const { register, watch } = useFormContext<PositionFormState>();
-  const variationId = watch('variation');
+export function VariationsSection({
+  variations,
+  fieldGroupId,
+}: VariationSectionProps) {
+  const { register, watch } = useFormContext();
+  const fieldName = `${fieldGroupId}.variation`;
+  const variationId = watch(fieldName);
   const animationPosition = [
     '-translate-x-full',
     'translate-x-0',
@@ -31,7 +35,7 @@ export function VariationsSection({ variations }: VariationSectionProps) {
             type='radio'
             value={id}
             className='sr-only'
-            {...register('variation')}
+            {...register(fieldName)}
           />
           <div>{size}</div>
         </label>

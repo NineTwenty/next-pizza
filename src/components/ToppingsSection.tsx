@@ -4,12 +4,15 @@ import { useFormContext } from 'react-hook-form';
 
 type ToppingSectionProps = {
   toppings: Topping[];
+  fieldGroupId: number;
 };
 
-const fieldName = 'includedToppings';
-
-export function ToppingsSection({ toppings }: ToppingSectionProps) {
+export function ToppingsSection({
+  toppings,
+  fieldGroupId,
+}: ToppingSectionProps) {
   const { register } = useFormContext();
+  const fieldName = `${fieldGroupId}.includedToppings`;
   return (
     <section>
       <div className='mb-3 mt-6 font-medium leading-5'>Добавить по вкусу</div>

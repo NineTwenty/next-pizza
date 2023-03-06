@@ -1,39 +1,41 @@
 import type { Ingredient, Topping } from '@prisma/client';
 import type { ProductState, ToppingState } from 'types/client';
-import type { DenormalizedMenuPosition } from 'types/server';
+import type { DenormalizedCategoryMap } from 'types/server';
 import { ToppingsSection } from 'components/ToppingsSection';
-import type { PositionFormState } from 'components/MenuPositionModal';
 import { useFormContext } from 'react-hook-form';
 import { IngredientsSection } from 'components/IngredientsSection';
 import { VariationsSection } from 'components/VariationsSection';
 
 export function PizzaForm({
-  categoryMap,
-  position,
+  fieldGroupId,
   products,
   toppings,
   ingredients,
   formId,
 }: {
-  categoryMap: PositionFormState;
+  fieldGroupId: DenormalizedCategoryMap['id'];
   products: ProductState;
   toppings: ToppingState;
-  position: DenormalizedMenuPosition;
   ingredients: Ingredient[];
   formId: string;
 }) {
-  const formContext = useFormContext<PositionFormState>();
-  const product = products.entities[formContext.getValues('product')];
+  const formContext = useFormContext();
+  const productId = formContext.getValues(`${fieldGroupId}.product`);
+  // getValues is lying about type and its actually always 'string'
+  const variationId = Number(
+    formContext.getValues(`${fieldGroupId}.variation`)
+  );
 
-  if (!product) return null;
-  const variation =
-    product.variations[
-      // getValues is lying about type and its actually always 'string'
-      Number(formContext.getValues('variation'))
-    ];
+  if (typeof productId !== 'number') return null;
+  const product = products.entities[productId];
+
+  if (!product || typeof variationId !== 'number') return null;
+  const variation = product.variations.find(({ id }) => id === variationId);
   const productToppings = product.toppings
     .map((toppingId) => toppings.entities[toppingId])
     .filter((topping): topping is Topping => !!topping);
+
+  if (!variation) return null;
 
   return (
     <form
@@ -42,9 +44,15 @@ export function PizzaForm({
       onSubmit={formContext.handleSubmit((data) => console.log(data))}
     >
       <div className='mb-1 text-sm text-gray-500'>{`${variation?.size}, ${variation?.weight}`}</div>
-      <IngredientsSection ingredients={ingredients} />
-      <VariationsSection variations={product.variations} />
-      <ToppingsSection toppings={productToppings} />
+      <IngredientsSection
+        fieldGroupId={fieldGroupId}
+        ingredients={ingredients}
+      />
+      <VariationsSection
+        fieldGroupId={fieldGroupId}
+        variations={product.variations}
+      />
+      <ToppingsSection fieldGroupId={fieldGroupId} toppings={productToppings} />
     </form>
   );
 }

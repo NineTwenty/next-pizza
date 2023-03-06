@@ -6,7 +6,7 @@ import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
 import { PizzaForm } from 'components/PizzaForm';
 import { ComboForm } from 'components/ComboForm';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 
 type MenuPositionModalProps = {
   description: string;
@@ -54,40 +54,46 @@ export function MenuPositionModal({
   const [categoryMapState, setCategoryMapState] = useState<
     Record<number, PositionFormState>
   >(
-    position.categoryMap.map((categoryMap) => {
-      const defaultProduct = products.entities[categoryMap.defaultProduct];
+    position.categoryMap
+      .map((categoryMap) => {
+        const defaultProduct = products.entities[categoryMap.defaultProduct];
 
-      if (!defaultProduct) {
-        throw new Error('Attempt to access missing default product');
-      }
+        if (!defaultProduct) {
+          throw new Error('Attempt to access missing default product');
+        }
 
-      return {
-        id: categoryMap.id,
-        product: defaultProduct.id,
-        includedToppings: [],
-        excludedIngredients: [],
-        variation: defaultProduct.variations.length > 1 ? 1 : 0,
-      };
-    })
+        return {
+          id: categoryMap.id,
+          product: defaultProduct.id,
+          includedToppings: [],
+          excludedIngredients: [],
+          variation: defaultProduct.variations.length > 1 ? 1 : 0,
+        };
+      })
+      .reduce(
+        (map, categoryMap) => ({ ...map, [categoryMap.id]: categoryMap }),
+        {}
+      )
   );
 
-  const firstCategoryMap = categoryMapState[0];
-  const isNotCombo = position.categoryMap.length === 1 && firstCategoryMap;
+  const isNotCombo = position.categoryMap.length === 1;
 
   const formId = `${position.id}_${position.categoryId}`;
   const methods = useForm({
-    defaultValues: isNotCombo ? firstCategoryMap : {},
+    defaultValues: categoryMapState,
   });
 
   const contentByCategory = isNotCombo ? (
-    <PizzaForm
-      categoryMap={firstCategoryMap}
-      ingredients={ingredients}
-      position={position}
-      products={products}
-      toppings={toppings}
-      formId={formId}
-    />
+    Object.values(categoryMapState).map(({ id }) => (
+      <PizzaForm
+        key={id}
+        fieldGroupId={id}
+        ingredients={ingredients}
+        products={products}
+        toppings={toppings}
+        formId={formId}
+      />
+    ))
   ) : (
     <ComboForm
       description={description}
@@ -131,7 +137,7 @@ export function MenuPositionModal({
               className='fixed top-0 aspect-square w-full bg-white'
             >
               <div className='flex h-full w-full items-center justify-center rounded-full bg-orange-200 text-center'>
-                {`Photo${scrollYProgress.get()}`}{' '}
+                {`Photo${scrollYProgress.get()}`}
               </div>
             </motion.div>
             <main

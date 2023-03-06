@@ -4,12 +4,15 @@ import { useFormContext } from 'react-hook-form';
 
 type IngredientSectionProps = {
   ingredients: Ingredient[];
+  fieldGroupId: number;
 };
 
-const fieldName = 'excludedIngredients';
-
-export function IngredientsSection({ ingredients }: IngredientSectionProps) {
+export function IngredientsSection({
+  ingredients,
+  fieldGroupId,
+}: IngredientSectionProps) {
   const { register } = useFormContext();
+  const fieldName = `${fieldGroupId}.excludedIngredients`;
   return (
     <section>
       <ul className='w-full text-sm first:first-letter:uppercase'>
