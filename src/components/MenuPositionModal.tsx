@@ -18,7 +18,7 @@ type MenuPositionModalProps = {
   products: ProductState;
 };
 
-type PositionState = {
+export type PositionState = {
   id: number;
   product: number;
   includedToppings: number[];
@@ -95,7 +95,7 @@ export function MenuPositionModal({
   ) : (
     <ComboForm
       description={description}
-      position={position}
+      positions={formValues}
       products={products}
     />
   );
