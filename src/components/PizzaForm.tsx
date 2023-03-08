@@ -1,6 +1,7 @@
 import type { Ingredient, Topping } from '@prisma/client';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedCategoryMap } from 'types/server';
+import type { PositionFormState } from 'components/MenuPositionModal';
 import { ToppingsSection } from 'components/ToppingsSection';
 import { useFormContext } from 'react-hook-form';
 import { IngredientsSection } from 'components/IngredientsSection';
@@ -19,11 +20,13 @@ export function PizzaForm({
   ingredients: Ingredient[];
   formId: string;
 }) {
-  const formContext = useFormContext();
-  const productId = formContext.getValues(`${fieldGroupId}.product`);
+  const formContext = useFormContext<PositionFormState>();
+  const productId = formContext.getValues(
+    `categoryMaps.${fieldGroupId}.product`
+  );
   // getValues is lying about type and its actually always 'string'
   const variationId = Number(
-    formContext.getValues(`${fieldGroupId}.variation`)
+    formContext.getValues(`categoryMaps.${fieldGroupId}.variation`)
   );
 
   if (typeof productId !== 'number') return null;

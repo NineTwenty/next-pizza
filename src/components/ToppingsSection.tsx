@@ -1,4 +1,5 @@
 import type { Topping } from '@prisma/client';
+import type { PositionFormState } from 'components/MenuPositionModal';
 import { CheckCircle } from 'react-feather';
 import { useFormContext } from 'react-hook-form';
 
@@ -11,8 +12,7 @@ export function ToppingsSection({
   toppings,
   fieldGroupId,
 }: ToppingSectionProps) {
-  const { register } = useFormContext();
-  const fieldName = `${fieldGroupId}.includedToppings`;
+  const { register } = useFormContext<PositionFormState>();
   return (
     <section>
       <div className='mb-3 mt-6 font-medium leading-5'>Добавить по вкусу</div>
@@ -25,7 +25,7 @@ export function ToppingsSection({
                 <input
                   type='checkbox'
                   value={topping.id}
-                  {...register(fieldName)}
+                  {...register(`categoryMaps.${fieldGroupId}.includedToppings`)}
                   className='peer sr-only'
                 />
                 <div className='flex flex-col items-center rounded-xl border border-white bg-white p-2 shadow-[rgba(6,5,50,0.12)_0px_4px_20px] transition duration-150 ease-out peer-checked:border-orange-600  peer-checked:shadow-none'>

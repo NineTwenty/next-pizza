@@ -6,7 +6,7 @@ import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
 import { PizzaForm } from 'components/PizzaForm';
 import { ComboForm } from 'components/ComboForm';
-import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 type MenuPositionModalProps = {
   description: string;
@@ -18,12 +18,16 @@ type MenuPositionModalProps = {
   products: ProductState;
 };
 
-export type PositionFormState = {
+type PositionState = {
   id: number;
   product: number;
   includedToppings: number[];
   excludedIngredients: number[];
   variation: number;
+};
+
+export type PositionFormState = {
+  categoryMaps: PositionState[];
 };
 
 export function MenuPositionModal({
@@ -50,12 +54,10 @@ export function MenuPositionModal({
   }, [inState]);
 
   // Form logic block
-  // Default form state for all included positions
-  const [categoryMapState, setCategoryMapState] = useState<
-    Record<number, PositionFormState>
-  >(
-    position.categoryMap
-      .map((categoryMap) => {
+  const formId = `${position.id}_${position.categoryId}`;
+  const methods = useForm<PositionFormState>({
+    defaultValues: {
+      categoryMaps: position.categoryMap.map((categoryMap) => {
         const defaultProduct = products.entities[categoryMap.defaultProduct];
 
         if (!defaultProduct) {
@@ -69,28 +71,21 @@ export function MenuPositionModal({
           excludedIngredients: [],
           variation:
             defaultProduct.variations.length > 1
-              ? defaultProduct.variations[1]
-              : defaultProduct.variations[0],
+              ? defaultProduct.variations[1]?.id
+              : defaultProduct.variations[0]?.id,
         };
-      })
-      .reduce(
-        (map, categoryMap) => ({ ...map, [categoryMap.id]: categoryMap }),
-        {}
-      )
-  );
-
-  const isNotCombo = position.categoryMap.length === 1;
-
-  const formId = `${position.id}_${position.categoryId}`;
-  const methods = useForm({
-    defaultValues: categoryMapState,
+      }),
+    },
   });
 
+  const formValues = methods.getValues('categoryMaps');
+  const isNotCombo = formValues.length === 1;
+
   const contentByCategory = isNotCombo ? (
-    Object.values(categoryMapState).map(({ id }) => (
+    formValues.map(({ id }, index) => (
       <PizzaForm
         key={id}
-        fieldGroupId={id}
+        fieldGroupId={index}
         ingredients={ingredients}
         products={products}
         toppings={toppings}

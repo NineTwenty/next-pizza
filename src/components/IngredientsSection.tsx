@@ -1,4 +1,5 @@
 import type { Ingredient } from '@prisma/client';
+import type { PositionFormState } from 'components/MenuPositionModal';
 import { PlusCircle, XCircle } from 'react-feather';
 import { useFormContext } from 'react-hook-form';
 
@@ -11,8 +12,7 @@ export function IngredientsSection({
   ingredients,
   fieldGroupId,
 }: IngredientSectionProps) {
-  const { register } = useFormContext();
-  const fieldName = `${fieldGroupId}.excludedIngredients`;
+  const { register } = useFormContext<PositionFormState>();
   return (
     <section>
       <ul className='w-full text-sm first:first-letter:uppercase'>
@@ -25,7 +25,9 @@ export function IngredientsSection({
                   <input
                     type='checkbox'
                     value={ingredient.id}
-                    {...register(fieldName)}
+                    {...register(
+                      `categoryMaps.${fieldGroupId}.excludedIngredients`
+                    )}
                     className='peer sr-only first-letter:uppercase'
                   />
                   <span className='h-8 border-b border-dashed border-gray-500 text-center decoration-dashed underline-offset-4 peer-checked:border-transparent peer-checked:line-through peer-checked:decoration-solid'>
