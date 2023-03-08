@@ -12,13 +12,11 @@ export function PizzaForm({
   products,
   toppings,
   ingredients,
-  formId,
 }: {
   fieldGroupId: DenormalizedCategoryMap['id'];
   products: ProductState;
   toppings: ToppingState;
   ingredients: Ingredient[];
-  formId: string;
 }) {
   const formContext = useFormContext<PositionFormState>();
   const productId = formContext.getValues(
@@ -41,11 +39,7 @@ export function PizzaForm({
   if (!variation) return null;
 
   return (
-    <form
-      id={formId}
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      onSubmit={formContext.handleSubmit((data) => console.log(data))}
-    >
+    <>
       <div className='mb-1 text-sm text-gray-500'>{`${variation?.size}, ${variation?.weight}`}</div>
       <IngredientsSection
         fieldGroupId={fieldGroupId}
@@ -56,6 +50,6 @@ export function PizzaForm({
         variations={product.variations}
       />
       <ToppingsSection fieldGroupId={fieldGroupId} toppings={productToppings} />
-    </form>
+    </>
   );
 }

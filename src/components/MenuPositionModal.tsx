@@ -81,23 +81,30 @@ export function MenuPositionModal({
   const formValues = methods.getValues('categoryMaps');
   const isNotCombo = formValues.length === 1;
 
-  const contentByCategory = isNotCombo ? (
-    formValues.map(({ id }, index) => (
-      <PizzaForm
-        key={id}
-        fieldGroupId={index}
-        ingredients={ingredients}
-        products={products}
-        toppings={toppings}
-        formId={formId}
-      />
-    ))
-  ) : (
-    <ComboForm
-      description={description}
-      positions={formValues}
-      products={products}
-    />
+  const contentByCategory = (
+    <form
+      id={formId}
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      onSubmit={methods.handleSubmit((data) => console.log(data))}
+    >
+      {isNotCombo ? (
+        formValues.map(({ id }, index) => (
+          <PizzaForm
+            key={id}
+            fieldGroupId={index}
+            ingredients={ingredients}
+            products={products}
+            toppings={toppings}
+          />
+        ))
+      ) : (
+        <ComboForm
+          description={description}
+          positions={formValues}
+          products={products}
+        />
+      )}
+    </form>
   );
 
   return (
