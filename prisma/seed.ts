@@ -214,7 +214,7 @@ async function main() {
     data: {
       category: { connect: { id: 2 } },
       menuPosition: { connect: { menuPositionName: '2 пиццы' } },
-      products: { connect: [{ id: 1 }] },
+      products: { connect: [{ id: 1 }, { id: 2 }] },
       defaultProduct: { connect: { id: 1 } },
       categoryDiscount: { connect: { id: 1 } },
     },
@@ -224,7 +224,7 @@ async function main() {
     data: {
       category: { connect: { id: 2 } },
       menuPosition: { connect: { menuPositionName: '2 пиццы' } },
-      products: { connect: [{ id: 2 }] },
+      products: { connect: [{ id: 1 }, { id: 2 }] },
       defaultProduct: { connect: { id: 2 } },
       categoryDiscount: { connect: { id: 1 } },
     },
