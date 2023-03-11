@@ -1,12 +1,14 @@
-import type { Ingredient } from '@prisma/client';
+import type { Ingredient, Topping } from '@prisma/client';
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'react-feather';
 import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
-import { PizzaForm } from 'components/PizzaForm';
 import { ComboForm } from 'components/ComboForm';
 import { FormProvider, useForm } from 'react-hook-form';
+import { IngredientsSection } from 'components/IngredientsSection';
+import { VariationsSection } from 'components/VariationsSection';
+import { ToppingsSection } from 'components/ToppingsSection';
 
 type MenuPositionModalProps = {
   description: string;
@@ -87,16 +89,36 @@ export function MenuPositionModal({
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onSubmit={methods.handleSubmit((data) => console.log(data))}
     >
-      {isNotCombo ? (
-        formValues.map(({ id }, index) => (
-          <PizzaForm
-            key={id}
-            fieldGroupId={index}
-            ingredients={ingredients}
-            products={products}
-            toppings={toppings}
-          />
-        ))
+      {formValues.map(
+        ({ id, product: productId, variation: variationId }, index) => {
+          const product = products.entities[productId];
+          if (!product || typeof variationId !== 'number') return null;
+          const variation = product.variations.find(
+            (productVariation) => productVariation.id === variationId
+          );
+          const productToppings = product.toppings
+            .map((toppingId) => toppings.entities[toppingId])
+            .filter((topping): topping is Topping => !!topping);
+
+          if (!variation) return null;
+          const variationInfo = `${variation?.size}, ${variation?.weight}`;
+
+          return isNotCombo ? (
+            <>
+              <div className='mb-1 text-sm text-gray-500'>{variationInfo}</div>
+              <IngredientsSection
+                fieldGroupId={index}
+                ingredients={ingredients}
+              />
+              <VariationsSection
+                fieldGroupId={index}
+                variations={product.variations}
+              />
+              <ToppingsSection
+                fieldGroupId={index}
+                toppings={productToppings}
+              />
+            </>
       ) : (
         <ComboForm
           description={description}
