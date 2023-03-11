@@ -4,7 +4,7 @@ import { ChevronDown } from 'react-feather';
 import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
-import { ComboForm } from 'components/ComboForm';
+import { ComboEntry } from 'components/ComboEntry';
 import { FormProvider, useForm } from 'react-hook-form';
 import { IngredientsSection } from 'components/IngredientsSection';
 import { VariationsSection } from 'components/VariationsSection';
@@ -119,12 +119,14 @@ export function MenuPositionModal({
                 toppings={productToppings}
               />
             </>
-      ) : (
-        <ComboForm
-          description={description}
-          positions={formValues}
-          products={products}
-        />
+          ) : (
+            <ComboEntry
+              productName={product.productName}
+              variationInfo={variationInfo}
+            >
+            </ComboEntry>
+          );
+        }
       )}
     </form>
   );
