@@ -9,6 +9,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { IngredientsSection } from 'components/IngredientsSection';
 import { VariationsSection } from 'components/VariationsSection';
 import { ToppingsSection } from 'components/ToppingsSection';
+import { Carousel } from 'components/Carousel';
 
 type MenuPositionModalProps = {
   description: string;
@@ -103,6 +104,15 @@ export function MenuPositionModal({
           if (!variation) return null;
           const variationInfo = `${variation?.size}, ${variation?.weight}`;
 
+          const categoryMap = position.categoryMap[index];
+          const comboItems =
+            !isNotCombo && categoryMap
+              ? categoryMap.products.map((availableProduct) => ({
+                  id: availableProduct,
+                  content: <div className='bg-white'>Product Card</div>,
+                }))
+              : [];
+
           return isNotCombo ? (
             <>
               <div className='mb-1 text-sm text-gray-500'>{variationInfo}</div>
@@ -121,9 +131,11 @@ export function MenuPositionModal({
             </>
           ) : (
             <ComboEntry
+              key={id}
               productName={product.productName}
               variationInfo={variationInfo}
             >
+              <Carousel initialId={productId} items={comboItems} />
             </ComboEntry>
           );
         }
