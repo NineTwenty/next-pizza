@@ -1,6 +1,7 @@
 import { Modal } from 'components/Modal';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
+import { X } from 'react-feather';
 
 export function ComboEntry({
   productName,
@@ -29,7 +30,20 @@ export function ComboEntry({
         </button>
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
         <div onClick={(e) => e.stopPropagation()}>
-          {isOpen ? <Modal>{children}</Modal> : null}
+          {isOpen ? (
+            <Modal>
+              <div className='fixed inset-0 z-20 bg-black/60 backdrop-blur-2xl '>
+                {children}
+                <button
+                  className='fixed top-2 right-2 z-50'
+                  type='button'
+                  onClick={() => setIsOpen(false)}
+                >
+                  <X className='h-8 w-8 text-white' />
+                </button>
+              </div>
+            </Modal>
+          ) : null}
         </div>
       </section>
     </label>
