@@ -60,11 +60,11 @@ export function Carousel({
   const itemPagination = `${activeIndex + 1} / ${items.length}`;
 
   return (
-    <div className='w-full'>
-      <div className='pb-5 pt-12 text-center text-xl font-medium text-white'>
+    <div className='h-full w-full'>
+      <div className='absolute w-full pt-12 text-center text-xl font-medium text-white'>
         {itemPagination}
       </div>
-      <div className='flex w-full snap-x snap-mandatory snap-always gap-6 overflow-x-auto px-12'>
+      <div className='flex h-full w-full snap-x snap-mandatory snap-always items-center gap-6 overflow-x-auto px-12'>
         {items.map(({ id, content }) => (
           <div
             ref={(node) => {
