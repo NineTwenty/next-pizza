@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, useFormContext } from 'react-hook-form';
 import type { ProductState } from 'types/client';
 import type { DenormalizedCategoryMap } from 'types/server';
 
@@ -45,4 +45,8 @@ export function usePositionForm({
   });
 
   return { ...methods, defaultFormValues: methods.getValues('categoryMaps') };
+}
+
+export function usePositionFormContext() {
+  return useFormContext<PositionFormState>();
 }
