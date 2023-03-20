@@ -1,7 +1,6 @@
 import type { Topping } from '@prisma/client';
-import type { PositionFormState } from 'hooks/usePositionForm';
+import { usePositionFormContext } from 'hooks/usePositionForm';
 import { CheckCircle } from 'react-feather';
-import { useFormContext } from 'react-hook-form';
 
 type ToppingSectionProps = {
   toppings: Topping[];
@@ -12,7 +11,7 @@ export function ToppingsSection({
   toppings,
   fieldGroupId,
 }: ToppingSectionProps) {
-  const { register } = useFormContext<PositionFormState>();
+  const { register } = usePositionFormContext();
   return (
     <section>
       <div className='mb-3 mt-6 font-medium leading-5'>Добавить по вкусу</div>

@@ -1,7 +1,6 @@
 import type { Ingredient } from '@prisma/client';
-import type { PositionFormState } from 'hooks/usePositionForm';
+import { usePositionFormContext } from 'hooks/usePositionForm';
 import { PlusCircle, XCircle } from 'react-feather';
-import { useFormContext } from 'react-hook-form';
 
 type IngredientSectionProps = {
   ingredients: Ingredient[];
@@ -12,7 +11,7 @@ export function IngredientsSection({
   ingredients,
   fieldGroupId,
 }: IngredientSectionProps) {
-  const { register } = useFormContext<PositionFormState>();
+  const { register } = usePositionFormContext();
   return (
     <section>
       <ul className='w-full text-sm first:first-letter:uppercase'>

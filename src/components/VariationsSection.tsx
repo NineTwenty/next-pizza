@@ -1,6 +1,6 @@
 import type { ProductVariation } from '@prisma/client';
-import type { PositionFormState } from 'hooks/usePositionForm';
-import { Controller, useFormContext } from 'react-hook-form';
+import { usePositionFormContext } from 'hooks/usePositionForm';
+import { Controller } from 'react-hook-form';
 
 type VariationSectionProps = {
   variations: ProductVariation[];
@@ -11,7 +11,7 @@ export function VariationsSection({
   variations,
   fieldGroupId,
 }: VariationSectionProps) {
-  const { control } = useFormContext<PositionFormState>();
+  const { control } = usePositionFormContext();
   const animationPosition = [
     '-translate-x-full',
     'translate-x-0',
