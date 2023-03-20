@@ -1,5 +1,5 @@
 import type { Ingredient } from '@prisma/client';
-import type { PositionFormState } from 'components/MenuPositionModal';
+import type { PositionFormState } from 'hooks/usePositionForm';
 import { PlusCircle, XCircle } from 'react-feather';
 import { useFormContext } from 'react-hook-form';
 

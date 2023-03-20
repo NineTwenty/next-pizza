@@ -1,5 +1,5 @@
 import type { Topping } from '@prisma/client';
-import type { PositionFormState } from 'components/MenuPositionModal';
+import type { PositionFormState } from 'hooks/usePositionForm';
 import { CheckCircle } from 'react-feather';
 import { useFormContext } from 'react-hook-form';
 

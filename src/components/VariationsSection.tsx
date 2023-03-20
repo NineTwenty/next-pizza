@@ -1,6 +1,6 @@
 import type { ProductVariation } from '@prisma/client';
+import type { PositionFormState } from 'hooks/usePositionForm';
 import { Controller, useFormContext } from 'react-hook-form';
-import type { PositionFormState } from 'components/MenuPositionModal';
 
 type VariationSectionProps = {
   variations: ProductVariation[];

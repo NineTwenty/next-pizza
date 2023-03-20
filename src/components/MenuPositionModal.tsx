@@ -4,8 +4,9 @@ import { ChevronDown } from 'react-feather';
 import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
+import { usePositionForm } from 'hooks/usePositionForm';
 import { ComboEntry } from 'components/ComboEntry';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { IngredientsSection } from 'components/IngredientsSection';
 import { VariationsSection } from 'components/VariationsSection';
 import { ToppingsSection } from 'components/ToppingsSection';
@@ -19,18 +20,6 @@ type MenuPositionModalProps = {
   ingredients: Ingredient[];
   toppings: ToppingState;
   products: ProductState;
-};
-
-export type PositionState = {
-  id: number;
-  product: number;
-  includedToppings: number[];
-  excludedIngredients: number[];
-  variation: number;
-};
-
-export type PositionFormState = {
-  categoryMaps: PositionState[];
 };
 
 export function MenuPositionModal({
@@ -58,30 +47,10 @@ export function MenuPositionModal({
 
   // Form logic block
   const formId = `${position.id}_${position.categoryId}`;
-  const methods = useForm<PositionFormState>({
-    defaultValues: {
-      categoryMaps: position.categoryMap.map((categoryMap) => {
-        const defaultProduct = products.entities[categoryMap.defaultProduct];
-
-        if (!defaultProduct) {
-          throw new Error('Attempt to access missing default product');
-        }
-
-        return {
-          id: categoryMap.id,
-          product: defaultProduct.id,
-          includedToppings: [],
-          excludedIngredients: [],
-          variation:
-            defaultProduct.variations.length > 1
-              ? defaultProduct.variations[1]?.id
-              : defaultProduct.variations[0]?.id,
-        };
-      }),
-    },
+  const { defaultFormValues: formValues, ...methods } = usePositionForm({
+    categoryMaps: position.categoryMap,
+    products,
   });
-
-  const formValues = methods.getValues('categoryMaps');
   const isNotCombo = formValues.length === 1;
 
   const contentByCategory = (
