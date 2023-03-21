@@ -5,9 +5,12 @@ import type { DenormalizedCategoryMap } from 'types/server';
 export type PositionState = {
   id: number;
   product: number;
-  includedToppings: number[];
-  excludedIngredients: number[];
-  variation: number;
+  byProductState: {
+    product: number;
+    includedToppings: number[];
+    excludedIngredients: number[];
+    variation: number;
+  }[];
 };
 
 export type PositionFormState = {
@@ -33,12 +36,15 @@ export function usePositionForm({
         return {
           id: categoryMap.id,
           product: defaultProduct.id,
-          includedToppings: [],
-          excludedIngredients: [],
-          variation:
-            defaultProduct.variations.length > 1
-              ? defaultProduct.variations[1]?.id
-              : defaultProduct.variations[0]?.id,
+          byProductState: Object.values(products.entities).map(
+            ({ variations, id }) => ({
+              product: id,
+              includedToppings: [],
+              excludedIngredients: [],
+              variation:
+                variations.length > 1 ? variations[1]?.id : variations[0]?.id,
+            })
+          ),
         };
       }),
     },
