@@ -5,11 +5,13 @@ import { Controller } from 'react-hook-form';
 type VariationSectionProps = {
   variations: ProductVariation[];
   fieldGroupId: number;
+  productId: number;
 };
 
 export function VariationsSection({
   variations,
   fieldGroupId,
+  productId,
 }: VariationSectionProps) {
   const { control } = usePositionFormContext();
   const animationPosition = [
@@ -24,7 +26,7 @@ export function VariationsSection({
 
   return (
     <Controller
-      name={`categoryMaps.${fieldGroupId}.variation`}
+      name={`categoryMaps.${fieldGroupId}.byProductState.${productId}.variation`}
       control={control}
       render={({ field }) => (
         <div className='relative my-4 flex items-center justify-evenly overflow-hidden rounded-full bg-gray-100 text-xs '>

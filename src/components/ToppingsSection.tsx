@@ -5,11 +5,13 @@ import { CheckCircle } from 'react-feather';
 type ToppingSectionProps = {
   toppings: Topping[];
   fieldGroupId: number;
+  productId: number;
 };
 
 export function ToppingsSection({
   toppings,
   fieldGroupId,
+  productId,
 }: ToppingSectionProps) {
   const { register } = usePositionFormContext();
   return (
@@ -24,7 +26,9 @@ export function ToppingsSection({
                 <input
                   type='checkbox'
                   value={topping.id}
-                  {...register(`categoryMaps.${fieldGroupId}.includedToppings`)}
+                  {...register(
+                    `categoryMaps.${fieldGroupId}.byProductState.${productId}.includedToppings`
+                  )}
                   className='peer sr-only'
                 />
                 <div className='flex flex-col items-center rounded-xl border border-white bg-white p-2 shadow-[rgba(6,5,50,0.12)_0px_4px_20px] transition duration-150 ease-out peer-checked:border-orange-600  peer-checked:shadow-none'>

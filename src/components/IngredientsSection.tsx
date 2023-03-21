@@ -5,11 +5,13 @@ import { PlusCircle, XCircle } from 'react-feather';
 type IngredientSectionProps = {
   ingredients: Ingredient[];
   fieldGroupId: number;
+  productId: number;
 };
 
 export function IngredientsSection({
   ingredients,
   fieldGroupId,
+  productId,
 }: IngredientSectionProps) {
   const { register } = usePositionFormContext();
   return (
@@ -25,7 +27,7 @@ export function IngredientsSection({
                     type='checkbox'
                     value={ingredient.id}
                     {...register(
-                      `categoryMaps.${fieldGroupId}.excludedIngredients`
+                      `categoryMaps.${fieldGroupId}.byProductState.${productId}.excludedIngredients`
                     )}
                     className='peer sr-only first-letter:uppercase'
                   />

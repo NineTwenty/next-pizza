@@ -59,56 +59,64 @@ export function MenuPositionModal({
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onSubmit={methods.handleSubmit((data) => console.log(data))}
     >
-      {formValues.map(
-        ({ id, product: productId, variation: variationId }, index) => {
-          const product = products.entities[productId];
-          if (!product || typeof variationId !== 'number') return null;
-          const variation = product.variations.find(
-            (productVariation) => productVariation.id === variationId
-          );
-          const productToppings = product.toppings
-            .map((toppingId) => toppings.entities[toppingId])
-            .filter((topping): topping is Topping => !!topping);
+      {formValues.map(({ id, product: productId, byProductState }, index) => {
+        const {
+          variations,
+          toppings: productToppings,
+          productName,
+        } = products.entities[productId] ?? {};
+        const { variation } =
+          byProductState.find(({ product }) => product === productId) ?? {};
 
-          if (!variation) return null;
-          const variationInfo = `${variation?.size}, ${variation?.weight}`;
+        if (!variations || !productToppings || !productName) return null;
+        const defaultVariation = variations.find(
+          (productVariation) => productVariation.id === variation
+        );
+        const defaultProductToppings = productToppings
+          .map((toppingId) => toppings.entities[toppingId])
+          .filter((topping): topping is Topping => !!topping);
 
-          const categoryMap = position.categoryMap[index];
-          const comboItems =
-            !isNotCombo && categoryMap
-              ? categoryMap.products.map((availableProduct) => ({
-                  id: availableProduct,
-                  content: <div className='bg-white'>Product Card</div>,
-                }))
-              : [];
+        if (!defaultVariation) return null;
+        const variationInfo = `${defaultVariation?.size}, ${defaultVariation?.weight}`;
 
-          return isNotCombo ? (
-            <>
-              <div className='mb-1 text-sm text-gray-500'>{variationInfo}</div>
-              <IngredientsSection
-                fieldGroupId={index}
-                ingredients={ingredients}
-              />
-              <VariationsSection
-                fieldGroupId={index}
-                variations={product.variations}
-              />
-              <ToppingsSection
-                fieldGroupId={index}
-                toppings={productToppings}
-              />
-            </>
-          ) : (
-            <ComboEntry
-              key={id}
-              productName={product.productName}
-              variationInfo={variationInfo}
-            >
-              <Carousel initialId={productId} items={comboItems} />
-            </ComboEntry>
-          );
-        }
-      )}
+        const categoryMap = position.categoryMap[index];
+        const comboItems =
+          !isNotCombo && categoryMap
+            ? categoryMap.products.map((availableProduct) => ({
+                id: availableProduct,
+                content: <div className='bg-white'>Product Card</div>,
+              }))
+            : [];
+
+        return isNotCombo ? (
+          <>
+            <div className='mb-1 text-sm text-gray-500'>{variationInfo}</div>
+            <IngredientsSection
+              productId={productId}
+              fieldGroupId={index}
+              ingredients={ingredients}
+            />
+            <VariationsSection
+              productId={productId}
+              fieldGroupId={index}
+              variations={variations}
+            />
+            <ToppingsSection
+              productId={productId}
+              fieldGroupId={index}
+              toppings={defaultProductToppings}
+            />
+          </>
+        ) : (
+          <ComboEntry
+            key={id}
+            productName={productName}
+            variationInfo={variationInfo}
+          >
+            <Carousel initialId={productId} items={comboItems} />
+          </ComboEntry>
+        );
+      })}
     </form>
   );
 
