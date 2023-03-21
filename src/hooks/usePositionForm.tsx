@@ -36,15 +36,23 @@ export function usePositionForm({
         return {
           id: categoryMap.id,
           product: defaultProduct.id,
-          byProductState: Object.values(products.entities).map(
-            ({ variations, id }) => ({
+          byProductState: categoryMap.products.map((id) => {
+            const { variations } = products.entities[id] ?? {};
+
+            if (!variations) {
+              throw new Error(
+                'Attempt to access missing product while making initial form value'
+              );
+            }
+
+            return {
               product: id,
               includedToppings: [],
               excludedIngredients: [],
               variation:
                 variations.length > 1 ? variations[1]?.id : variations[0]?.id,
-            })
-          ),
+            };
+          }),
         };
       }),
     },
