@@ -60,19 +60,17 @@ export function MenuPositionModal({
       onSubmit={methods.handleSubmit((data) => console.log(data))}
     >
       {formValues.map(({ id, product: productId, byProductState }, index) => {
-        const {
-          variations,
-          toppings: productToppings,
-          productName,
-        } = positionProducts.entities[productId] ?? {};
-        const { variation } =
-          byProductState.find(({ product }) => product === productId) ?? {};
-
-        if (!variations || !productToppings || !productName) return null;
-        const defaultVariation = variations.find(
-          (productVariation) => productVariation.id === variation
+        const defaultProduct = positionProducts.entities[productId];
+        const defaultProductState = byProductState.find(
+          ({ product }) => product === productId
         );
-        const defaultProductToppings = productToppings
+
+        if (!defaultProduct || !defaultProductState) return null;
+        const defaultVariation = defaultProduct.variations.find(
+          (productVariation) =>
+            productVariation.id === defaultProductState.variation
+        );
+        const defaultProductToppings = defaultProduct.toppings
           .map((toppingId) => positionToppings.entities[toppingId])
           .filter((topping): topping is Topping => !!topping);
 
@@ -99,7 +97,7 @@ export function MenuPositionModal({
             <VariationsSection
               productId={productId}
               fieldGroupId={index}
-              variations={variations}
+              variations={defaultProduct.variations}
             />
             <ToppingsSection
               productId={productId}
@@ -110,7 +108,7 @@ export function MenuPositionModal({
         ) : (
           <ComboEntry
             key={id}
-            productName={productName}
+            productName={defaultProduct.productName}
             variationInfo={variationInfo}
           >
             <Carousel initialId={productId} items={comboItems} />
