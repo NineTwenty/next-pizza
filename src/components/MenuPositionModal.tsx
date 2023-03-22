@@ -27,9 +27,9 @@ export function MenuPositionModal({
   closeCallback,
   name,
   position,
-  ingredients,
-  toppings,
-  products,
+  ingredients: positionIngredients,
+  toppings: positionToppings,
+  products: positionProducts,
 }: MenuPositionModalProps) {
   // Animation related block
   const [inState, setInState] = useState(true);
@@ -49,7 +49,7 @@ export function MenuPositionModal({
   const formId = `${position.id}_${position.categoryId}`;
   const { defaultFormValues: formValues, ...methods } = usePositionForm({
     categoryMaps: position.categoryMap,
-    products,
+    products: positionProducts,
   });
   const isNotCombo = formValues.length === 1;
 
@@ -64,7 +64,7 @@ export function MenuPositionModal({
           variations,
           toppings: productToppings,
           productName,
-        } = products.entities[productId] ?? {};
+        } = positionProducts.entities[productId] ?? {};
         const { variation } =
           byProductState.find(({ product }) => product === productId) ?? {};
 
@@ -73,7 +73,7 @@ export function MenuPositionModal({
           (productVariation) => productVariation.id === variation
         );
         const defaultProductToppings = productToppings
-          .map((toppingId) => toppings.entities[toppingId])
+          .map((toppingId) => positionToppings.entities[toppingId])
           .filter((topping): topping is Topping => !!topping);
 
         if (!defaultVariation) return null;
@@ -94,7 +94,7 @@ export function MenuPositionModal({
             <IngredientsSection
               productId={productId}
               fieldGroupId={index}
-              ingredients={ingredients}
+              ingredients={positionIngredients}
             />
             <VariationsSection
               productId={productId}
