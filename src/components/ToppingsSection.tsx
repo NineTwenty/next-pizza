@@ -6,18 +6,31 @@ type ToppingSectionProps = {
   toppings: Topping[];
   fieldGroupId: number;
   productId: number;
+  type?: 'grid' | 'column';
 };
 
 export function ToppingsSection({
+  type = 'grid',
   toppings,
   fieldGroupId,
   productId,
 }: ToppingSectionProps) {
   const { register } = usePositionFormContext();
+  const isColumn = type === 'column';
   return (
-    <section>
-      <div className='mb-3 mt-6 font-medium leading-5'>Добавить по вкусу</div>
-      <ul className='grid w-full grid-cols-3 gap-2'>
+    <section className={`${isColumn ? 'px-4' : ''}`}>
+      <div
+        className={`${
+          isColumn ? 'text-lg' : ''
+        } mb-3 mt-6 font-medium leading-5`}
+      >
+        Добавить по вкусу
+      </div>
+      <ul
+        className={`${
+          isColumn ? 'grid-cols-1' : 'grid-cols-3'
+        } grid w-full gap-2`}
+      >
         {toppings.map((topping) => {
           if (!topping) return null;
           return (
@@ -31,12 +44,35 @@ export function ToppingsSection({
                   )}
                   className='peer sr-only'
                 />
-                <div className='flex flex-col items-center rounded-xl border border-white bg-white p-2 shadow-[rgba(6,5,50,0.12)_0px_4px_20px] transition duration-150 ease-out peer-checked:border-orange-600  peer-checked:shadow-none'>
-                  <img className='aspect-square w-full' alt='' />
-                  <span className='h-8 text-center text-xs'>
-                    {topping.toppingName}
-                  </span>
-                  <span className='tracking-wide'>{`${topping.price}₽`}</span>
+                <div
+                  className={`${
+                    isColumn ? 'gap-1' : 'flex-col'
+                  } flex items-center rounded-xl border border-white bg-white p-2 shadow-[rgba(6,5,50,0.12)_0px_4px_20px] transition duration-150 ease-out peer-checked:border-orange-600  peer-checked:shadow-none`}
+                >
+                  <img
+                    className={`${isColumn ? 'w-12' : 'w-full'} aspect-square`}
+                    alt=''
+                  />
+                  <div className={`${isColumn ? 'flex flex-col ' : ''}`}>
+                    <p
+                      className={`${
+                        isColumn
+                          ? 'text-sm font-medium leading-[1.125rem]'
+                          : 'h-8 text-xs'
+                      } text-center`}
+                    >
+                      {topping.toppingName}
+                    </p>
+                    <p
+                      className={`${
+                        isColumn
+                          ? 'text-sm leading-[1.125rem] text-gray-600'
+                          : 'text-center'
+                      } 'tracking-wide'`}
+                    >
+                      {isColumn ? `+${topping.price} ₽` : `${topping.price}₽`}
+                    </p>
+                  </div>
                 </div>
                 <CheckCircle
                   aria-hidden
