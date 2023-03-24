@@ -11,6 +11,8 @@ import { IngredientsSection } from 'components/IngredientsSection';
 import { VariationsSection } from 'components/VariationsSection';
 import { ToppingsSection } from 'components/ToppingsSection';
 import { Carousel } from 'components/Carousel';
+import { FlipCard } from 'components/FlipCard';
+import { BackCardContent, FrontCardContent } from 'components/FlipCardContent';
 
 type MenuPositionModalProps = {
   description: string;
@@ -77,14 +79,67 @@ export function MenuPositionModal({
         if (!defaultVariation) return null;
         const variationInfo = `${defaultVariation?.size}, ${defaultVariation?.weight}`;
 
-        const categoryMap = position.categoryMap[index];
-        const comboItems =
-          !isNotCombo && categoryMap
-            ? categoryMap.products.map((availableProduct) => ({
-                id: availableProduct,
-                content: <div className='bg-white'>Product Card</div>,
-              }))
-            : [];
+        const comboItems = !isNotCombo
+          ? byProductState.map(
+              ({ product: cardProductId, variation }, productStateIndex) => {
+                const cardProduct = positionProducts.entities[cardProductId];
+
+                if (!cardProduct) {
+                  throw new Error('Missing entity');
+                }
+
+                const cardToppings = cardProduct.toppings
+                  .map((toppingId) => positionToppings.entities[toppingId])
+                  .filter((topping): topping is Topping => !!topping);
+                const cardIngredients = positionIngredients.filter(
+                  (ingredient) =>
+                    cardProduct.ingredients.includes(ingredient.id)
+                );
+
+                const cardVariation = cardProduct.variations.find(
+                  (productVariation) => productVariation.id === variation
+                );
+                if (!cardVariation) {
+                  throw new Error('Missing entity');
+                }
+
+                const cardVariationInfo = `${cardVariation.size}, ${cardVariation.weight}`;
+                const priceDifference =
+                  cardVariation.price - defaultVariation.price;
+
+                return {
+                  id: cardProductId,
+                  content: (
+                    <FlipCard
+                      key={cardProductId}
+                      renderFrontContent={({ flip }) => (
+                        <FrontCardContent
+                          fieldGroupId={index}
+                          productFieldIndex={productStateIndex}
+                          productId={cardProductId}
+                          productName={cardProduct.productName}
+                          priceDifference={priceDifference}
+                          variationInfo={cardVariationInfo}
+                          ingredients={cardIngredients}
+                          toppings={cardToppings}
+                          flip={flip}
+                        />
+                      )}
+                      renderBackContent={({ flip }) => (
+                        <BackCardContent
+                          fieldGroupId={index}
+                          productFieldIndex={productStateIndex}
+                          ingredients={cardIngredients}
+                          toppings={cardToppings}
+                          flip={flip}
+                        />
+                      )}
+                    />
+                  ),
+                };
+              }
+            )
+          : [];
 
         return isNotCombo ? (
           <>
