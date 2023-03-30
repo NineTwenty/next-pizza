@@ -177,6 +177,47 @@ export function MenuPositionModal({
     </form>
   );
 
+  const categoryMapsFormValues = methods.watch('categoryMaps');
+  const totalPrice = categoryMapsFormValues.reduce(
+    (comboPrice, { product: productId, byProductState }) => {
+      const defaultProduct = positionProducts.entities[productId];
+      const defaultProductState = byProductState.find(
+        ({ product }) => product === productId
+      );
+
+      if (!defaultProduct || !defaultProductState) {
+        throw new Error(
+          `Required entity is missing, cannot calculate total position price`
+        );
+      }
+      const defaultVariation = defaultProduct.variations.find(
+        (productVariation) =>
+          productVariation.id === defaultProductState.variation
+      );
+
+      if (!defaultVariation) {
+        throw new Error(
+          `Required entity is missing, cannot calculate total position price`
+        );
+      }
+
+      const productToppingsPrice = defaultProductState.includedToppings
+        .map(
+          (toppingId) =>
+            positionToppings.entities[parseInt(`${toppingId}`, 10)]?.price ?? 0
+        )
+        .reduce((toppingsPrice, price) => {
+          if (toppingsPrice >= 0 && price) {
+            return toppingsPrice + price;
+          }
+          return 0;
+        }, 0);
+
+      return comboPrice + defaultVariation.price + productToppingsPrice;
+    },
+    0
+  );
+
   return (
     <AnimatePresence onExitComplete={closeCallback}>
       {inState && (
@@ -238,9 +279,9 @@ export function MenuPositionModal({
                 onClick={() => {
                   setInState(false);
                 }}
-                className='h-12 w-full rounded-full bg-orange-600 text-white'
+                className='h-12 w-full rounded-full bg-orange-600 tracking-tight text-white'
               >
-                КОРЗИНА
+                Добавить в корзину за {totalPrice} ₽
               </button>
             </footer>
             <button
