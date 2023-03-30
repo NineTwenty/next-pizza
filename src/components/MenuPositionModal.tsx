@@ -141,21 +141,25 @@ export function MenuPositionModal({
             )
           : [];
 
+        const productStateIndex = byProductState.findIndex(
+          (product) => product === defaultProductState
+        );
+
         return isNotCombo ? (
           <>
             <div className='mb-1 text-sm text-gray-500'>{variationInfo}</div>
             <IngredientsSection
-              productId={productId}
+              productId={productStateIndex}
               fieldGroupId={index}
               ingredients={positionIngredients}
             />
             <VariationsSection
-              productId={productId}
+              productId={productStateIndex}
               fieldGroupId={index}
               variations={defaultProduct.variations}
             />
             <ToppingsSection
-              productId={productId}
+              productId={productStateIndex}
               fieldGroupId={index}
               toppings={defaultProductToppings}
             />
