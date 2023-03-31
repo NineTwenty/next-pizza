@@ -2,15 +2,17 @@ import { useForm, useFormContext } from 'react-hook-form';
 import type { ProductState } from 'types/client';
 import type { DenormalizedCategoryMap } from 'types/server';
 
+export type PositionProductState = {
+  product: number;
+  includedToppings: number[];
+  excludedIngredients: number[];
+  variation: number;
+};
+
 export type PositionState = {
   id: number;
   product: number;
-  byProductState: {
-    product: number;
-    includedToppings: number[];
-    excludedIngredients: number[];
-    variation: number;
-  }[];
+  byProductState: PositionProductState[];
 };
 
 export type PositionFormState = {
