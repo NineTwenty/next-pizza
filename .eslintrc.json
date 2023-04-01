@@ -33,6 +33,14 @@
         "unnamedComponents": "arrow-function"
       }
     ],
+    "react/jsx-props-no-spreading": "off",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        "assert": "either",
+        "depth": 2
+      }
+    ],
     "@typescript-eslint/consistent-type-imports": "warn",
     "import/prefer-default-export": "off",
     "import/extensions": [

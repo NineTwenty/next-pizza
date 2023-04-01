@@ -1,0 +1,24 @@
+.card__content {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+  transform: perspective(1000px) rotateY(0turn);
+}
+
+.front,
+.back {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  position: absolute;
+  inset: 0;
+  transition: transform 0.3s ease;
+}
+
+.back {
+  transform: rotateY(0.5turn);
+}
+
+.flip {
+  transform: perspective(1000px) rotateY(-0.5turn);
+}

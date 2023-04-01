@@ -1,4 +1,5 @@
 import { MenuPosition } from 'components/MenuPosition';
+import { MenuPositionModal } from 'components/MenuPositionModal';
 import { useEffect, useRef } from 'react';
 import { useMenuPositions } from 'utils/apiHooks';
 
@@ -45,12 +46,24 @@ export function CategoryEntry({ title, id, setActiveCategory }: CategoryProps) {
       const position = menuPositions.entities[positionId];
       return position ? (
         <MenuPosition
+          name={position.menuPositionName}
           position={position}
           ingredients={ingredients}
           products={products}
-          toppings={toppings}
           key={positionId}
-        />
+        >
+          {({ closeCallback, description, positionIngredients }) => (
+            <MenuPositionModal
+              position={position}
+              name={position.menuPositionName}
+              ingredients={positionIngredients}
+              toppings={toppings}
+              products={products}
+              description={description}
+              closeCallback={closeCallback}
+            />
+          )}
+        </MenuPosition>
       ) : null;
     });
   }
