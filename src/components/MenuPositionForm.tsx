@@ -38,126 +38,119 @@ export function MenuPositionForm({
   });
   const isNotCombo = formValues.length === 1;
 
-  const contentByCategory = (
-    <form
-      id={formId}
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      onSubmit={methods.handleSubmit((data) => console.log(data))}
-    >
-      {formValues.map(({ id, product: productId, byProductState }, index) => {
-        const defaultProduct = positionProducts.entities[productId];
-        const defaultProductState = byProductState.find(
-          ({ product }) => product === productId
-        );
+  const contentByCategory = formValues.map(
+    ({ id, product: productId, byProductState }, index) => {
+      const defaultProduct = positionProducts.entities[productId];
+      const defaultProductState = byProductState.find(
+        ({ product }) => product === productId
+      );
 
-        if (!defaultProduct || !defaultProductState) return null;
-        const defaultVariation = defaultProduct.variations.find(
-          (productVariation) =>
-            productVariation.id === defaultProductState.variation
-        );
-        const defaultProductToppings = defaultProduct.toppings
-          .map((toppingId) => positionToppings.entities[toppingId])
-          .filter((topping): topping is Topping => !!topping);
+      if (!defaultProduct || !defaultProductState) return null;
+      const defaultVariation = defaultProduct.variations.find(
+        (productVariation) =>
+          productVariation.id === defaultProductState.variation
+      );
+      const defaultProductToppings = defaultProduct.toppings
+        .map((toppingId) => positionToppings.entities[toppingId])
+        .filter((topping): topping is Topping => !!topping);
 
-        if (!defaultVariation) return null;
-        const variationInfo = `${defaultVariation?.size}, ${defaultVariation?.weight}`;
+      if (!defaultVariation) return null;
+      const variationInfo = `${defaultVariation?.size}, ${defaultVariation?.weight}`;
 
-        const comboItems = !isNotCombo
-          ? byProductState.map(
-              ({ product: cardProductId, variation }, productStateIndex) => {
-                const cardProduct = positionProducts.entities[cardProductId];
+      const comboItems = !isNotCombo
+        ? byProductState.map(
+            ({ product: cardProductId, variation }, productStateIndex) => {
+              const cardProduct = positionProducts.entities[cardProductId];
 
-                if (!cardProduct) {
-                  throw new Error('Missing entity');
-                }
-
-                const cardToppings = cardProduct.toppings
-                  .map((toppingId) => positionToppings.entities[toppingId])
-                  .filter((topping): topping is Topping => !!topping);
-                const cardIngredients = positionIngredients.filter(
-                  (ingredient) =>
-                    cardProduct.ingredients.includes(ingredient.id)
-                );
-
-                const cardVariation = cardProduct.variations.find(
-                  (productVariation) => productVariation.id === variation
-                );
-                if (!cardVariation) {
-                  throw new Error('Missing entity');
-                }
-
-                const cardVariationInfo = `${cardVariation.size}, ${cardVariation.weight}`;
-                const priceDifference =
-                  cardVariation.price - defaultVariation.price;
-
-                return {
-                  id: cardProductId,
-                  content: (
-                    <FlipCard
-                      key={cardProductId}
-                      renderFrontContent={({ flip }) => (
-                        <FrontCardContent
-                          fieldGroupId={index}
-                          productFieldIndex={productStateIndex}
-                          productId={cardProductId}
-                          productName={cardProduct.productName}
-                          priceDifference={priceDifference}
-                          variationInfo={cardVariationInfo}
-                          ingredients={cardIngredients}
-                          toppings={cardToppings}
-                          flip={flip}
-                        />
-                      )}
-                      renderBackContent={({ flip }) => (
-                        <BackCardContent
-                          fieldGroupId={index}
-                          productFieldIndex={productStateIndex}
-                          ingredients={cardIngredients}
-                          toppings={cardToppings}
-                          flip={flip}
-                        />
-                      )}
-                    />
-                  ),
-                };
+              if (!cardProduct) {
+                throw new Error('Missing entity');
               }
-            )
-          : [];
 
-        const productStateIndex = byProductState.findIndex(
-          (product) => product === defaultProductState
-        );
+              const cardToppings = cardProduct.toppings
+                .map((toppingId) => positionToppings.entities[toppingId])
+                .filter((topping): topping is Topping => !!topping);
+              const cardIngredients = positionIngredients.filter((ingredient) =>
+                cardProduct.ingredients.includes(ingredient.id)
+              );
 
-        return isNotCombo ? (
-          <>
-            <div className='mb-1 text-sm text-gray-500'>{variationInfo}</div>
-            <IngredientsSection
-              productId={productStateIndex}
-              fieldGroupId={index}
-              ingredients={positionIngredients}
-            />
-            <VariationsSection
-              productId={productStateIndex}
-              fieldGroupId={index}
-              variations={defaultProduct.variations}
-            />
-            <ToppingsSection
-              productId={productStateIndex}
-              fieldGroupId={index}
-              toppings={defaultProductToppings}
-            />
-          </>
-        ) : (
-          <ComboEntry
-            key={id}
-            productName={defaultProduct.productName}
-            variationInfo={variationInfo}
-          >
-            <Carousel initialId={productId} items={comboItems} />
-          </ComboEntry>
-        );
-      })}
-    </form>
+              const cardVariation = cardProduct.variations.find(
+                (productVariation) => productVariation.id === variation
+              );
+              if (!cardVariation) {
+                throw new Error('Missing entity');
+              }
+
+              const cardVariationInfo = `${cardVariation.size}, ${cardVariation.weight}`;
+              const priceDifference =
+                cardVariation.price - defaultVariation.price;
+
+              return {
+                id: cardProductId,
+                content: (
+                  <FlipCard
+                    key={cardProductId}
+                    renderFrontContent={({ flip }) => (
+                      <FrontCardContent
+                        fieldGroupId={index}
+                        productFieldIndex={productStateIndex}
+                        productId={cardProductId}
+                        productName={cardProduct.productName}
+                        priceDifference={priceDifference}
+                        variationInfo={cardVariationInfo}
+                        ingredients={cardIngredients}
+                        toppings={cardToppings}
+                        flip={flip}
+                      />
+                    )}
+                    renderBackContent={({ flip }) => (
+                      <BackCardContent
+                        fieldGroupId={index}
+                        productFieldIndex={productStateIndex}
+                        ingredients={cardIngredients}
+                        toppings={cardToppings}
+                        flip={flip}
+                      />
+                    )}
+                  />
+                ),
+              };
+            }
+          )
+        : [];
+
+      const productStateIndex = byProductState.findIndex(
+        (product) => product === defaultProductState
+      );
+
+      return isNotCombo ? (
+        <>
+          <div className='mb-1 text-sm text-gray-500'>{variationInfo}</div>
+          <IngredientsSection
+            productId={productStateIndex}
+            fieldGroupId={index}
+            ingredients={positionIngredients}
+          />
+          <VariationsSection
+            productId={productStateIndex}
+            fieldGroupId={index}
+            variations={defaultProduct.variations}
+          />
+          <ToppingsSection
+            productId={productStateIndex}
+            fieldGroupId={index}
+            toppings={defaultProductToppings}
+          />
+        </>
+      ) : (
+        <ComboEntry
+          key={id}
+          productName={defaultProduct.productName}
+          variationInfo={variationInfo}
+        >
+          <Carousel initialId={productId} items={comboItems} />
+        </ComboEntry>
+      );
+    }
   );
 
   const categoryMapsFormValues = methods.watch('categoryMaps');
@@ -208,7 +201,13 @@ export function MenuPositionForm({
         <FormProvider {...methods}>
           <h2 className='text-2xl'>{name}</h2>
           {!isNotCombo && <span>{description}</span>}
-          {contentByCategory}
+          <form
+            id={formId}
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            onSubmit={methods.handleSubmit((data) => console.log(data))}
+          >
+            {contentByCategory}
+          </form>
         </FormProvider>
       }
       renderFooterContent={(close) => (
