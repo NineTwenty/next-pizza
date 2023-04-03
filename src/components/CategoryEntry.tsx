@@ -1,5 +1,5 @@
 import { MenuPosition } from 'components/MenuPosition';
-import { MenuPositionModal } from 'components/MenuPositionModal';
+import { MenuPositionForm } from 'components/MenuPositionForm';
 import { useEffect, useRef } from 'react';
 import { useMenuPositions } from 'utils/apiHooks';
 
@@ -53,7 +53,7 @@ export function CategoryEntry({ title, id, setActiveCategory }: CategoryProps) {
           key={positionId}
         >
           {({ closeCallback, description, positionIngredients }) => (
-            <MenuPositionModal
+            <MenuPositionForm
               position={position}
               name={position.menuPositionName}
               ingredients={positionIngredients}
