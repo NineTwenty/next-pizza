@@ -11,6 +11,7 @@ import { VariationsSection } from 'components/VariationsSection';
 import { ToppingsSection } from 'components/ToppingsSection';
 import { ComboEntry } from 'components/ComboEntry';
 import { Carousel } from 'components/Carousel';
+import { useOrders } from 'hooks/useOrders';
 
 type MenuPositionFormProps = {
   closeCallback: () => void;
@@ -31,6 +32,7 @@ export function MenuPositionForm({
   toppings: positionToppings,
   products: positionProducts,
 }: MenuPositionFormProps) {
+  const { addOrder } = useOrders();
   const formId = `${position.id}_${position.categoryId}`;
   const { defaultFormValues: formValues, ...methods } = usePositionForm({
     categoryMaps: position.categoryMap,
@@ -204,7 +206,15 @@ export function MenuPositionForm({
           <form
             id={formId}
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onSubmit={methods.handleSubmit((data) => console.log(data))}
+            onSubmit={methods.handleSubmit(({ categoryMaps }) =>
+              addOrder({
+                order: categoryMaps,
+                categoryId: position.categoryId,
+                positionId: position.id,
+                positionName: position.menuPositionName,
+                totalPrice,
+              })
+            )}
           >
             {contentByCategory}
           </form>
