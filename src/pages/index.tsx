@@ -7,6 +7,7 @@ import { useOrders } from 'hooks/useOrders';
 import { Navbar } from 'components/Navbar';
 import { CategoryEntry } from 'components/CategoryEntry';
 import { Header } from 'components/Header';
+import { Cart } from 'components/Cart';
 
 // TODO: Use SSR
 const Home: NextPage = () => {
@@ -33,78 +34,84 @@ const Home: NextPage = () => {
             isMenuOpen={isMenuOpen}
             setIsMenuOpen={setIsMenuOpen}
           />
-          <Navbar
-            activeLink={activeCategory}
-            links={data
-              .filter(({ listed }) => listed)
-              .map(({ categoryName }) => categoryName)}
-          />
-          <main className='px-4'>
-            {data.map((category) =>
-              category.listed ? (
-                <CategoryEntry
-                  key={category.id}
-                  id={category.id}
-                  title={category.categoryName}
-                  setActiveCategory={setActiveCategory}
-                />
-              ) : null
-            )}
-            {ordersIds.length > 0 && (
-              <div className='sticky bottom-0 h-px'>
-                <button
-                  type='button'
-                  className='relative -top-[4.5rem] ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-[rgba(0,0,0,0.2)0px_10px_20px]'
-                  onClick={() => setIsCartOpen(true)}
-                >
-                  <div className='absolute top-0 -right-1 flex h-5 min-w-[1.25rem] place-items-center justify-center rounded-full bg-orange-500 text-sm text-white'>
-                    {ordersIds.length}
+          {isCartOpen ? (
+            <Cart />
+          ) : (
+            <>
+              <Navbar
+                activeLink={activeCategory}
+                links={data
+                  .filter(({ listed }) => listed)
+                  .map(({ categoryName }) => categoryName)}
+              />
+              <main className='px-4'>
+                {data.map((category) =>
+                  category.listed ? (
+                    <CategoryEntry
+                      key={category.id}
+                      id={category.id}
+                      title={category.categoryName}
+                      setActiveCategory={setActiveCategory}
+                    />
+                  ) : null
+                )}
+                {ordersIds.length > 0 && (
+                  <div className='sticky bottom-0 h-px'>
+                    <button
+                      type='button'
+                      className='relative -top-[4.5rem] ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-[rgba(0,0,0,0.2)0px_10px_20px]'
+                      onClick={() => setIsCartOpen(true)}
+                    >
+                      <div className='absolute top-0 -right-1 flex h-5 min-w-[1.25rem] place-items-center justify-center rounded-full bg-orange-500 text-sm text-white'>
+                        {ordersIds.length}
+                      </div>
+                      <ShoppingCart className='-ml-1 stroke-orange-500' />
+                    </button>
                   </div>
-                  <ShoppingCart className='-ml-1 stroke-orange-500' />
-                </button>
-              </div>
-            )}
-          </main>
-          <footer className='flex flex-col border-t-8 border-orange-500 bg-black/90 p-4 leading-loose text-white'>
-            <div className='border-b border-white/10 pb-4'>
-              Feedback@pizza.com
-            </div>
-            <section className='py-2'>
-              <div className='py-2'>
-                <h1 className='font-semibold'>Next Пицца</h1>
-                <ul className='text-white/80'>
-                  <li>О нас</li>
-                  <li>Блог</li>
-                </ul>
-              </div>
-              <div className='py-2'>
-                <h1 className='font-semibold'>Работа</h1>
-                <ul className='text-white/80'>
-                  <li>В пиццерии</li>
-                </ul>
-              </div>
-              <div className='border-b border-white/10 py-2 pb-4'>
-                <h1 className='font-semibold'>Партнерам</h1>
-                <ul className='text-white/80'>
-                  <li>Инвестиции</li>
-                  <li>Поставщикам</li>
-                </ul>
-              </div>
-            </section>
-            <div className='py-2 text-white/80'>
-              <ul className='text-white/80'>
-                <li>Правовая информация</li>
-                <li>Калорийность</li>
-                <li>Помощь</li>
-              </ul>
-              <div className='py-4'>
-                <span className='text-lg font-bold tracking-wide'>
-                  NEXT ПИЦЦА
-                </span>{' '}
-                © 2023
-              </div>
-            </div>
-          </footer>
+                )}
+              </main>
+              <footer className='flex flex-col border-t-8 border-orange-500 bg-black/90 p-4 leading-loose text-white'>
+                <div className='border-b border-white/10 pb-4'>
+                  Feedback@pizza.com
+                </div>
+                <section className='py-2'>
+                  <div className='py-2'>
+                    <h1 className='font-semibold'>Next Пицца</h1>
+                    <ul className='text-white/80'>
+                      <li>О нас</li>
+                      <li>Блог</li>
+                    </ul>
+                  </div>
+                  <div className='py-2'>
+                    <h1 className='font-semibold'>Работа</h1>
+                    <ul className='text-white/80'>
+                      <li>В пиццерии</li>
+                    </ul>
+                  </div>
+                  <div className='border-b border-white/10 py-2 pb-4'>
+                    <h1 className='font-semibold'>Партнерам</h1>
+                    <ul className='text-white/80'>
+                      <li>Инвестиции</li>
+                      <li>Поставщикам</li>
+                    </ul>
+                  </div>
+                </section>
+                <div className='py-2 text-white/80'>
+                  <ul className='text-white/80'>
+                    <li>Правовая информация</li>
+                    <li>Калорийность</li>
+                    <li>Помощь</li>
+                  </ul>
+                  <div className='py-4'>
+                    <span className='text-lg font-bold tracking-wide'>
+                      NEXT ПИЦЦА{' '}
+                    </span>
+                    © 2023
+                  </div>
+                </div>
+              </footer>
+            </>
+          )}
         </>
       ) : (
         'loading'
