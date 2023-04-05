@@ -1,5 +1,8 @@
+import type { Ingredient, Topping } from '@prisma/client';
+import type { OrderEntry } from 'hooks/useOrders';
 import { useOrders } from 'hooks/useOrders';
-import { ChevronRight } from 'react-feather';
+import { ChevronRight, Minus, Plus, X } from 'react-feather';
+import { useMenuPositions } from 'utils/apiHooks';
 
 function getNoun(number: number, one: string, two: string, five: string) {
   let n = Math.abs(number);
@@ -17,6 +20,134 @@ function getNoun(number: number, one: string, two: string, five: string) {
   return five;
 }
 
+function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
+  const { updateOrder, deleteOrder } = useOrders();
+  const { isSuccess, data } = useMenuPositions({
+    category: orderEntry.categoryId,
+  });
+
+  if (!isSuccess) {
+    return null;
+  }
+  const { ingredients, products, toppings } = data;
+  const isCombo = orderEntry.order.length > 1;
+
+  function makeSummaryEntry(order: (typeof orderEntry.order)[number]) {
+    const product = products.entities[order.product];
+    const entryState = order.byProductState.find(
+      ({ product: productId }) => productId === order.product
+    );
+
+    if (!entryState || !product) {
+      throw new Error('Cannot render CartItem. Required entity is missing.');
+    }
+
+    const entryVariation = product.variations.find(
+      ({ id }) => id === entryState.variation
+    );
+    const entryIngredients = entryState.excludedIngredients
+      .map((id) => ingredients.entities[id])
+      .filter(
+        (ingredient): ingredient is Ingredient => !!ingredient?.ingredientName
+      );
+    const entryToppings = entryState.includedToppings
+      .map((id) => toppings.entities[id])
+      .filter((topping): topping is Topping => !!topping?.toppingName);
+
+    if (!entryVariation) {
+      throw new Error('Cannot render CartItem. Required entity is missing.');
+    }
+
+    return (
+      <div key={order.id} className='mb-2 text-xs last:mb-0'>
+        {isCombo ? <h4 className='mt-1'>{product.productName}</h4> : null}
+        <p className={`${isCombo ? '' : 'pb-1'} text-gray-500`}>
+          {`${entryVariation.size} ${entryVariation.weight}`}
+        </p>
+        {entryIngredients.length > 0 ? (
+          <p className='lowercase text-gray-500'>
+            {'+ '}
+            {entryIngredients.map((ingredient, i, arr) => (
+              <span key={ingredient.id}>
+                {ingredient.ingredientName}
+                {i === arr.length - 1 ? null : ', '}
+              </span>
+            ))}
+          </p>
+        ) : null}
+        {entryToppings.length > 0 ? (
+          <p className='lowercase  text-gray-500'>
+            {'- '}
+            {entryToppings.map((topping, i, arr) => (
+              <span key={topping.id}>
+                {topping.toppingName}
+                {i === arr.length - 1 ? null : ', '}
+              </span>
+            ))}
+          </p>
+        ) : null}
+      </div>
+    );
+  }
+
+  const positionSummary = orderEntry.order.map(makeSummaryEntry);
+
+  return (
+    <section className='relative bg-white p-4'>
+      <button
+        type='button'
+        aria-label={`Убрать заказ ${orderEntry.positionName}`}
+        className='absolute top-4 right-6'
+        onClick={() => deleteOrder(orderEntry.positionId)}
+      >
+        <X className='w-4' />
+      </button>
+      <section className='grid grid-flow-col grid-cols-[1fr,5fr] gap-4 pb-2'>
+        <div className='mt-1 aspect-square w-full rounded-full bg-orange-200' />
+        <section className='flex flex-col justify-center'>
+          <h3 className='mb-1 font-medium leading-5'>
+            {orderEntry.positionName}
+          </h3>
+          <div>{positionSummary}</div>
+        </section>
+      </section>
+      <section className='flex place-items-center border-t pt-4'>
+        <span className='mr-auto font-medium'>{orderEntry.totalPrice} ₽</span>
+        <div>
+          {/* TODO: Add order edit button */}
+          <div className='flex place-items-center rounded-full bg-gray-100 p-1 text-gray-800'>
+            <button
+              type='button'
+              aria-label='decrease order count'
+              className='px-1'
+              onClick={() => {
+                if (orderEntry.amount === 1) {
+                  deleteOrder(orderEntry.positionId);
+                } else {
+                  updateOrder(orderEntry, orderEntry.amount - 1);
+                }
+              }}
+            >
+              <Minus className='w-4' />
+            </button>
+            <div className='w-10 text-center'>{orderEntry.amount}</div>
+            <button
+              type='button'
+              aria-label='increase order count'
+              className='px-1'
+              onClick={() => {
+                updateOrder(orderEntry, orderEntry.amount + 1);
+              }}
+            >
+              <Plus className='w-4' />
+            </button>
+          </div>
+        </div>
+      </section>
+    </section>
+  );
+}
+
 export function Cart() {
   const { orders } = useOrders();
   const orderPrice = orders.reduce(
@@ -24,8 +155,8 @@ export function Cart() {
     0
   );
 
-  const orderItems = orders.map(({ positionName }) => (
-    <div>{positionName}</div>
+  const orderItems = orders.map((orderEntry) => (
+    <CartItem orderEntry={orderEntry} />
   ));
 
   return (
