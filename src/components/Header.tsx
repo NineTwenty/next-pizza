@@ -1,22 +1,47 @@
 import Image from 'next/image';
 import type { Dispatch, SetStateAction } from 'react';
-import { Info, MapPin, Menu, Smartphone, Star, X } from 'react-feather';
+import {
+  ChevronLeft,
+  Info,
+  MapPin,
+  Menu,
+  Smartphone,
+  Star,
+  X,
+} from 'react-feather';
 
 type HeaderProps = {
   isMenuOpen: boolean;
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
+  showCloseButton?: boolean;
+  onCloseButtonClick?: () => void;
 };
 
-export function Header({ isMenuOpen, setIsMenuOpen }: HeaderProps) {
+export function Header({
+  isMenuOpen,
+  setIsMenuOpen,
+  showCloseButton,
+  onCloseButtonClick,
+}: HeaderProps) {
   if (!isMenuOpen) {
     return (
       <header
-        className={`flex h-12 items-center px-4 ${
+        className={`flex h-12 items-center ${
           isMenuOpen ? 'border-b border-white/20 bg-black text-white' : ''
         }`}
       >
+        {showCloseButton ? (
+          <button
+            aria-label='Закрыть корзину'
+            type='button'
+            onClick={onCloseButtonClick}
+            className='h-full border-r px-3'
+          >
+            <ChevronLeft className='' />
+          </button>
+        ) : null}
         <Image
-          className='mr-3'
+          className='mr-3 ml-4'
           src='logo.svg'
           width={26}
           height={26}
@@ -28,7 +53,7 @@ export function Header({ isMenuOpen, setIsMenuOpen }: HeaderProps) {
         <button
           onClick={() => setIsMenuOpen(() => !isMenuOpen)}
           type='button'
-          className='ml-auto flex place-items-center'
+          className='ml-auto flex place-items-center px-4'
         >
           <Menu className='-mr-1 h-5' />
         </button>

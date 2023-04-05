@@ -27,7 +27,12 @@ const Home: NextPage = () => {
       </Head>
       {isSuccess ? (
         <>
-          <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+          <Header
+            showCloseButton={isCartOpen}
+            onCloseButtonClick={() => setIsCartOpen(false)}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+          />
           <Navbar
             activeLink={activeCategory}
             links={data
