@@ -150,6 +150,18 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
 
 export function Cart() {
   const { orders } = useOrders();
+
+  if (orders.length === 0) {
+    return (
+      <section className='flex h-[80vh] w-full place-items-center justify-center border-t'>
+        <div className='w-4/5 text-center'>
+          <p className='mb-2 text-4xl font-medium'>В корзине пока пусто</p>
+          <p className='text-1xl text-gray-500'>Вы ещё ничего не добавили</p>
+        </div>
+      </section>
+    );
+  }
+
   const orderPrice = orders.reduce(
     (price, order) => price + order.totalPrice,
     0
