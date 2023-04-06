@@ -60,7 +60,7 @@ export function Carousel({
   const itemPagination = `${activeIndex + 1} / ${items.length}`;
 
   return (
-    <div className='h-full w-full'>
+    <div data-testid='carousel' className='h-full w-full'>
       <div className='absolute w-full pt-12 text-center text-xl font-medium text-white'>
         {itemPagination}
       </div>

@@ -29,7 +29,10 @@ export function VariationsSection({
       name={`categoryMaps.${fieldGroupId}.byProductState.${productId}.variation`}
       control={control}
       render={({ field }) => (
-        <div className='relative my-4 flex items-center justify-evenly overflow-hidden rounded-full bg-gray-100 text-xs '>
+        <div
+          data-testid='variant_section'
+          className='relative my-4 flex items-center justify-evenly overflow-hidden rounded-full bg-gray-100 text-xs '
+        >
           <div
             className={`${
               animationMap.get(field.value) ?? ''

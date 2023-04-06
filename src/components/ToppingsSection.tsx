@@ -18,7 +18,10 @@ export function ToppingsSection({
   const { register } = usePositionFormContext();
   const isColumn = type === 'column';
   return (
-    <section className={`${isColumn ? 'px-4' : ''}`}>
+    <section
+      data-testid='toppings_section'
+      className={`${isColumn ? 'px-4' : ''}`}
+    >
       <div
         className={`${
           isColumn ? 'text-lg' : ''

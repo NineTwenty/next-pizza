@@ -93,7 +93,7 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
   const positionSummary = orderEntry.order.map(makeSummaryEntry);
 
   return (
-    <section className='relative bg-white p-4'>
+    <section data-testid='cart' className='relative bg-white p-4'>
       <button
         type='button'
         aria-label={`Убрать заказ ${orderEntry.positionName}`}

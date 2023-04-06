@@ -17,7 +17,7 @@ export function IngredientsSection({
 }: IngredientSectionProps) {
   const { register } = usePositionFormContext();
   return (
-    <section>
+    <section data-testid='ingredients_section'>
       <ul
         className={
           onlyOptional

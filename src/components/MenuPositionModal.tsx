@@ -33,6 +33,7 @@ export function MenuPositionModal({
       {inState && (
         // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
         <div
+          data-testid='menu_position_modal'
           onClick={(event) => event.stopPropagation()}
           className='fixed top-0 left-0 z-10 h-full w-full'
         >
