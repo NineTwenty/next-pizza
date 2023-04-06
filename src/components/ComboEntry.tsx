@@ -35,6 +35,7 @@ export function ComboEntry({
               <div className='fixed inset-0 z-20 bg-black/60 backdrop-blur-2xl '>
                 {children}
                 <button
+                  aria-label='Закрыть'
                   className='fixed top-2 right-2 z-50'
                   type='button'
                   onClick={() => setIsOpen(false)}

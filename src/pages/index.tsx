@@ -58,6 +58,7 @@ const Home: NextPage = () => {
                 {ordersIds.length > 0 && (
                   <div className='sticky bottom-0 h-px'>
                     <button
+                      aria-label='Открыть корзину'
                       type='button'
                       className='relative -top-[4.5rem] ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-[rgba(0,0,0,0.2)0px_10px_20px]'
                       onClick={() => setIsCartOpen(true)}
