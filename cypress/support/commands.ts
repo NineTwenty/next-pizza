@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+// eslint-disable-next-line import/no-extraneous-dependencies
+import '@testing-library/cypress/add-commands';
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
