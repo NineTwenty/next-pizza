@@ -1,8 +1,5 @@
-import type { Ingredient, Topping } from '@prisma/client';
 import type {
   GetPositionsResponse,
-  DenormalizedProduct,
-  DenormalizedMenuPosition,
   DenormalizedCategoryMap,
 } from 'types/server';
 import { z } from 'zod';
@@ -37,13 +34,7 @@ export const entitiesRouter = createTRPCRouter({
 
       const collections = positions.reduce<GetPositionsResponse>(
         (acc, currPosition) => {
-          // Setup vars for nested entities
-          const currProducts: DenormalizedProduct[] = [];
-          const currIngredients: Ingredient[] = [];
-          const currToppings: Topping[] = [];
-
-          // Map & denormalize MenuPositions
-          const denormPosition: DenormalizedMenuPosition = {
+          acc.menuPositions.push({
             ...currPosition,
             // Map & denormalize categoryMaps
             categoryMap: currPosition.categoryMap.map(
@@ -54,7 +45,7 @@ export const entitiesRouter = createTRPCRouter({
                   const productIngredients = product.ingredients.map(
                     (ingredient) => {
                       // Save ingredients
-                      currIngredients.push(ingredient);
+                      acc.ingredients.push(ingredient);
                       return ingredient.id;
                     }
                   );
@@ -62,12 +53,12 @@ export const entitiesRouter = createTRPCRouter({
                   // Map & denormalize toppings
                   const productToppings = product.toppings.map((toppings) => {
                     // Save toppings
-                    currToppings.push(toppings);
+                    acc.toppings.push(toppings);
                     return toppings.id;
                   });
 
                   // Save denormalized product
-                  currProducts.push({
+                  acc.products.push({
                     ...product,
                     ingredients: productIngredients,
                     toppings: productToppings,
@@ -86,15 +77,8 @@ export const entitiesRouter = createTRPCRouter({
                 };
               }
             ),
-          };
-
-          // Make denormalized response object
-          return {
-            menuPositions: [...acc.menuPositions, denormPosition],
-            products: [...acc.products, ...currProducts],
-            ingredients: [...acc.ingredients, ...currIngredients],
-            toppings: [...acc.toppings, ...currToppings],
-          };
+          });
+          return acc;
         },
         { menuPositions: [], products: [], ingredients: [], toppings: [] }
       );
