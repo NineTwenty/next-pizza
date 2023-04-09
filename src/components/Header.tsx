@@ -26,7 +26,7 @@ export function Header({
   if (!isMenuOpen) {
     return (
       <header
-        className={`flex h-12 items-center ${
+        className={`mx-auto flex h-12 max-w-7xl items-center md:h-fit md:min-h-[5.375rem] md:w-5/6 md:pt-6 md:pb-4 ${
           isMenuOpen ? 'border-b border-white/20 bg-black text-white' : ''
         }`}
       >
@@ -41,19 +41,40 @@ export function Header({
           </button>
         ) : null}
         <Image
-          className='mr-3 ml-4'
+          className='mr-3 ml-4 md:ml-0 md:h-11 md:w-11'
           src='logo.svg'
           width={26}
           height={26}
           alt='Logo'
         />
-        <h1 className='space-x-5 text-lg font-bold tracking-wider'>
-          NEXT PIZZA
-        </h1>
+        <div className='flex h-full flex-col justify-center md:mr-10 md:justify-between'>
+          <h1 className='space-x-5 text-lg font-extrabold tracking-wider md:text-2xl md:leading-6 md:tracking-widest'>
+            NEXT PIZZA
+          </h1>
+          <p className='hidden text-sm text-gray-800 md:block'>Сеть пиццерий</p>
+        </div>
+        <div className='mr-10 hidden h-full md:block'>
+          <p className='text-lg leading-5'>
+            Доставка пиццы <span className='text-orange-600'>Москва</span>
+          </p>
+          <p className='mt-1 flex place-items-center text-sm'>
+            32 мин • 4.8
+            <Star className='ml-1 inline-block h-[0.875rem] w-[0.875rem] fill-yellow-400 stroke-yellow-400 ' />
+          </p>
+        </div>
+        <div className='hidden h-full md:block'>
+          <p className='text-lg leading-5'>8 888 888-88-88</p>
+          <p className='mt-1 text-sm text-[rgb(153,153,153)]'>
+            Звонок бесплатный
+          </p>
+        </div>
+        <button className='ml-auto hidden rounded-full bg-gray-100 px-4 py-2 text-sm leading-4 text-gray-500 md:block'>
+          Войти
+        </button>
         <button
           onClick={() => setIsMenuOpen(() => !isMenuOpen)}
           type='button'
-          className='ml-auto flex place-items-center px-4'
+          className='ml-auto flex place-items-center px-4 md:hidden'
         >
           <Menu className='-mr-1 h-5' />
         </button>
