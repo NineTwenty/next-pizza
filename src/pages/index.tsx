@@ -49,6 +49,7 @@ const Home: NextPage = () => {
                 links={data
                   .filter(({ listed }) => listed)
                   .map(({ categoryName }) => categoryName)}
+                onCartClick={() => setIsCartOpen(true)}
               />
               <main className='px-4'>
                 {data.map((category) =>
