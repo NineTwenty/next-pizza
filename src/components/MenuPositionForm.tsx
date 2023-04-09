@@ -126,7 +126,9 @@ export function MenuPositionForm({
 
       return isNotCombo ? (
         <>
-          <div className='mb-1 text-sm text-gray-500'>{variationInfo}</div>
+          <div className='mb-1 text-sm font-medium text-gray-500'>
+            {variationInfo}
+          </div>
           <IngredientsSection
             productId={productStateIndex}
             fieldGroupId={index}
@@ -201,8 +203,8 @@ export function MenuPositionForm({
       closeCallback={closeCallback}
       renderMainContent={
         <FormProvider {...methods}>
-          <h2 className='text-2xl'>{name}</h2>
-          {!isNotCombo && <span>{description}</span>}
+          <h2 className='text-2xl font-semibold'>{name}</h2>
+          {!isNotCombo && <span className='font-medium'>{description}</span>}
           <form
             id={formId}
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -225,7 +227,7 @@ export function MenuPositionForm({
           type='submit'
           form={formId}
           onClick={close}
-          className='h-12 w-full rounded-full bg-orange-600 tracking-tight text-white'
+          className='h-12 w-full rounded-full bg-orange-600 font-medium tracking-tight text-white'
         >
           Добавить в корзину за {totalPrice} ₽
         </button>

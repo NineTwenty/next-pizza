@@ -19,11 +19,11 @@ export function ComboEntry({
         {productName}
       </div>
       <section>
-        <h3 className='font-medium'>{productName}</h3>
-        <span className='text-xs'>{variationInfo}</span>
+        <h3 className='font-bold'>{productName}</h3>
+        <span className='text-xs font-medium'>{variationInfo}</span>
         <button
           type='button'
-          className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm leading-8 text-orange-700'
+          className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm font-semibold leading-8 text-orange-700'
           onClick={() => setIsOpen((oldIsOpen) => !oldIsOpen)}
         >
           Изменить

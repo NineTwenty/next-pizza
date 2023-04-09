@@ -83,20 +83,20 @@ const Home: NextPage = () => {
                 </div>
                 <section className='py-2'>
                   <div className='py-2'>
-                    <h1 className='font-semibold'>Next Пицца</h1>
+                    <h1 className='font-extrabold'>Next Пицца</h1>
                     <ul className='text-white/80'>
                       <li>О нас</li>
                       <li>Блог</li>
                     </ul>
                   </div>
                   <div className='py-2'>
-                    <h1 className='font-semibold'>Работа</h1>
+                    <h1 className='font-extrabold'>Работа</h1>
                     <ul className='text-white/80'>
                       <li>В пиццерии</li>
                     </ul>
                   </div>
                   <div className='border-b border-white/10 py-2 pb-4'>
-                    <h1 className='font-semibold'>Партнерам</h1>
+                    <h1 className='font-extrabold'>Партнерам</h1>
                     <ul className='text-white/80'>
                       <li>Инвестиции</li>
                       <li>Поставщикам</li>
@@ -110,10 +110,8 @@ const Home: NextPage = () => {
                     <li>Помощь</li>
                   </ul>
                   <div className='py-4'>
-                    <span className='text-lg font-bold tracking-wide'>
-                      NEXT ПИЦЦА{' '}
-                    </span>
-                    © 2023
+                    <span className='text-lg font-extrabold'>NEXT ПИЦЦА </span>©
+                    2023
                   </div>
                 </div>
               </footer>

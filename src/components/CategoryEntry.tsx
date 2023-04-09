@@ -70,7 +70,7 @@ export function CategoryEntry({ title, id, setActiveCategory }: CategoryProps) {
 
   return (
     <section ref={sectionRef}>
-      <h2 className='my-5 pb-2 text-2xl'>{title}</h2>
+      <h2 className='my-5 pb-2 text-2xl font-semibold'>{title}</h2>
       {isSuccess && populateMenuPositions(data)}
     </section>
   );

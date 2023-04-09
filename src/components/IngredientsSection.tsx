@@ -17,7 +17,7 @@ export function IngredientsSection({
 }: IngredientSectionProps) {
   const { register } = usePositionFormContext();
   return (
-    <section data-testid='ingredients_section'>
+    <section data-testid='ingredients_section' className='font-medium'>
       <ul
         className={
           onlyOptional
@@ -46,7 +46,7 @@ export function IngredientsSection({
                   <span
                     className={`${
                       onlyOptional
-                        ? 'block rounded-full bg-orange-100 p-2 px-4 text-sm leading-4 text-orange-600 line-through decoration-transparent peer-checked:bg-gray-100 peer-checked:text-gray-400 peer-checked:decoration-current'
+                        ? 'block rounded-full bg-orange-100 p-2 px-4 text-sm font-semibold leading-4 text-orange-600 line-through decoration-transparent peer-checked:bg-gray-100 peer-checked:text-gray-400 peer-checked:decoration-current'
                         : 'h-8 border-b border-dashed border-gray-500'
                     } text-center decoration-dashed underline-offset-4 transition-colors peer-checked:border-transparent peer-checked:line-through peer-checked:decoration-solid`}
                   >

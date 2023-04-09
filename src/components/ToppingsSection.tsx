@@ -25,7 +25,7 @@ export function ToppingsSection({
       <div
         className={`${
           isColumn ? 'text-lg' : ''
-        } mb-3 mt-6 font-medium leading-5`}
+        } mb-3 mt-6 font-semibold leading-5`}
       >
         Добавить по вкусу
       </div>
@@ -60,8 +60,8 @@ export function ToppingsSection({
                     <p
                       className={`${
                         isColumn
-                          ? 'text-sm font-medium leading-[1.125rem]'
-                          : 'h-8 text-xs'
+                          ? 'text-sm font-bold leading-[1.125rem]'
+                          : 'h-8 text-xs font-semibold'
                       } text-center`}
                     >
                       {topping.toppingName}
@@ -69,9 +69,9 @@ export function ToppingsSection({
                     <p
                       className={`${
                         isColumn
-                          ? 'text-sm leading-[1.125rem] text-gray-600'
+                          ? 'text-sm font-bold leading-[1.125rem] text-gray-600'
                           : 'text-center'
-                      } 'tracking-wide'`}
+                      } font-semibold tracking-tighter`}
                     >
                       {isColumn ? `+${topping.price} ₽` : `${topping.price}₽`}
                     </p>

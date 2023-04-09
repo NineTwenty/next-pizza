@@ -61,7 +61,7 @@ export function Carousel({
 
   return (
     <div data-testid='carousel' className='h-full w-full'>
-      <div className='absolute w-full pt-12 text-center text-xl font-medium text-white'>
+      <div className='absolute w-full pt-12 text-center text-xl font-bold text-white'>
         {itemPagination}
       </div>
       <div className='flex h-full w-full snap-x snap-mandatory snap-always items-center gap-6 overflow-x-auto px-12'>

@@ -41,9 +41,9 @@ export function FrontCardContent({
       className='overflow-y-scroll-scroll flex h-full w-full flex-col items-center rounded-3xl bg-white p-4'
     >
       <div className='mx-auto my-3 h-40 w-40 rounded-full bg-pink-400' />
-      <h3 className='text-lg font-semibold'>{productName}</h3>
-      <p className='text-xs'>{variationInfo}</p>
-      <section className='flex flex-wrap justify-center text-xs text-gray-600'>
+      <h3 className='text-lg font-bold'>{productName}</h3>
+      <p className='text-xs font-semibold'>{variationInfo}</p>
+      <section className='flex flex-wrap justify-center text-xs font-medium text-gray-600'>
         {ingredients.map(({ id, ingredientName }, index) => (
           <>
             <span
@@ -72,7 +72,7 @@ export function FrontCardContent({
       </section>
       <button
         type='button'
-        className='rounded-full bg-orange-100 p-2 px-4 text-sm text-orange-600'
+        className='rounded-full bg-orange-100 p-2 px-4 text-sm font-semibold text-orange-600'
         onClick={flip}
       >
         Изменить состав
@@ -99,7 +99,7 @@ export function FrontCardContent({
                   isChecked
                     ? 'w-full bg-orange-100 text-orange-600'
                     : 'w-[62%] bg-orange-600 text-white'
-                } mt-auto block h-12 cursor-pointer rounded-full p-2 px-5 text-center text-base`}
+                } mt-auto block h-12 cursor-pointer rounded-full p-2 px-5 text-center text-base font-semibold`}
               >
                 {isChecked ? 'Уже в комбо' : 'Выбрать'}
               </button>
@@ -128,7 +128,7 @@ export function BackCardContent({
     <div className='flex h-full w-full flex-col overflow-hidden rounded-3xl bg-white'>
       <div className='overflow-y-auto py-4'>
         <div className='px-4'>
-          <h4 className='mb-4 text-lg font-medium'>Можно удалить</h4>
+          <h4 className='mb-4 text-lg font-bold'>Можно удалить</h4>
           <IngredientsSection
             onlyOptional
             productId={productFieldIndex}
@@ -154,7 +154,7 @@ export function BackCardContent({
         <button
           type='button'
           onClick={flip}
-          className='w-full rounded-full bg-orange-500 px-4 text-white'
+          className='w-full rounded-full bg-orange-500 px-4 font-semibold text-white'
         >
           Сохранить
         </button>

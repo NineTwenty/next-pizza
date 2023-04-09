@@ -32,7 +32,7 @@ export function Navbar({ links, activeLink }: NavbarProps) {
   return (
     <nav
       ref={navRef}
-      className={`before:content-[" "] line sticky top-[-1px] flex place-items-center overflow-x-scroll bg-white text-sm before:h-14 before:w-3 before:flex-none ${
+      className={`before:content-[" "] line sticky top-[-1px] flex place-items-center overflow-x-scroll bg-white text-sm font-semibold before:h-14 before:w-3 before:flex-none ${
         isSticky ? 'shadow' : ''
       }`}
     >

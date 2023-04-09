@@ -99,11 +99,13 @@ export function MenuPosition({
         {name}
       </div>
       <main className='flex flex-col'>
-        <h3 className='text-lg'>{name}</h3>
-        <p className='text-xs text-gray-600'>{description}</p>
+        <h3 className='text-lg font-semibold'>{name}</h3>
+        <p className='text-xs font-medium tracking-tight text-gray-600'>
+          {description}
+        </p>
         <button
           type='button'
-          className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm leading-8 text-orange-700'
+          className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm font-semibold leading-8 text-orange-700'
         >{`от ${price} ₽`}</button>
       </main>
       {Modal}

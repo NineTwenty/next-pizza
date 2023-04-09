@@ -26,7 +26,7 @@ export function Header({
   if (!isMenuOpen) {
     return (
       <header
-        className={`mx-auto flex h-12 max-w-7xl items-center md:h-fit md:min-h-[5.375rem] md:w-5/6 md:pt-6 md:pb-4 ${
+        className={`mx-auto flex  h-12 max-w-7xl items-center font-medium md:h-fit md:min-h-[5.375rem] md:w-5/6 md:pt-6 md:pb-4 ${
           isMenuOpen ? 'border-b border-white/20 bg-black text-white' : ''
         }`}
       >
@@ -48,7 +48,7 @@ export function Header({
           alt='Logo'
         />
         <div className='flex h-full flex-col justify-center md:mr-10 md:justify-between'>
-          <h1 className='space-x-5 text-lg font-extrabold tracking-wider md:text-2xl md:leading-6 md:tracking-widest'>
+          <h1 className='space-x-5 text-lg font-extrabold md:text-2xl md:leading-6'>
             NEXT PIZZA
           </h1>
           <p className='hidden text-sm text-gray-800 md:block'>Сеть пиццерий</p>
@@ -83,7 +83,7 @@ export function Header({
   }
 
   return (
-    <section className='absolute top-0 z-10 h-screen w-full overflow-auto overscroll-y-contain bg-black text-white '>
+    <section className='absolute top-0 z-10 h-screen w-full overflow-auto overscroll-y-contain bg-black font-medium text-white '>
       {/* Force content overflow to trigger scroll and make overscroll-contain work */}
       <div className='h-[104vh]'>
         <header className='flex h-12 items-center border-b border-white/20 px-4'>
@@ -94,9 +94,7 @@ export function Header({
             height={26}
             alt='Logo'
           />
-          <h1 className='space-x-5 text-lg font-bold tracking-wider'>
-            NEXT PIZZA
-          </h1>
+          <h1 className='space-x-5 text-lg font-extrabold'>NEXT PIZZA</h1>
           <button
             onClick={() => setIsMenuOpen(() => !isMenuOpen)}
             type='button'

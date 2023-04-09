@@ -31,7 +31,7 @@ export function VariationsSection({
       render={({ field }) => (
         <div
           data-testid='variant_section'
-          className='relative my-4 flex items-center justify-evenly overflow-hidden rounded-full bg-gray-100 text-xs '
+          className='relative my-4 flex items-center justify-evenly overflow-hidden rounded-full bg-gray-100 text-xs font-semibold'
         >
           <div
             className={`${
