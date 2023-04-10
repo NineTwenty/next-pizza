@@ -70,8 +70,12 @@ export function CategoryEntry({ title, id, setActiveCategory }: CategoryProps) {
 
   return (
     <section ref={sectionRef}>
-      <h2 className='my-5 pb-2 text-2xl font-semibold'>{title}</h2>
-      {isSuccess && populateMenuPositions(data)}
+      <h2 className='my-5 pb-2 text-2xl font-semibold md:text-4xl md:font-bold md:tracking-tight'>
+        {title}
+      </h2>
+      <div className='grid grid-cols-1 md:grid-cols-4 md:gap-7 md:gap-y-14'>
+        {isSuccess && populateMenuPositions(data)}
+      </div>
     </section>
   );
 }
