@@ -51,7 +51,7 @@ const Home: NextPage = () => {
                   .map(({ categoryName }) => categoryName)}
                 onCartClick={() => setIsCartOpen(true)}
               />
-              <main className='px-4'>
+              <main className='max-w-7xl px-4 md:mx-auto md:w-5/6 md:px-0'>
                 {data.map((category) =>
                   category.listed ? (
                     <CategoryEntry
