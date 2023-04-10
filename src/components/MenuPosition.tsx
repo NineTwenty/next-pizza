@@ -92,21 +92,27 @@ export function MenuPosition({
       onClick={() => {
         setIsOpen(true);
       }}
-      className='flex border-b border-slate-100 py-6 last:border-b-0'
+      className='flex w-full border-b border-slate-100 py-6 last:border-b-0 md:flex-col md:border-b-0'
     >
       <div className='m-2 mr-4 flex h-28 w-28 flex-shrink-0 items-center justify-center rounded-full bg-orange-200 p-4 text-center'>
         {/* TODO: Use actual position image */}
         {name}
       </div>
       <main className='flex flex-col'>
-        <h3 className='text-lg font-semibold'>{name}</h3>
-        <p className='text-xs font-medium tracking-tight text-gray-600'>
+        <h3 className='text-lg font-semibold md:mb-2 md:text-xl'>{name}</h3>
+        <p className='text-xs font-medium tracking-tight text-gray-500 md:h-24 md:text-base md:leading-5'>
           {description}
         </p>
-        <button
-          type='button'
-          className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm font-semibold leading-8 text-orange-700'
-        >{`от ${price} ₽`}</button>
+        <div className='flex place-items-center justify-between'>
+          <span className='hidden font-semibold md:block'>{`от ${price} ₽`}</span>
+          <button
+            type='button'
+            className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm font-semibold leading-8 text-orange-700'
+          >
+            <span className='md:hidden'>{`от ${price} ₽`}</span>
+            <span className='hidden md:block'>Выбрать</span>
+          </button>
+        </div>
       </main>
       {Modal}
     </article>
