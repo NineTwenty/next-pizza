@@ -32,7 +32,7 @@ async function main() {
 
   const toppings: Prisma.ToppingCreateManyInput[] = [
     { id: 1, toppingName: 'Сырный бортик', price: 180 },
-    { id: 2, toppingName: 'Моцарелал', price: 99 },
+    { id: 2, toppingName: 'Моцарелла', price: 99 },
     { id: 3, toppingName: 'Халапеньо', price: 70 },
     { id: 4, toppingName: 'Пепперони', price: 99 },
     { id: 5, toppingName: 'Ветчина', price: 99 },
@@ -170,8 +170,8 @@ async function main() {
     data: {
       category: { connect: { id: 1 } },
       menuPosition: { connect: { menuPositionName: 'Пепперони' } },
-      products: { connect: [{ id: 1 }] },
-      defaultProduct: { connect: { id: 1 } },
+      products: { connect: [{ productName: products[0]?.productName }] },
+      defaultProduct: { connect: { productName: products[0]?.productName } },
     },
   });
 
@@ -188,8 +188,8 @@ async function main() {
     data: {
       category: { connect: { id: 1 } },
       menuPosition: { connect: { menuPositionName: 'Цыпленок ранч' } },
-      products: { connect: [{ id: 2 }] },
-      defaultProduct: { connect: { id: 2 } },
+      products: { connect: [{ productName: products[1]?.productName }] },
+      defaultProduct: { connect: { productName: products[1]?.productName } },
     },
   });
 
@@ -214,7 +214,12 @@ async function main() {
     data: {
       category: { connect: { id: 2 } },
       menuPosition: { connect: { menuPositionName: '2 пиццы' } },
-      products: { connect: [{ id: 1 }, { id: 2 }] },
+      products: {
+        connect: [
+          { productName: products[0]?.productName },
+          { productName: products[1]?.productName },
+        ],
+      },
       defaultProduct: { connect: { id: 1 } },
       categoryDiscount: { connect: { id: 1 } },
     },
@@ -224,8 +229,13 @@ async function main() {
     data: {
       category: { connect: { id: 2 } },
       menuPosition: { connect: { menuPositionName: '2 пиццы' } },
-      products: { connect: [{ id: 1 }, { id: 2 }] },
-      defaultProduct: { connect: { id: 2 } },
+      products: {
+        connect: [
+          { productName: products[0]?.productName },
+          { productName: products[1]?.productName },
+        ],
+      },
+      defaultProduct: { connect: { productName: products[1]?.productName } },
       categoryDiscount: { connect: { id: 1 } },
     },
   });
@@ -240,5 +250,5 @@ main()
     // eslint-disable-next-line no-console
     console.error(e);
     await prisma.$disconnect();
-    process.exit(1);
+    // process.exit(1);
   });
