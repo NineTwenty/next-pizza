@@ -50,7 +50,7 @@ export function ToppingsSection({
                 <div
                   className={`${
                     isColumn ? 'gap-1' : 'flex-col'
-                  } flex items-center rounded-xl border border-white bg-white p-2 shadow-[rgba(6,5,50,0.12)_0px_4px_20px] transition duration-150 ease-out peer-checked:border-orange-600  peer-checked:shadow-none`}
+                  } flex cursor-pointer items-center rounded-xl border border-white bg-white p-2 shadow-[rgba(6,5,50,0.12)_0px_4px_20px] transition duration-150 ease-out hover:shadow-[rgba(6,5,50,0.12)_0px_0px_8px] peer-checked:border-orange-600  peer-checked:shadow-none`}
                 >
                   <img
                     className={`${isColumn ? 'w-12' : 'w-full'} aspect-square`}
