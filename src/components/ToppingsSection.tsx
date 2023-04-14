@@ -25,7 +25,7 @@ export function ToppingsSection({
       <div
         className={`${
           isColumn ? 'text-lg' : ''
-        } mb-3 mt-6 font-semibold leading-5`}
+        } mb-3 mt-6 font-semibold leading-5 md:text-xl md:font-bold`}
       >
         Добавить по вкусу
       </div>
