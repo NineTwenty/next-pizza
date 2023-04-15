@@ -7,6 +7,7 @@ import type { DenormalizedMenuPosition } from 'types/server';
 import { FlipCard } from 'components/FlipCard';
 import { BackCardContent, FrontCardContent } from 'components/FlipCardContent';
 import { MenuPositionModal } from 'components/MenuPositionModal';
+import type { PositionProductState } from 'hooks/usePositionForm';
 import { usePositionForm } from 'hooks/usePositionForm';
 import { IngredientsSection } from 'components/IngredientsSection';
 import { VariationsSection } from 'components/VariationsSection';
@@ -44,82 +45,94 @@ export function MenuPositionForm({
 
   const contentByCategory = formValues.map(
     ({ id, product: productId, byProductState }, index) => {
-      const defaultProduct = positionProducts.entities[productId];
+      function getEntities(
+        targetProductId: number,
+        targetProductState: PositionProductState
+      ) {
+        const product = positionProducts.entities[targetProductId];
+
+        if (!product) throw new Error('Missing entity');
+        const variation = product.variations.find(
+          (productVariation) =>
+            productVariation.id === targetProductState.variation
+        );
+        const ingredients = positionIngredients.filter((ingredient) =>
+          product.ingredients.includes(ingredient.id)
+        );
+        const toppings = product.toppings
+          .map((toppingId) => positionToppings.entities[toppingId])
+          .filter((topping): topping is Topping => !!topping);
+
+        if (!variation) throw new Error('Missing entity');
+        return {
+          product,
+          variation,
+          ingredients,
+          toppings,
+        };
+      }
+
       const defaultProductState = byProductState.find(
-        ({ product }) => product === productId
+        (state) => state.product === productId
       );
 
-      if (!defaultProduct || !defaultProductState) return null;
-      const defaultVariation = defaultProduct.variations.find(
-        (productVariation) =>
-          productVariation.id === defaultProductState.variation
-      );
-      const defaultProductToppings = defaultProduct.toppings
-        .map((toppingId) => positionToppings.entities[toppingId])
-        .filter((topping): topping is Topping => !!topping);
+      if (!defaultProductState) {
+        return null;
+      }
 
-      if (!defaultVariation) return null;
+      const {
+        product: defaultProduct,
+        toppings: defaultProductToppings,
+        variation: defaultVariation,
+      } = getEntities(productId, defaultProductState);
+
       const variationInfo = `${defaultVariation?.size}, ${defaultVariation?.weight}`;
 
       const comboItems = !isNotCombo
-        ? byProductState.map(
-            ({ product: cardProductId, variation }, productStateIndex) => {
-              const cardProduct = positionProducts.entities[cardProductId];
+        ? byProductState.map((productState, productStateIndex) => {
+            const { product: cardProductId } = productState;
+            const {
+              product: cardProduct,
+              ingredients: cardIngredients,
+              toppings: cardToppings,
+              variation: cardVariation,
+            } = getEntities(productState.product, productState);
 
-              if (!cardProduct) {
-                throw new Error('Missing entity');
-              }
+            const cardVariationInfo = `${cardVariation.size}, ${cardVariation.weight}`;
+            const priceDifference =
+              cardVariation.price - defaultVariation.price;
 
-              const cardToppings = cardProduct.toppings
-                .map((toppingId) => positionToppings.entities[toppingId])
-                .filter((topping): topping is Topping => !!topping);
-              const cardIngredients = positionIngredients.filter((ingredient) =>
-                cardProduct.ingredients.includes(ingredient.id)
-              );
-
-              const cardVariation = cardProduct.variations.find(
-                (productVariation) => productVariation.id === variation
-              );
-              if (!cardVariation) {
-                throw new Error('Missing entity');
-              }
-
-              const cardVariationInfo = `${cardVariation.size}, ${cardVariation.weight}`;
-              const priceDifference =
-                cardVariation.price - defaultVariation.price;
-
-              return {
-                id: cardProductId,
-                content: (
-                  <FlipCard
-                    key={cardProductId}
-                    renderFrontContent={({ flip }) => (
-                      <FrontCardContent
-                        fieldGroupId={index}
-                        productFieldIndex={productStateIndex}
-                        productId={cardProductId}
-                        productName={cardProduct.productName}
-                        priceDifference={priceDifference}
-                        variationInfo={cardVariationInfo}
-                        ingredients={cardIngredients}
-                        toppings={cardToppings}
-                        flip={flip}
-                      />
-                    )}
-                    renderBackContent={({ flip }) => (
-                      <BackCardContent
-                        fieldGroupId={index}
-                        productFieldIndex={productStateIndex}
-                        ingredients={cardIngredients}
-                        toppings={cardToppings}
-                        flip={flip}
-                      />
-                    )}
-                  />
-                ),
-              };
-            }
-          )
+            return {
+              id: cardProductId,
+              content: (
+                <FlipCard
+                  key={cardProductId}
+                  renderFrontContent={({ flip }) => (
+                    <FrontCardContent
+                      fieldGroupId={index}
+                      productFieldIndex={productStateIndex}
+                      productId={cardProductId}
+                      productName={cardProduct.productName}
+                      priceDifference={priceDifference}
+                      variationInfo={cardVariationInfo}
+                      ingredients={cardIngredients}
+                      toppings={cardToppings}
+                      flip={flip}
+                    />
+                  )}
+                  renderBackContent={({ flip }) => (
+                    <BackCardContent
+                      fieldGroupId={index}
+                      productFieldIndex={productStateIndex}
+                      ingredients={cardIngredients}
+                      toppings={cardToppings}
+                      flip={flip}
+                    />
+                  )}
+                />
+              ),
+            };
+          })
         : [];
 
       const productStateIndex = byProductState.findIndex(
