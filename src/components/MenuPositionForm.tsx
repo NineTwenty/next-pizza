@@ -36,7 +36,6 @@ export function MenuPositionForm({
   products: positionProducts,
 }: MenuPositionFormProps) {
   const { addOrder } = useOrders();
-  const formId = `${position.id}_${position.categoryId}`;
   const { defaultFormValues: formValues, ...methods } = usePositionForm({
     categoryMaps: position.categoryMap,
     products: positionProducts,
@@ -231,7 +230,19 @@ export function MenuPositionForm({
       closeCallback={closeCallback}
       renderContent={(closeModal) => (
         <FormProvider {...methods}>
-          <div className='flex h-full'>
+          <form
+            className='flex h-full'
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            onSubmit={methods.handleSubmit(({ categoryMaps }) =>
+              addOrder({
+                order: categoryMaps,
+                categoryId: position.categoryId,
+                positionId: position.id,
+                positionName: position.menuPositionName,
+                totalPrice,
+              })
+            )}
+          >
             <motion.div // Position image, fixed in background in mobile layout
               style={{ opacity: scrollYProgress }}
               className='fixed top-0 aspect-square w-full md:static'
@@ -253,26 +264,11 @@ export function MenuPositionForm({
                 {!isNotCombo && (
                   <span className='font-medium'>{description}</span>
                 )}
-                <form
-                  id={formId}
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                  onSubmit={methods.handleSubmit(({ categoryMaps }) =>
-                    addOrder({
-                      order: categoryMaps,
-                      categoryId: position.categoryId,
-                      positionId: position.id,
-                      positionName: position.menuPositionName,
-                      totalPrice,
-                    })
-                  )}
-                >
-                  {contentByCategory}
-                </form>
+                {contentByCategory}
               </section>
               <footer className='sticky bottom-0 flex h-min w-full justify-center bg-white/60 px-4 py-3 backdrop-blur md:bg-stone-50 md:p-[1.5rem_1.875rem_1.875rem] md:backdrop-blur-none'>
                 <button
                   type='submit'
-                  form={formId}
                   onClick={closeModal}
                   className='h-12 w-full rounded-full bg-orange-600 font-medium tracking-tight text-white'
                 >
@@ -280,7 +276,7 @@ export function MenuPositionForm({
                 </button>
               </footer>
             </main>
-          </div>
+          </form>
         </FormProvider>
       )}
     />
