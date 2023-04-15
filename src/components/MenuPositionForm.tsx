@@ -17,6 +17,7 @@ import { ComboEntry } from 'components/ComboEntry';
 import { Carousel } from 'components/Carousel';
 import { Modal } from 'components/Modal';
 import { useOrders } from 'hooks/useOrders';
+import { createPortal } from 'react-dom';
 
 type MenuPositionFormProps = {
   closeCallback: () => void;
@@ -246,7 +247,7 @@ export function MenuPositionForm({
       renderContent={(closeModal) => (
         <FormProvider {...methods}>
           <form
-            className='flex h-full'
+            className='grid h-full md:grid-cols-[1.3fr_minmax(24rem,_1fr)]'
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={methods.handleSubmit(({ categoryMaps }) =>
               addOrder({
@@ -260,7 +261,7 @@ export function MenuPositionForm({
           >
             <motion.div // Position image, fixed in background in mobile layout
               style={{ opacity: scrollYProgress }}
-              className='fixed top-0 aspect-square w-full md:static'
+              className='fixed top-0 col-start-1 col-end-2 row-start-1 row-end-2 aspect-square w-full md:static'
             >
               <div className='flex h-full w-full items-center justify-center rounded-full bg-orange-200 text-center'>
                 {`Photo${scrollYProgress.get()}`}
@@ -268,7 +269,7 @@ export function MenuPositionForm({
             </motion.div>
             <main
               ref={containerRef}
-              className='flex h-full flex-col justify-between overflow-y-auto bg-white md:min-w-[24rem] md:rounded-r-3xl md:bg-stone-50'
+              className='col-start-2 col-end-3 flex h-full flex-col justify-between overflow-y-auto bg-white md:min-w-[24rem] md:rounded-r-3xl md:bg-stone-50'
             >
               <div className='z-10 md:hidden'>
                 <div className='h-[50vw] w-full' />
