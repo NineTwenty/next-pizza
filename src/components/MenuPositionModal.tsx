@@ -44,7 +44,7 @@ export function MenuPositionModal({
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
-              className='relative top-0 h-full overflow-hidden md:flex md:h-[38rem] md:w-[60rem] md:overflow-visible md:rounded-3xl md:bg-white'
+              className='relative top-0 h-full overflow-hidden md:h-[38rem] md:w-[60rem] md:overflow-visible md:rounded-3xl md:bg-white'
             >
               {renderContent(() => setInState(false))}
               <button
