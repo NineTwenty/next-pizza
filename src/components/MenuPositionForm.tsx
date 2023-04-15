@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { motion, useScroll } from 'framer-motion';
+import { X } from 'react-feather';
 import type { Ingredient, Topping } from '@prisma/client';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
@@ -14,6 +15,7 @@ import { VariationsSection } from 'components/VariationsSection';
 import { ToppingsSection } from 'components/ToppingsSection';
 import { ComboEntry } from 'components/ComboEntry';
 import { Carousel } from 'components/Carousel';
+import { Modal } from 'components/Modal';
 import { useOrders } from 'hooks/useOrders';
 
 type MenuPositionFormProps = {
@@ -164,9 +166,22 @@ export function MenuPositionForm({
           key={id}
           productName={defaultProduct.productName}
           variationInfo={variationInfo}
-        >
-          <Carousel initialId={productId} items={comboItems} />
-        </ComboEntry>
+          render={(close) => (
+            <Modal>
+              <div className='fixed inset-0 z-20 bg-black/60 backdrop-blur-2xl '>
+                <Carousel initialId={productId} items={comboItems} />
+                <button
+                  aria-label='Закрыть'
+                  className='fixed top-2 right-2 z-50'
+                  type='button'
+                  onClick={close}
+                >
+                  <X className='h-8 w-8 text-white' />
+                </button>
+              </div>
+            </Modal>
+          )}
+        />
       );
     }
   );
