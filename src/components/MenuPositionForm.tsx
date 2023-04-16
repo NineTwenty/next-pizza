@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { motion, useScroll } from 'framer-motion';
 import { X } from 'react-feather';
@@ -38,6 +38,29 @@ export function MenuPositionForm({
   toppings: positionToppings,
   products: positionProducts,
 }: MenuPositionFormProps) {
+  const portalRootRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const resizeObserverRef = useRef(
+    new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const bodyWidth = entry.borderBoxSize[0]?.inlineSize;
+        if (bodyWidth && bodyWidth < 768) {
+          setIsMobile(true);
+        } else {
+          setIsMobile(false);
+        }
+      }
+    })
+  );
+
+  useEffect(() => {
+    const observer = resizeObserverRef.current;
+    observer.observe(document.body);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const { addOrder } = useOrders();
   const { defaultFormValues: formValues, ...methods } = usePositionForm({
     categoryMaps: position.categoryMap,
@@ -167,21 +190,32 @@ export function MenuPositionForm({
           key={id}
           productName={defaultProduct.productName}
           variationInfo={variationInfo}
-          render={(close) => (
-            <Modal>
-              <div className='fixed inset-0 z-20 bg-black/60 backdrop-blur-2xl '>
-                <Carousel initialId={productId} items={comboItems} />
-                <button
-                  aria-label='Закрыть'
-                  className='fixed top-2 right-2 z-50'
-                  type='button'
-                  onClick={close}
-                >
-                  <X className='h-8 w-8 text-white' />
-                </button>
-              </div>
-            </Modal>
-          )}
+          render={(close) => {
+            if (isMobile) {
+              return (
+                <Modal>
+                  <div className='fixed inset-0 z-20 bg-black/60 backdrop-blur-2xl '>
+                    <Carousel initialId={productId} items={comboItems} />
+                    <button
+                      aria-label='Закрыть'
+                      className='fixed top-2 right-2 z-50'
+                      type='button'
+                      onClick={close}
+                    >
+                      <X className='h-8 w-8 text-white' />
+                    </button>
+                  </div>
+                </Modal>
+              );
+            }
+
+            return createPortal(
+              <section className='grid h-full w-full grid-cols-3 rounded-l-3xl bg-white'>
+                products
+              </section>,
+              portalRootRef.current!
+            );
+          }}
         />
       );
     }
@@ -261,15 +295,19 @@ export function MenuPositionForm({
           >
             <motion.div // Position image, fixed in background in mobile layout
               style={{ opacity: scrollYProgress }}
-              className='fixed top-0 col-start-1 col-end-2 row-start-1 row-end-2 aspect-square w-full md:static'
+              className='fixed top-0 aspect-square w-full md:static md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-2'
             >
               <div className='flex h-full w-full items-center justify-center rounded-full bg-orange-200 text-center'>
                 {`Photo${scrollYProgress.get()}`}
               </div>
             </motion.div>
+            <div
+              className='col-start-1 col-end-2 row-start-1 row-end-2 hidden md:block'
+              ref={portalRootRef}
+            />
             <main
               ref={containerRef}
-              className='col-start-2 col-end-3 flex h-full flex-col justify-between overflow-y-auto bg-white md:min-w-[24rem] md:rounded-r-3xl md:bg-stone-50'
+              className='flex h-full w-full flex-col justify-between overflow-y-auto bg-white md:col-start-2 md:col-end-3 md:min-w-[24rem] md:rounded-r-3xl md:bg-stone-50'
             >
               <div className='z-10 md:hidden'>
                 <div className='h-[50vw] w-full' />
