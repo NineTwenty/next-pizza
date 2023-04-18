@@ -61,6 +61,11 @@ export function MenuPositionForm({
     };
   }, []);
 
+  // State of combo entries editing
+  const [isProductOpen, setIsProductOpen] = useState(false);
+  const [isExtraOpen, setIsExtraOpen] = useState(false);
+  const [openProduct, setOpenProduct] = useState<number>();
+
   const { addOrder } = useOrders();
   const { defaultFormValues: formValues, ...methods } = usePositionForm({
     categoryMaps: position.categoryMap,
@@ -109,6 +114,7 @@ export function MenuPositionForm({
         product: defaultProduct,
         toppings: defaultProductToppings,
         variation: defaultVariation,
+        ingredients: defaultProductIngredients,
       } = getEntities(productId, defaultProductState);
 
       const variationInfo = `${defaultVariation?.size}, ${defaultVariation?.weight}`;
@@ -188,9 +194,31 @@ export function MenuPositionForm({
       ) : (
         <ComboEntry
           key={id}
+          description={defaultProductIngredients
+            .map(({ ingredientName }) => ingredientName)
+            .join(', ')}
+          disabled={isExtraOpen && openProduct !== id}
+          isExtraOpen={isExtraOpen && openProduct === id}
+          isProductOpen={isProductOpen && openProduct === id}
+          openExtra={() => {
+            if (!isProductOpen || openProduct !== id) {
+              setIsProductOpen(true);
+              setOpenProduct(id);
+            }
+            setIsExtraOpen(true);
+          }}
+          toggleProduct={() => {
+            setIsProductOpen(!(isProductOpen && openProduct === id));
+            setOpenProduct(
+              isProductOpen && openProduct === id ? undefined : id
+            );
+            if (isExtraOpen) {
+              setIsExtraOpen(false);
+            }
+          }}
           productName={defaultProduct.productName}
           variationInfo={variationInfo}
-          render={(close) => {
+          render={() => {
             if (isMobile) {
               return (
                 <Modal>
@@ -200,7 +228,10 @@ export function MenuPositionForm({
                       aria-label='Закрыть'
                       className='fixed top-2 right-2 z-50'
                       type='button'
-                      onClick={close}
+                      onClick={() => {
+                        setIsProductOpen(false);
+                        setOpenProduct(undefined);
+                      }}
                     >
                       <X className='h-8 w-8 text-white' />
                     </button>
