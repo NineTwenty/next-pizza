@@ -241,8 +241,77 @@ export function MenuPositionForm({
             }
 
             return createPortal(
-              <section className='grid h-full w-full grid-cols-3 rounded-l-3xl bg-white'>
-                products
+              <section className='relative grid h-full w-full rounded-l-3xl bg-white p-[1.875rem]'>
+                <section className='grid w-full auto-rows-min grid-cols-3 gap-4'>
+                  {byProductState.map(({ product, variation }) => {
+                    // Find initial product variation to have persistent price difference
+                    // no matter which product is actually selected
+                    const initialCategoryMap = position.categoryMap.find(
+                      (val) => val.id === id
+                    );
+
+                    if (!initialCategoryMap) {
+                      return null;
+                    }
+
+                    const initialProduct =
+                      positionProducts.entities[
+                        initialCategoryMap.defaultProduct
+                      ];
+                    const cardProduct = positionProducts.entities[product];
+
+                    if (!cardProduct || !initialProduct) {
+                      return null;
+                    }
+                    const cardVariation = cardProduct.variations.find(
+                      ({ id: variationId }) => variationId === variation
+                    );
+                    const initialVariation = initialProduct.variations[1];
+
+                    if (!cardVariation || !initialVariation) {
+                      return null;
+                    }
+
+                    const priceDifference =
+                      cardVariation.price - initialVariation.price;
+
+                    return (
+                      <button
+                        key={product}
+                        type='button'
+                        onClick={() =>
+                          methods.setValue(
+                            `categoryMaps.${index}.product`,
+                            product
+                          )
+                        }
+                        className={`${
+                          defaultProduct.id === product
+                            ? 'border-orange-600'
+                            : 'border-transparent'
+                        } flex flex-col place-items-center rounded-2xl border`}
+                      >
+                        <div
+                          className={`${
+                            defaultProduct.id === product
+                              ? 'scale-90 hover:scale-[.85]'
+                              : 'scale-100 hover:scale-95'
+                          } aspect-square w-full rounded-full bg-orange-300 transition-transform `}
+                        />
+                        <p className='mt-2 font-bold'>
+                          {cardProduct.productName}
+                        </p>
+                        {priceDifference !== 0 ? (
+                          <p className='mt-1 mb-3 w-fit rounded-full bg-orange-100 px-2 text-sm font-medium tracking-tighter text-orange-600'>
+                            {`${
+                              priceDifference > 0 ? '+' : ''
+                            }${priceDifference} ₽`}
+                          </p>
+                        ) : null}
+                      </button>
+                    );
+                  })}
+                </section>
               </section>,
               portalRootRef.current!
             );
