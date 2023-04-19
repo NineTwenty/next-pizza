@@ -27,7 +27,7 @@ export function ComboEntry({
         isProductOpen
           ? 'md:border-orange-600 md:shadow-[rgba(6,5,50,0.12)_0px_0px_8px]'
           : ''
-      } relative z-[inherit] my-4 flex rounded-xl border border-white bg-white p-4 shadow-[rgb(6,5,50,10%)_0px_4px_16px] transition-[border-color,box-shadow] ease-out`}
+      } relative z-[inherit] my-3 flex rounded-xl border border-white bg-white p-4 shadow-[rgb(6,5,50,10%)_0px_4px_16px] transition-[border-color,box-shadow] ease-out`}
     >
       <div className='mr-4 flex aspect-square w-1/3 items-center justify-center rounded-full bg-orange-200 text-center md:w-1/5'>
         {productName}
