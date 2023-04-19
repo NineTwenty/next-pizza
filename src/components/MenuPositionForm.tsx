@@ -436,16 +436,18 @@ export function MenuPositionForm({
             />
             <main
               ref={containerRef}
-              className='flex h-full w-full flex-col justify-between overflow-y-auto bg-white md:col-start-2 md:col-end-3 md:min-w-[24rem] md:rounded-r-3xl md:bg-stone-50'
+              className={`flex h-full w-full flex-col justify-between overflow-y-auto bg-white md:col-start-2 md:col-end-3 md:min-w-[24rem] md:rounded-r-3xl  ${
+                isNotCombo ? 'md:bg-white' : 'md:bg-slate-100'
+              }`}
             >
               <div className='z-10 md:hidden'>
                 <div className='h-[50vw] w-full' />
                 <div ref={targetRef} className='h-[50vw] w-full' />
               </div>
-              <section className='bg-white/60 p-4 pt-7 backdrop-blur-xl md:px-[1.875rem]'>
+              <section className='bg-white/60 p-4 pt-7 backdrop-blur-xl md:bg-transparent md:px-6 md:backdrop-blur-none'>
                 <h2 className='text-2xl font-semibold'>{name}</h2>
                 {!isNotCombo && (
-                  <span className='font-medium'>{description}</span>
+                  <span className='text-sm font-medium'>{description}</span>
                 )}
                 {contentByCategory}
               </section>
