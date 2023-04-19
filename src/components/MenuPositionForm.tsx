@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { motion, useScroll } from 'framer-motion';
-import { X } from 'react-feather';
+import { ChevronLeft, X } from 'react-feather';
 import type { Ingredient, Topping } from '@prisma/client';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
@@ -312,6 +312,35 @@ export function MenuPositionForm({
                     );
                   })}
                 </section>
+                {isExtraOpen && (
+                  <section className='absolute h-full w-full overflow-y-auto rounded-l-3xl bg-white p-6'>
+                    <div className='flex place-items-center text-4xl tracking-tight'>
+                      <button
+                        type='button'
+                        onClick={() => {
+                          setIsExtraOpen(false);
+                        }}
+                        className='mr-6 rounded-full bg-white shadow-[rgba(0,0,0,0.12)_0px_0px_12px]'
+                      >
+                        <ChevronLeft className='h-12 w-12' />
+                      </button>
+                      <h2 className='font-bold'>Меняйте на свой вкус</h2>
+                    </div>
+                    <h3 className='my-4 text-xl font-bold'>Можно удалить</h3>
+                    <IngredientsSection
+                      onlyOptional
+                      productId={productStateIndex}
+                      fieldGroupId={index}
+                      ingredients={defaultProductIngredients}
+                    />
+                    <hr className='mt-6' />
+                    <ToppingsSection
+                      productId={productStateIndex}
+                      fieldGroupId={index}
+                      toppings={defaultProductToppings}
+                    />
+                  </section>
+                )}
               </section>,
               portalRootRef.current!
             );
