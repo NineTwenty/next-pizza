@@ -406,6 +406,7 @@ export function MenuPositionForm({
 
   return (
     <MenuPositionModal
+      isMobile={isMobile}
       closeCallback={closeCallback}
       renderContent={(closeModal) => (
         <FormProvider {...methods}>
