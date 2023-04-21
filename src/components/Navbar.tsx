@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
+import { useOrders } from 'hooks/useOrders';
 
 type NavbarProps = {
   links: string[];
@@ -36,11 +37,11 @@ export function Navbar({ links, activeLink, onCartClick }: NavbarProps) {
     <nav
       ref={navRef}
       className={`sticky top-[-1px] bg-white md:bg-[rgba(255,255,255,0.75)] md:backdrop-blur-xl ${
-        isSticky ? 'shadow' : ''
+        isSticky ? 'shadow-[rgb(6_5_50_/_10%)_0px_4px_30px]' : ''
       }`}
     >
       <div
-        className={`before:content-[" "] flex max-w-7xl place-items-center overflow-x-auto text-sm font-semibold before:h-14 before:w-3 before:flex-none md:mx-auto md:w-5/6 md:before:w-0`}
+        className={`before:content-[" "] flex max-w-7xl place-items-center overflow-x-auto text-sm font-semibold before:h-[3.625rem] before:w-3 before:flex-none md:mx-auto md:w-5/6 md:before:w-0`}
       >
         <Image
           className={`transition-[transform,margin-right] ease-out ${
@@ -80,9 +81,11 @@ export function Navbar({ links, activeLink, onCartClick }: NavbarProps) {
           className='ml-auto hidden rounded-full bg-orange-500 p-2 px-4 text-base font-semibold text-white md:block'
         >
           Корзина
-          <span className='ml-3 border-l border-white/40 pl-3'>
-            {ordersIds.length}
-          </span>
+          {ordersIds.length > 0 && (
+            <span className='ml-3 border-l border-white/40 pl-3'>
+              {ordersIds.length}
+            </span>
+          )}
         </button>
       </div>
     </nav>
