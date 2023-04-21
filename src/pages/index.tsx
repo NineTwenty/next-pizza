@@ -63,7 +63,7 @@ const Home: NextPage = () => {
                   ) : null
                 )}
                 {ordersIds.length > 0 && (
-                  <div className='sticky bottom-0 h-px'>
+                  <div className='sticky bottom-0 h-px md:hidden'>
                     <button
                       aria-label='Открыть корзину'
                       type='button'
