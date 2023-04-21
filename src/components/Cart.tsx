@@ -1,4 +1,6 @@
 import type { Ingredient, Topping } from '@prisma/client';
+import { useState } from 'react';
+import { MenuPositionForm } from 'components/MenuPositionForm';
 import type { OrderEntry } from 'hooks/useOrders';
 import { useOrders } from 'hooks/useOrders';
 import { ChevronRight, Minus, Plus, X } from 'react-feather';
@@ -25,12 +27,39 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
   const { isSuccess, data } = useMenuPositions({
     category: orderEntry.categoryId,
   });
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   if (!isSuccess) {
     return null;
   }
-  const { ingredients, products, toppings } = data;
+  const { ingredients, products, toppings, menuPositions } = data;
   const isCombo = orderEntry.order.length > 1;
+
+  const position = menuPositions.entities[orderEntry.positionId];
+
+  if (!position) {
+    return null;
+  }
+
+  const positionIngredients = position.categoryMap.reduce<Ingredient[]>(
+    (accIngredients, { defaultProduct: defaultProductId }) => {
+      const defaultProduct = products.entities[defaultProductId];
+
+      defaultProduct?.ingredients.forEach((id) => {
+        const ingredient = ingredients.entities[id];
+        if (ingredient) {
+          accIngredients.push(ingredient);
+        }
+      });
+
+      return accIngredients;
+    },
+    []
+  );
+
+  const ingredientsDescription = positionIngredients
+    .map(({ ingredientName }) => ingredientName)
+    .join(', ');
 
   function makeSummaryEntry(order: (typeof orderEntry.order)[number]) {
     const product = products.entities[order.product];
@@ -113,6 +142,13 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
       </section>
       <section className='flex place-items-center border-t pt-4'>
         <span className='mr-auto font-medium'>{orderEntry.totalPrice} ₽</span>
+        <button
+          className='mr-3 text-sm font-bold text-orange-500'
+          type='button'
+          onClick={() => setIsFormOpen(true)}
+        >
+          Изменить
+        </button>
         <div>
           {/* TODO: Add order edit button */}
           <div className='flex place-items-center rounded-full bg-gray-100 p-1 text-gray-800'>
@@ -144,6 +180,17 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
           </div>
         </div>
       </section>
+      {isFormOpen ? (
+        <MenuPositionForm
+          description={position.description || ingredientsDescription}
+          position={position}
+          ingredients={positionIngredients}
+          products={products}
+          toppings={toppings}
+          name={orderEntry.positionName}
+          closeCallback={() => setIsFormOpen(false)}
+        />
+      ) : null}
     </section>
   );
 }
