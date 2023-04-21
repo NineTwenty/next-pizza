@@ -30,6 +30,8 @@ export function Navbar({ links, activeLink, onCartClick }: NavbarProps) {
     return () => observer.disconnect();
   }, [observer]);
 
+  const { ordersIds } = useOrders();
+
   return (
     <nav
       ref={navRef}
@@ -78,6 +80,9 @@ export function Navbar({ links, activeLink, onCartClick }: NavbarProps) {
           className='ml-auto hidden rounded-full bg-orange-500 p-2 px-4 text-base font-semibold text-white md:block'
         >
           Корзина
+          <span className='ml-3 border-l border-white/40 pl-3'>
+            {ordersIds.length}
+          </span>
         </button>
       </div>
     </nav>
