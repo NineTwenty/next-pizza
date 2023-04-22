@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useOrders } from 'hooks/useOrders';
+import { ArrowLeft, ArrowRight } from 'react-feather';
 
 type NavbarProps = {
   links: string[];
@@ -78,12 +79,15 @@ export function Navbar({ links, activeLink, onCartClick }: NavbarProps) {
         <button
           onClick={onCartClick}
           type='button'
-          className='ml-auto hidden rounded-full bg-orange-500 p-2 px-4 text-base font-semibold text-white md:block'
+          className='group ml-auto hidden rounded-full bg-orange-500 p-2 px-4 text-base font-semibold text-white transition-colors hover:bg-orange-600 md:block'
         >
           Корзина
           {ordersIds.length > 0 && (
-            <span className='ml-3 border-l border-white/40 pl-3'>
-              {ordersIds.length}
+            <span className='relative ml-3 inline-flex place-items-center border-l border-white/40 pl-3 pr-1'>
+              <span className='absoulte transition-[opacity,transform] duration-200 ease-in-out group-hover:translate-x-1 group-hover:opacity-0'>
+                {ordersIds.length}
+              </span>
+              <ArrowRight className='absolute h-4 w-4 -translate-x-1 opacity-0 transition-[opacity,transform] duration-200 ease-in-out group-hover:translate-x-0 group-hover:opacity-100' />
             </span>
           )}
         </button>
