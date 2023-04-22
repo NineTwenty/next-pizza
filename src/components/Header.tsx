@@ -35,7 +35,7 @@ export function Header({
             aria-label='Закрыть корзину'
             type='button'
             onClick={onCloseButtonClick}
-            className='h-full border-r px-3'
+            className='h-full border-r px-3 md:hidden'
           >
             <ChevronLeft className='' />
           </button>
