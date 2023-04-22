@@ -219,7 +219,7 @@ export function Cart() {
   ));
 
   return (
-    <div className='border-t'>
+    <div className='h-full border-t bg-white'>
       <h2 className='p-4 text-2xl'>
         {`${orders.length} ${getNoun(
           orders.length,
