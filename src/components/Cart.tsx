@@ -126,7 +126,7 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
       <button
         type='button'
         aria-label={`Убрать заказ ${orderEntry.positionName}`}
-        className='absolute top-4 right-6'
+        className='absolute right-6 top-4'
         onClick={() => deleteOrder(orderEntry.positionId)}
       >
         <X className='w-4' />
@@ -200,7 +200,7 @@ export function Cart() {
 
   if (orders.length === 0) {
     return (
-      <section className='flex h-[80vh] w-full place-items-center justify-center border-t'>
+      <section className='flex h-full w-full place-items-center justify-center border-t bg-white'>
         <div className='w-4/5 text-center'>
           <p className='mb-2 text-4xl font-medium'>В корзине пока пусто</p>
           <p className='text-1xl text-gray-500'>Вы ещё ничего не добавили</p>
