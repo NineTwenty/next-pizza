@@ -40,7 +40,11 @@ const Home: NextPage = () => {
           <Navbar
             activeLink={activeCategory}
             links={data
-              .filter(({ listed }) => listed)
+              .filter(
+                ({ listed, categoryName }) =>
+                  listed &&
+                  (categoryName === 'Пицца' || categoryName === 'Комбо')
+              )
               .map(({ categoryName }) => categoryName)}
             onCartClick={() => setIsCartOpen(true)}
           />
@@ -63,7 +67,7 @@ const Home: NextPage = () => {
                   className='relative -top-[4.5rem] ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-[rgba(0,0,0,0.2)0px_10px_20px]'
                   onClick={() => setIsCartOpen(true)}
                 >
-                  <div className='absolute top-0 -right-1 flex h-5 min-w-[1.25rem] place-items-center justify-center rounded-full bg-orange-500 text-sm text-white'>
+                  <div className='absolute -right-1 top-0 flex h-5 min-w-[1.25rem] place-items-center justify-center rounded-full bg-orange-500 text-sm text-white'>
                     {ordersIds.length}
                   </div>
                   <ShoppingCart className='-ml-1 stroke-orange-500' />

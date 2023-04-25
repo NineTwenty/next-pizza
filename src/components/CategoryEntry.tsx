@@ -68,6 +68,10 @@ export function CategoryEntry({ title, id, setActiveCategory }: CategoryProps) {
     });
   }
 
+  if (isSuccess && data.menuPositions.ids.length === 0) {
+    return null;
+  }
+
   return (
     <section ref={sectionRef}>
       <h2 className='my-5 pb-2 text-2xl font-semibold md:text-4xl md:font-bold md:tracking-tight'>
