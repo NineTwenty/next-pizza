@@ -94,6 +94,20 @@ async function main() {
       optional: true,
     },
     { id: 14, ingredientName: 'соус ранч' },
+    {
+      id: 15,
+      ingredientName: 'чеддер и пармезан',
+      included: true,
+      optional: true,
+    },
+    { id: 16, ingredientName: 'соус альфредо', included: true, optional: true },
+    { id: 17, ingredientName: 'сыр блю чиз' },
+    {
+      id: 18,
+      ingredientName: 'итальянские травы',
+      included: true,
+      optional: true,
+    },
   ] satisfies Prisma.IngredientCreateManyInput[];
 
   await prisma.ingredient.createMany({
@@ -105,17 +119,15 @@ async function main() {
       productName: 'Пепперони',
       variations: {
         create: [
-          { price: 419, size: 'Маленькая', weight: '400г' },
-          { price: 629, size: 'Средняя', weight: '580г' },
-          { price: 749, size: 'Большая', weight: '760г' },
+          { price: 420, size: 'Маленькая', weight: '400г' },
+          { price: 630, size: 'Средняя', weight: '580г' },
+          { price: 750, size: 'Большая', weight: '760г' },
         ],
       },
       ingredients: {
-        connect: ingredients
-          .filter(({ id }) => id === 8 || id === 2 || id === 3)
-          .map(({ id }) => ({
-            id,
-          })),
+        connect: [8, 2, 3].map((id) => ({
+          id,
+        })),
       },
       toppings: {
         connect: toppingsIdObjectCollection,
@@ -125,74 +137,122 @@ async function main() {
       productName: 'Цыпленок ранч',
       variations: {
         create: [
-          { price: 489, size: 'Маленькая', weight: '430г' },
-          { price: 739, size: 'Средняя', weight: '650г' },
-          { price: 889, size: 'Большая', weight: '890г' },
+          { price: 490, size: 'Маленькая', weight: '430г' },
+          { price: 740, size: 'Средняя', weight: '650г' },
+          { price: 890, size: 'Большая', weight: '890г' },
         ],
       },
       ingredients: {
-        connect: ingredients
-          .filter(
-            ({ id }) =>
-              id === 10 ||
-              id === 6 ||
-              id === 14 ||
-              id === 1 ||
-              id === 9 ||
-              id === 7
-          )
-          .map(({ id }) => ({
-            id,
-          })),
+        connect: [10, 6, 14, 1, 9, 7].map((id) => ({
+          id,
+        })),
       },
       toppings: {
         connect: toppingsIdObjectCollection,
       },
     },
+    {
+      productName: 'Сырная',
+      variations: {
+        create: [
+          { price: 300, size: 'Маленькая', weight: '330г' },
+          { price: 520, size: 'Средняя', weight: '490г' },
+          { price: 639, size: 'Большая', weight: '670г' },
+        ],
+      },
+      ingredients: {
+        connect: [1, 15, 16].map((id) => ({
+          id,
+        })),
+      },
+      toppings: { connect: toppingsIdObjectCollection },
+    },
+    {
+      productName: 'Ветчина и сыр',
+      variations: {
+        create: [
+          { price: 390, size: 'Маленькая', weight: '330г' },
+          { price: 600, size: 'Средняя', weight: '500г' },
+          { price: 729, size: 'Большая', weight: '670г' },
+        ],
+      },
+      ingredients: {
+        connect: [6, 1, 16].map((id) => ({
+          id,
+        })),
+      },
+      toppings: { connect: toppingsIdObjectCollection },
+    },
+    {
+      productName: 'Четыре сыра',
+      variations: {
+        create: [
+          { price: 490, size: 'Маленькая', weight: '340г' },
+          { price: 740, size: 'Средняя', weight: '510г' },
+          { price: 890, size: 'Большая', weight: '690г' },
+        ],
+      },
+      ingredients: {
+        connect: [17, 15, 1, 16].map((id) => ({
+          id,
+        })),
+      },
+      toppings: { connect: toppingsIdObjectCollection },
+    },
+    {
+      productName: 'Маргарита',
+      variations: {
+        create: [
+          { price: 390, size: 'Маленькая', weight: '410г' },
+          { price: 600, size: 'Средняя', weight: '630г' },
+          { price: 730, size: 'Большая', weight: '850г' },
+        ],
+      },
+      ingredients: {
+        connect: [2, 9, 18, 3].map((id) => ({
+          id,
+        })),
+      },
+      toppings: { connect: toppingsIdObjectCollection },
+    },
   ] satisfies Prisma.ProductCreateInput[];
 
+  // Create products
   await Promise.all(
     products.map(async (product) => {
       await prisma.product.create({ data: product });
     })
   );
 
-  await prisma.menuPosition.create({
-    data: {
-      menuPositionName: 'Пепперони',
-      category: {
-        connect: { id: 1 },
-      },
-    },
-  });
+  // Create single pizza positions
+  await Promise.all(
+    products.map(async (product) => {
+      await prisma.menuPosition.create({
+        data: {
+          menuPositionName: product.productName,
+          category: {
+            connect: { id: 1 },
+          },
+        },
+      });
+    })
+  );
 
-  await prisma.menuPosition_Category.create({
-    data: {
-      category: { connect: { id: 1 } },
-      menuPosition: { connect: { menuPositionName: 'Пепперони' } },
-      products: { connect: [{ productName: products[0]?.productName }] },
-      defaultProduct: { connect: { productName: products[0]?.productName } },
-    },
-  });
+  // Create single pizza position-category maps
+  await Promise.all(
+    products.map(async (product) => {
+      await prisma.menuPosition_Category.create({
+        data: {
+          category: { connect: { id: 1 } },
+          menuPosition: { connect: { menuPositionName: product.productName } },
+          products: { connect: [{ productName: product.productName }] },
+          defaultProduct: { connect: { productName: product.productName } },
+        },
+      });
+    })
+  );
 
-  await prisma.menuPosition.create({
-    data: {
-      menuPositionName: 'Цыпленок ранч',
-      category: {
-        connect: { id: 1 },
-      },
-    },
-  });
-
-  await prisma.menuPosition_Category.create({
-    data: {
-      category: { connect: { id: 1 } },
-      menuPosition: { connect: { menuPositionName: 'Цыпленок ранч' } },
-      products: { connect: [{ productName: products[1]?.productName }] },
-      defaultProduct: { connect: { productName: products[1]?.productName } },
-    },
-  });
-
+  // Create combo positions
   await prisma.menuPosition.create({
     data: {
       menuPositionName: '2 пиццы',
@@ -215,10 +275,9 @@ async function main() {
       category: { connect: { id: 2 } },
       menuPosition: { connect: { menuPositionName: '2 пиццы' } },
       products: {
-        connect: [
-          { productName: products[0]?.productName },
-          { productName: products[1]?.productName },
-        ],
+        connect: products.map((product) => ({
+          productName: product.productName,
+        })),
       },
       defaultProduct: { connect: { id: 1 } },
       categoryDiscount: { connect: { id: 1 } },
@@ -230,10 +289,9 @@ async function main() {
       category: { connect: { id: 2 } },
       menuPosition: { connect: { menuPositionName: '2 пиццы' } },
       products: {
-        connect: [
-          { productName: products[0]?.productName },
-          { productName: products[1]?.productName },
-        ],
+        connect: products.map((product) => ({
+          productName: product.productName,
+        })),
       },
       defaultProduct: { connect: { productName: products[1]?.productName } },
       categoryDiscount: { connect: { id: 1 } },
