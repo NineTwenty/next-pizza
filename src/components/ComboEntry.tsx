@@ -1,4 +1,6 @@
 import type { ReactElement } from 'react';
+import Image from 'next/image';
+import pizzaPic from 'assets/pizza-icon.svg';
 
 export function ComboEntry({
   productName,
@@ -27,12 +29,12 @@ export function ComboEntry({
         isProductOpen
           ? 'md:border-orange-600 md:shadow-[rgba(6,5,50,0.12)_0px_0px_8px]'
           : ''
-      } relative z-[inherit] my-3 flex rounded-xl border border-white bg-white p-4 shadow-[rgb(6,5,50,10%)_0px_4px_16px] transition-[border-color,box-shadow] ease-out`}
+      } relative z-[inherit] my-3 flex rounded-xl border border-white bg-white shadow-[rgb(6,5,50,10%)_0px_4px_16px] transition-[border-color,box-shadow] ease-out`}
     >
-      <div className='mr-4 flex aspect-square w-1/3 items-center justify-center rounded-full bg-orange-200 text-center md:w-1/5'>
-        {productName}
+      <div className='mr-1 flex aspect-square w-5/12 p-2 text-center md:w-1/5'>
+        <Image className='w-full' alt='' src={pizzaPic} />
       </div>
-      <section>
+      <section className='flex flex-col justify-center'>
         <h3 className='font-bold'>{productName}</h3>
         <p className='mt-1 text-xs font-medium'>{variationInfo}</p>
         <p className='mt-1 hidden text-xs text-gray-600 first-letter:uppercase md:block'>

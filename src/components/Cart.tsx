@@ -1,10 +1,12 @@
 import type { Ingredient, Topping } from '@prisma/client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { MenuPositionForm } from 'components/MenuPositionForm';
 import type { OrderEntry } from 'hooks/useOrders';
 import { useOrders } from 'hooks/useOrders';
 import { ChevronRight, Minus, Plus, X } from 'react-feather';
 import { useMenuPositions } from 'utils/apiHooks';
+import pizzaPic from 'assets/pizza-icon.svg';
 
 function getNoun(number: number, one: string, two: string, five: string) {
   let n = Math.abs(number);
@@ -132,7 +134,9 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
         <X className='w-4' />
       </button>
       <section className='grid grid-flow-col grid-cols-[1fr,5fr] gap-4 pb-2'>
-        <div className='mt-1 aspect-square w-full rounded-full bg-orange-200' />
+        <div className='mt-1 w-full'>
+          <Image alt='' src={pizzaPic} />
+        </div>
         <section className='flex flex-col justify-center'>
           <h3 className='mb-1 font-medium leading-5'>
             {orderEntry.positionName}

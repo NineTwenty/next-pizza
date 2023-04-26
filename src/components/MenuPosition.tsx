@@ -1,12 +1,14 @@
 import type { Ingredient } from '@prisma/client';
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
 import type { IngredientState, ProductState } from 'types/client';
 import type {
   DenormalizedMenuPosition,
   DenormalizedProduct,
 } from 'types/server';
 import { capitalizeFirstLetter } from 'utils/common';
+import pizzaPic from 'assets/pizza-icon.svg';
 
 type MenuPositionProps = {
   name: DenormalizedMenuPosition['menuPositionName'];
@@ -94,9 +96,8 @@ export function MenuPosition({
       }}
       className='flex w-full border-b border-slate-100 py-6 last:border-b-0 md:flex-col md:border-b-0'
     >
-      <div className='m-2 mr-4 flex h-28 w-28 flex-shrink-0 items-center justify-center rounded-full bg-orange-200 p-4 text-center'>
-        {/* TODO: Use actual position image */}
-        {name}
+      <div className='mr-1 max-w-[38%] p-2 md:mr-0 md:max-w-full'>
+        <Image alt='' src={pizzaPic} />
       </div>
       <main className='flex flex-col'>
         <h3 className='text-lg font-semibold md:mb-2 md:text-xl'>{name}</h3>

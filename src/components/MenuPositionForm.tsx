@@ -3,6 +3,7 @@ import { FormProvider } from 'react-hook-form';
 import { motion, useScroll } from 'framer-motion';
 import { ChevronLeft, X } from 'react-feather';
 import type { Ingredient, Topping } from '@prisma/client';
+import Image from 'next/image';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
 import { FlipCard } from 'components/FlipCard';
@@ -18,6 +19,7 @@ import { Carousel } from 'components/Carousel';
 import { Modal } from 'components/Modal';
 import { useOrders } from 'hooks/useOrders';
 import { createPortal } from 'react-dom';
+import pizzaPic from 'assets/pizza-icon.svg';
 
 type MenuPositionFormProps = {
   closeCallback: () => void;
@@ -425,11 +427,13 @@ export function MenuPositionForm({
           >
             <motion.div // Position image, fixed in background in mobile layout
               style={{ opacity: scrollYProgress }}
-              className='fixed top-0 aspect-square w-full md:static md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-2'
+              className='fixed top-0 flex aspect-square w-full place-items-center justify-center md:static md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-2 md:h-full md:p-10'
             >
-              <div className='flex h-full w-full items-center justify-center rounded-full bg-orange-200 text-center'>
-                {`Photo${scrollYProgress.get()}`}
-              </div>
+              <Image
+                className='w-full opacity-[inherit]'
+                alt=''
+                src={pizzaPic}
+              />
             </motion.div>
             <div
               className='col-start-1 col-end-2 row-start-1 row-end-2 hidden md:block'

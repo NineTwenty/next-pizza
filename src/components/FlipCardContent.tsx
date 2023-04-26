@@ -1,9 +1,11 @@
 import type { Ingredient, Topping } from '@prisma/client';
 import { X } from 'react-feather';
 import { Controller } from 'react-hook-form';
+import Image from 'next/image';
 import { usePositionFormContext } from 'hooks/usePositionForm';
 import { IngredientsSection } from 'components/IngredientsSection';
 import { ToppingsSection } from 'components/ToppingsSection';
+import pizzaPic from 'assets/pizza-icon.svg';
 
 export function FrontCardContent({
   fieldGroupId,
@@ -40,7 +42,9 @@ export function FrontCardContent({
       key={productName}
       className='overflow-y-scroll-scroll flex h-full w-full flex-col items-center rounded-3xl bg-white p-4'
     >
-      <div className='mx-auto my-3 h-40 w-40 rounded-full bg-pink-400' />
+      <div className='mx-auto mb-3 w-48'>
+        <Image className='w-full' alt='' src={pizzaPic} />
+      </div>
       <h3 className='text-lg font-bold'>{productName}</h3>
       <p className='text-xs font-semibold'>{variationInfo}</p>
       <section className='flex flex-wrap justify-center text-xs font-medium text-gray-600'>
