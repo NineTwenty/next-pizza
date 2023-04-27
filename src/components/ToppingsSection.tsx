@@ -52,10 +52,15 @@ export function ToppingsSection({
                     isColumn ? 'gap-1' : 'flex-col'
                   } flex cursor-pointer items-center rounded-xl border border-white bg-white p-2 shadow-[rgba(6,5,50,0.12)_0px_4px_20px] transition duration-150 ease-out hover:shadow-[rgba(6,5,50,0.12)_0px_0px_8px] peer-checked:border-orange-600  peer-checked:shadow-none`}
                 >
-                  <img
-                    className={`${isColumn ? 'w-12' : 'w-full'} aspect-square`}
-                    alt=''
-                  />
+                  <div
+                    className={`${
+                      isColumn ? 'w-12' : 'w-full'
+                    } flex aspect-square place-items-center justify-center rounded-lg bg-orange-100`}
+                  >
+                    <p className='text-5xl text-red-700'>
+                      {topping.toppingName[0]}
+                    </p>
+                  </div>
                   <div className={`${isColumn ? 'flex flex-col ' : ''}`}>
                     <p
                       className={`${
