@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { motion, useScroll } from 'framer-motion';
 import { ChevronLeft, X } from 'react-feather';
@@ -173,7 +173,7 @@ export function MenuPositionForm({
       );
 
       return isNotCombo ? (
-        <>
+        <Fragment key={id}>
           <div className='mb-1 text-sm font-medium text-gray-500'>
             {variationInfo}
           </div>
@@ -192,7 +192,7 @@ export function MenuPositionForm({
             fieldGroupId={index}
             toppings={defaultProductToppings}
           />
-        </>
+        </Fragment>
       ) : (
         <ComboEntry
           key={id}
