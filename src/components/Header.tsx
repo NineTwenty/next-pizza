@@ -26,7 +26,7 @@ export function Header({
   if (!isMenuOpen) {
     return (
       <header
-        className={`mx-auto flex  h-12 max-w-7xl items-center font-medium md:h-fit md:min-h-[5.375rem] md:w-5/6 md:pt-6 md:pb-4 ${
+        className={`mx-auto flex  h-12 max-w-7xl items-center font-medium md:h-fit md:min-h-[5.375rem] md:w-5/6 md:pb-4 md:pt-6 ${
           isMenuOpen ? 'border-b border-white/20 bg-black text-white' : ''
         }`}
       >
@@ -41,7 +41,7 @@ export function Header({
           </button>
         ) : null}
         <Image
-          className='mr-3 ml-4 md:ml-0 md:h-11 md:w-11'
+          className='ml-4 mr-3 md:ml-0 md:h-11 md:w-11'
           src='logo.svg'
           width={26}
           height={26}

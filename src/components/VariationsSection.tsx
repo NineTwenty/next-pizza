@@ -36,7 +36,7 @@ export function VariationsSection({
           <div
             className={`${
               animationMap.get(field.value) ?? ''
-            } absolute top-0 bottom-0 w-1/3 p-[0.125rem] transition-transform duration-200 ease-out before:block before:h-full before:w-full before:rounded-full before:bg-white before:shadow-[rgb(6,5,50,0.19)_0px_6px_20px]`}
+            } absolute bottom-0 top-0 w-1/3 p-[0.125rem] transition-transform duration-200 ease-out before:block before:h-full before:w-full before:rounded-full before:bg-white before:shadow-[rgb(6,5,50,0.19)_0px_6px_20px]`}
           />
           {variations.map(({ size, id }) => (
             <label

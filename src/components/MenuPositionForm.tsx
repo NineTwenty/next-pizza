@@ -228,7 +228,7 @@ export function MenuPositionForm({
                     <Carousel initialId={productId} items={comboItems} />
                     <button
                       aria-label='Закрыть'
-                      className='fixed top-2 right-2 z-50'
+                      className='fixed right-2 top-2 z-50'
                       type='button'
                       onClick={() => {
                         setIsProductOpen(false);
@@ -304,7 +304,7 @@ export function MenuPositionForm({
                           {cardProduct.productName}
                         </p>
                         {priceDifference !== 0 ? (
-                          <p className='mt-1 mb-3 w-fit rounded-full bg-orange-100 px-2 text-sm font-medium tracking-tighter text-orange-600'>
+                          <p className='mb-3 mt-1 w-fit rounded-full bg-orange-100 px-2 text-sm font-medium tracking-tighter text-orange-600'>
                             {`${
                               priceDifference > 0 ? '+' : ''
                             }${priceDifference} ₽`}

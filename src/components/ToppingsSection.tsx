@@ -79,7 +79,7 @@ export function ToppingsSection({
                 </div>
                 <CheckCircle
                   aria-hidden
-                  className='absolute top-2 right-2 h-5 w-5 text-orange-600 opacity-0 transition-opacity ease-out peer-checked:opacity-100'
+                  className='absolute right-2 top-2 h-5 w-5 text-orange-600 opacity-0 transition-opacity ease-out peer-checked:opacity-100'
                 />
               </label>
             </li>

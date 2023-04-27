@@ -43,7 +43,7 @@ export function ComboEntry({
         <button
           type='button'
           disabled={disabled}
-          className='absolute top-0 left-0 h-full w-full rounded-xl text-transparent'
+          className='absolute left-0 top-0 h-full w-full rounded-xl text-transparent'
           onClick={() => {
             toggleProduct();
           }}
@@ -78,7 +78,7 @@ export function ComboEntry({
       <div
         className={`${
           disabled ? 'block' : 'hidden'
-        } absolute top-0 left-0 z-10 h-full w-full rounded-xl bg-white/70`}
+        } absolute left-0 top-0 z-10 h-full w-full rounded-xl bg-white/70`}
       />
     </article>
   );

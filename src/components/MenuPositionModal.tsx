@@ -62,7 +62,7 @@ export function MenuPositionModal({
         <Modal>
           <div
             data-testid='menu_position_modal'
-            className='fixed top-0 left-0 z-10 h-full w-full place-items-center justify-center md:flex'
+            className='fixed left-0 top-0 z-10 h-full w-full place-items-center justify-center md:flex'
           >
             <motion.div // Fade background
               key={`bg-${key}`}
