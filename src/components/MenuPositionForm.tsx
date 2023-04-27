@@ -413,7 +413,7 @@ export function MenuPositionForm({
       renderContent={(closeModal) => (
         <FormProvider {...methods}>
           <form
-            className='grid h-full md:grid-cols-[1.3fr_minmax(24rem,_1fr)]'
+            className='grid h-full overflow-hidden bg-white md:grid-cols-[1.3fr_minmax(24rem,_1fr)] md:grid-rows-1 md:rounded-3xl'
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={methods.handleSubmit(({ categoryMaps }) =>
               addOrder({
@@ -441,7 +441,7 @@ export function MenuPositionForm({
             />
             <main
               ref={containerRef}
-              className={`flex h-full w-full flex-col justify-between overflow-y-auto bg-white md:col-start-2 md:col-end-3 md:min-w-[24rem] md:rounded-r-3xl  ${
+              className={`flex h-full w-full flex-col justify-between overflow-y-scroll bg-white md:col-start-2 md:col-end-3 md:min-w-[24rem] md:overflow-auto ${
                 isNotCombo ? 'md:bg-white' : 'md:bg-slate-100'
               }`}
             >
@@ -449,7 +449,7 @@ export function MenuPositionForm({
                 <div className='h-[50vw] w-full' />
                 <div ref={targetRef} className='h-[50vw] w-full' />
               </div>
-              <section className='bg-white/60 p-4 pt-7 backdrop-blur-xl md:bg-transparent md:px-6 md:backdrop-blur-none'>
+              <section className='bg-white/60 p-4 pt-7 backdrop-blur-xl md:overflow-y-scroll md:bg-transparent md:px-6 md:backdrop-blur-none'>
                 <h2 className='text-2xl font-semibold'>{name}</h2>
                 {!isNotCombo && (
                   <span className='text-sm font-medium'>{description}</span>

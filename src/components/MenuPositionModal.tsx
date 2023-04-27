@@ -79,7 +79,7 @@ export function MenuPositionModal({
               initial='hidden'
               animate='visible'
               exit='hidden'
-              className='relative top-0 h-full overflow-hidden md:h-[38rem] md:w-[60rem] md:overflow-visible md:rounded-3xl md:bg-white'
+              className='relative top-0 h-full md:h-[38rem] md:w-[60rem]'
             >
               {renderContent(() => setInState(false))}
               <button
