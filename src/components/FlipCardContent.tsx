@@ -43,7 +43,7 @@ export function FrontCardContent({
       className='overflow-y-scroll-scroll flex h-full w-full flex-col items-center rounded-3xl bg-white p-4'
     >
       <div className='mx-auto mb-3 w-48'>
-        <Image className='w-full' alt='' src={pizzaPic} />
+        <Image className='w-full' alt='' src={pizzaPic as string} />
       </div>
       <h3 className='text-lg font-bold'>{productName}</h3>
       <p className='text-xs font-semibold'>{variationInfo}</p>

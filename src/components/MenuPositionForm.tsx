@@ -432,7 +432,7 @@ export function MenuPositionForm({
               <Image
                 className='w-full opacity-[inherit]'
                 alt=''
-                src={pizzaPic}
+                src={pizzaPic as string}
               />
             </motion.div>
             <div

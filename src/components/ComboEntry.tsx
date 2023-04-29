@@ -32,7 +32,7 @@ export function ComboEntry({
       } relative z-[inherit] my-3 flex rounded-xl border border-white bg-white shadow-[rgb(6,5,50,10%)_0px_4px_16px] transition-[border-color,box-shadow] ease-out md:place-items-start md:p-3`}
     >
       <div className='mr-1 flex aspect-square w-5/12 p-2 text-center md:mr-2 md:w-1/5 md:p-0'>
-        <Image className='w-full' alt='' src={pizzaPic} />
+        <Image className='w-full' alt='' src={pizzaPic as string} />
       </div>
       <section className='flex flex-col justify-center md:w-4/5'>
         <h3 className='font-bold'>{productName}</h3>

@@ -135,7 +135,7 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
       </button>
       <section className='grid grid-flow-col grid-cols-[1fr,5fr] gap-4 pb-2'>
         <div className='mt-1 w-full'>
-          <Image alt='' src={pizzaPic} />
+          <Image alt='' src={pizzaPic as string} />
         </div>
         <section className='flex flex-col justify-center'>
           <h3 className='mb-1 font-medium leading-5'>
