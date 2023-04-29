@@ -52,6 +52,7 @@ export function FrontCardContent({
           <>
             <span
               className={`${
+                /// @ts-expect-error Form actually return string[]
                 excludedIngredients.includes(`${id}`) ? 'line-through' : ''
               } first:first-letter:uppercase`}
             >
@@ -68,6 +69,8 @@ export function FrontCardContent({
           .map(
             (id) =>
               `+${
+                /// @ts-expect-error Form actually return string[]
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 toppings.find((topping) => topping.id === parseInt(id, 10))
                   ?.toppingName
               }`
