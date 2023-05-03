@@ -68,7 +68,7 @@ export function CategoryEntry({ title, id, setActiveCategory }: CategoryProps) {
     });
   }
 
-  if (isSuccess && data.menuPositions.ids.length === 0) {
+  if (!isSuccess || (isSuccess && data.menuPositions.ids.length === 0)) {
     return null;
   }
 
