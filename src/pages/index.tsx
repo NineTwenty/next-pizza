@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { type NextPage } from 'next';
 import Head from 'next/head';
 import { ShoppingCart, X } from 'react-feather';
@@ -20,6 +20,38 @@ const Home: NextPage = () => {
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { ordersIds } = useOrders();
+
+  const categoryEntryRefs = useRef<HTMLDivElement[]>([]);
+  const observer = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      return new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (
+              entry.isIntersecting &&
+              entry.target instanceof HTMLDivElement &&
+              data
+            ) {
+              const entryIndex = categoryEntryRefs.current.indexOf(
+                entry.target
+              );
+              const name = data[entryIndex]?.categoryName;
+              setActiveCategory(name);
+            }
+          });
+        },
+        { threshold: [0.25] }
+      );
+    }
+    return null;
+  }, [data]);
+
+  useEffect(() => {
+    categoryEntryRefs.current.forEach((element) => {
+      observer?.observe(element);
+    });
+    return () => observer?.disconnect();
+  }, [categoryEntryRefs.current.length, observer]);
 
   return (
     <>
@@ -49,14 +81,22 @@ const Home: NextPage = () => {
             onCartClick={() => setIsCartOpen(true)}
           />
           <main className='max-w-7xl px-4 md:mx-auto md:w-5/6 md:px-0'>
-            {data.map((category) =>
+            {data.map((category, index) =>
               category.listed ? (
-                <CategoryEntry
+                <div
+                  className='empty:hidden'
                   key={category.id}
-                  id={category.id}
-                  title={category.categoryName}
-                  setActiveCategory={setActiveCategory}
-                />
+                  ref={(element) => {
+                    if (element) {
+                      categoryEntryRefs.current[index] = element;
+                    }
+                  }}
+                >
+                  <CategoryEntry
+                    id={category.id}
+                    title={category.categoryName}
+                  />
+                </div>
               ) : null
             )}
             {ordersIds.length > 0 && (
