@@ -10,6 +10,7 @@ import { CategoryEntry } from 'components/CategoryEntry';
 import { Header } from 'components/Header';
 import { Cart } from 'components/Cart';
 import { Modal } from 'components/Modal';
+import { Loader } from 'components/Loader';
 
 // TODO: Use SSR
 const Home: NextPage = () => {
@@ -204,7 +205,9 @@ const Home: NextPage = () => {
           </AnimatePresence>
         </div>
       ) : (
-        'loading'
+        <div className='flex h-screen place-items-center justify-center'>
+          <Loader />
+        </div>
       )}
     </>
   );
