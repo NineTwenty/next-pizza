@@ -61,7 +61,7 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       {isSuccess ? (
-        <>
+        <div className='flex min-h-screen flex-col'>
           <Header
             showCloseButton={isCartOpen}
             onCloseButtonClick={() => setIsCartOpen(false)}
@@ -115,7 +115,7 @@ const Home: NextPage = () => {
               </div>
             )}
           </main>
-          <footer className='flex flex-col border-t-8 border-orange-500 bg-black/90 p-4 leading-loose text-white'>
+          <footer className='mt-auto flex flex-col border-t-8 border-orange-500 bg-black/90 p-4 leading-loose text-white'>
             <div className='mx-auto w-5/6 max-w-7xl'>
               <div className='border-b border-white/10 pb-4'>
                 Feedback@pizza.com
@@ -202,7 +202,7 @@ const Home: NextPage = () => {
               </Modal>
             )}
           </AnimatePresence>
-        </>
+        </div>
       ) : (
         'loading'
       )}
