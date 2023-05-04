@@ -293,13 +293,17 @@ export function MenuPositionForm({
                             : 'border-transparent'
                         } flex flex-col place-items-center rounded-2xl border`}
                       >
-                        <div
-                          className={`${
-                            defaultProduct.id === product
-                              ? 'scale-90 hover:scale-[.85]'
-                              : 'scale-100 hover:scale-95'
-                          } aspect-square w-full rounded-full bg-orange-300 transition-transform `}
-                        />
+                        <div className='w-full'>
+                          <Image
+                            className={`${
+                              defaultProduct.id === product
+                                ? 'scale-90 hover:scale-[.85]'
+                                : 'scale-100 hover:scale-95'
+                            } transition-transform`}
+                            alt=''
+                            src={pizzaPic as string}
+                          />
+                        </div>
                         <p className='mt-2 font-bold'>
                           {cardProduct.productName}
                         </p>
