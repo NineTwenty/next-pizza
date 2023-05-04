@@ -47,7 +47,7 @@ export function CategoryEntry({ title, id }: CategoryProps) {
   }
 
   return (
-    <section>
+    <section id={title}>
       <h2 className='my-5 pb-2 text-2xl font-semibold md:text-4xl md:font-bold md:tracking-tight'>
         {title}
       </h2>

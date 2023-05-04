@@ -62,7 +62,7 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       {isSuccess ? (
-        <div className='flex min-h-screen flex-col'>
+        <div className='flex min-h-screen flex-col scroll-smooth'>
           <Header
             showCloseButton={isCartOpen}
             onCloseButtonClick={() => setIsCartOpen(false)}
