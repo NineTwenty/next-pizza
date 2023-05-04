@@ -64,13 +64,16 @@ export function MenuPositionModal({
             data-testid='menu_position_modal'
             className='fixed left-0 top-0 z-10 h-full w-full place-items-center justify-center md:flex'
           >
-            <motion.div // Fade background
+            <motion.button // Fade background
+              onClick={() => {
+                setInState(false);
+              }}
               key={`bg-${key}`}
               transition={transtition}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className='absolute h-full w-full bg-black/60'
+              className='absolute h-full w-full cursor-default bg-black/60'
             />
             <motion.section // Main modal
               key={`modal-${key}`}
