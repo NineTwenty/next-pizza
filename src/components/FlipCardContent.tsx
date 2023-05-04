@@ -42,7 +42,7 @@ export function FrontCardContent({
       key={productName}
       className='overflow-y-scroll-scroll flex h-full w-full flex-col items-center rounded-3xl bg-white p-4'
     >
-      <div className='mx-auto mb-3 w-48'>
+      <div className='mx-auto mb-3 w-[70%]'>
         <Image className='w-full' alt='' src={pizzaPic as string} />
       </div>
       <h3 className='text-lg font-bold'>{productName}</h3>
