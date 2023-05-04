@@ -54,7 +54,6 @@ export function MenuPositionModal({
   const variant = isMobile ? mobileVariant : desktopVariant;
   const transtition = isMobile ? mobileTransition : desktopTransition;
   // Force remount by key change to update variant & transition
-  const key = isMobile ? 'mobile' : 'desktop';
 
   return (
     <AnimatePresence onExitComplete={closeCallback}>
@@ -68,7 +67,6 @@ export function MenuPositionModal({
               onClick={() => {
                 setInState(false);
               }}
-              key={`bg-${key}`}
               transition={transtition}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -76,7 +74,6 @@ export function MenuPositionModal({
               className='absolute h-full w-full cursor-default bg-black/60'
             />
             <motion.section // Main modal
-              key={`modal-${key}`}
               variants={variant}
               transition={transtition}
               initial='hidden'
