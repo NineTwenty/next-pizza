@@ -77,7 +77,7 @@ export function Carousel({
             }}
             data-carouselid={`${id.toString()}`}
             key={id}
-            className='h-[77.6vh] w-[77.6vw] flex-shrink-0 snap-center'
+            className='h-[77.6vh] w-[77.6vw] max-w-md flex-shrink-0 snap-center'
           >
             {content}
           </div>
