@@ -1,5 +1,6 @@
 import { MenuPosition } from 'components/MenuPosition';
 import { MenuPositionForm } from 'components/MenuPositionForm';
+import { MenuPositionSkeleton } from 'components/MenuPositionSkeleton';
 import { useMenuPositions } from 'utils/apiHooks';
 
 type CategoryProps = {
@@ -42,7 +43,7 @@ export function CategoryEntry({ title, id }: CategoryProps) {
     });
   }
 
-  if (!isSuccess || (isSuccess && data.menuPositions.ids.length === 0)) {
+  if (isSuccess && data.menuPositions.ids.length === 0) {
     return null;
   }
 
@@ -52,7 +53,8 @@ export function CategoryEntry({ title, id }: CategoryProps) {
         {title}
       </h2>
       <div className='grid grid-cols-1 md:grid-cols-4 md:gap-7 md:gap-y-14'>
-        {isSuccess && populateMenuPositions(data)}
+        {(isSuccess && populateMenuPositions(data)) ||
+          new Array(5).fill(<MenuPositionSkeleton />)}
       </div>
     </section>
   );
