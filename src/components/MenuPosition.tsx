@@ -94,9 +94,9 @@ export function MenuPosition({
       onClick={() => {
         setIsOpen(true);
       }}
-      className='flex w-full border-b border-slate-100 py-6 last:border-b-0 md:flex-col md:border-b-0'
+      className='flex w-full border-b border-slate-100 py-6 last:border-b-0 md:flex-col md:border-b-0 md:p-0'
     >
-      <div className='mr-1 max-w-[38%] p-2 md:mr-0 md:max-w-full'>
+      <div className='mr-1 max-w-[38%] p-[0_0.5rem_0.5rem] md:mr-0 md:max-w-full'>
         <Image alt='' src={pizzaPic as string} />
       </div>
       <main className='flex flex-col'>
@@ -105,10 +105,13 @@ export function MenuPosition({
           {description}
         </p>
         <div className='flex place-items-center justify-between'>
-          <span className='hidden font-semibold md:block'>{`от ${price} ₽`}</span>
+          <span className='hidden font-semibold md:block'>
+            {'от '}
+            <span className='whitespace-nowrap'>{`${price} ₽`}</span>
+          </span>
           <button
             type='button'
-            className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm font-semibold leading-8 text-orange-700'
+            className='my-3 block h-8 w-fit min-w-[6rem] rounded-full bg-orange-100 text-sm font-semibold leading-8 text-orange-700 hover:bg-orange-200 md:h-10 md:min-w-[7.50rem] md:px-5 md:py-2 md:text-base'
           >
             <span className='md:hidden'>{`от ${price} ₽`}</span>
             <span className='hidden md:block'>Выбрать</span>
