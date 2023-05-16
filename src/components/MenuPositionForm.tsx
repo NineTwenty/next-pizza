@@ -453,7 +453,7 @@ export function MenuPositionForm({
                 <div className='h-[50vw] w-full' />
                 <div ref={targetRef} className='h-[50vw] w-full' />
               </div>
-              <section className='bg-white/60 p-4 pt-7 backdrop-blur-xl md:overflow-y-scroll md:bg-transparent md:px-6 md:backdrop-blur-none'>
+              <section className='bg-white/60 p-4 pt-7 backdrop-blur-xl md:mt-7 md:overflow-y-scroll md:bg-transparent md:px-6 md:pt-0 md:backdrop-blur-none'>
                 <h2 className='text-2xl font-semibold'>{name}</h2>
                 {!isNotCombo && (
                   <span className='text-sm font-medium'>{description}</span>
