@@ -12,7 +12,6 @@ import { Cart } from 'components/Cart';
 import { Modal } from 'components/Modal';
 import { Loader } from 'components/Loader';
 
-// TODO: Use SSR
 const Home: NextPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>();
