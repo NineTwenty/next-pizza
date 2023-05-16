@@ -2,14 +2,13 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { motion, useScroll } from 'framer-motion';
 import { ChevronLeft, X } from 'react-feather';
-import type { Ingredient, Topping } from '@prisma/client';
+import type { Ingredient } from '@prisma/client';
 import Image from 'next/image';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
 import { FlipCard } from 'components/FlipCard';
 import { BackCardContent, FrontCardContent } from 'components/FlipCardContent';
 import { MenuPositionModal } from 'components/MenuPositionModal';
-import type { PositionProductState } from 'hooks/usePositionForm';
 import { usePositionForm } from 'hooks/usePositionForm';
 import { IngredientsSection } from 'components/IngredientsSection';
 import { VariationsSection } from 'components/VariationsSection';
@@ -20,6 +19,7 @@ import { Modal } from 'components/Modal';
 import { useOrders } from 'hooks/useOrders';
 import { createPortal } from 'react-dom';
 import pizzaPic from 'assets/pizza-icon.svg';
+import { getEntities } from 'utils/common';
 
 type MenuPositionFormProps = {
   closeCallback: () => void;
@@ -77,33 +77,6 @@ export function MenuPositionForm({
 
   const contentByCategory = formValues.map(
     ({ id, product: productId, byProductState }, index) => {
-      function getEntities(
-        targetProductId: number,
-        targetProductState: PositionProductState
-      ) {
-        const product = positionProducts.entities[targetProductId];
-
-        if (!product) throw new Error('Missing entity');
-        const variation = product.variations.find(
-          (productVariation) =>
-            productVariation.id === targetProductState.variation
-        );
-        const ingredients = positionIngredients.filter((ingredient) =>
-          product.ingredients.includes(ingredient.id)
-        );
-        const toppings = product.toppings
-          .map((toppingId) => positionToppings.entities[toppingId])
-          .filter((topping): topping is Topping => !!topping);
-
-        if (!variation) throw new Error('Missing entity');
-        return {
-          product,
-          variation,
-          ingredients,
-          toppings,
-        };
-      }
-
       const defaultProductState = byProductState.find(
         (state) => state.product === productId
       );
@@ -117,7 +90,11 @@ export function MenuPositionForm({
         toppings: defaultProductToppings,
         variation: defaultVariation,
         ingredients: defaultProductIngredients,
-      } = getEntities(productId, defaultProductState);
+      } = getEntities(productId, defaultProductState, {
+        products: positionProducts,
+        ingredients: positionIngredients,
+        toppings: positionToppings,
+      });
 
       const variationInfo = `${defaultVariation?.size}, ${defaultVariation?.weight}`;
 
@@ -129,7 +106,11 @@ export function MenuPositionForm({
               ingredients: cardIngredients,
               toppings: cardToppings,
               variation: cardVariation,
-            } = getEntities(productState.product, productState);
+            } = getEntities(productState.product, productState, {
+              products: positionProducts,
+              ingredients: positionIngredients,
+              toppings: positionToppings,
+            });
 
             const cardVariationInfo = `${cardVariation.size}, ${cardVariation.weight}`;
             const priceDifference =
