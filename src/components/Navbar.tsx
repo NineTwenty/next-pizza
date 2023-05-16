@@ -12,24 +12,25 @@ type NavbarProps = {
 export function Navbar({ links, activeLink, onCartClick }: NavbarProps) {
   const [isSticky, setIsSticky] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
-  const observer = useMemo(
-    () =>
-      new IntersectionObserver(
+  const observer = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      return new IntersectionObserver(
         (entries) => {
           entries.forEach(({ intersectionRatio }) => {
             setIsSticky(intersectionRatio < 1);
           });
         },
         { threshold: [1] }
-      ),
-    []
-  );
+      );
+    }
+    return null;
+  }, []);
 
   useEffect(() => {
-    if (navRef.current) {
+    if (observer && navRef.current) {
       observer.observe(navRef.current);
     }
-    return () => observer.disconnect();
+    return () => observer?.disconnect();
   }, [observer]);
 
   const { ordersIds } = useOrders();
