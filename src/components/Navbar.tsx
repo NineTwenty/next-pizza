@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useOrders } from 'hooks/useOrders';
-import { ArrowLeft, ArrowRight } from 'react-feather';
+import { ArrowRight } from 'react-feather';
 
 type NavbarProps = {
   links: string[];
