@@ -101,7 +101,7 @@ export function MenuPosition({
       </div>
       <article className='flex flex-col'>
         <h3 className='text-lg font-semibold md:mb-2 md:text-xl'>{name}</h3>
-        <p className='text-xs font-medium tracking-tight text-gray-500 md:h-24 md:text-base md:leading-5'>
+        <p className='text-xs font-medium tracking-tight text-gray-500 first-letter:capitalize md:h-24 md:text-base md:leading-5'>
           {description}
         </p>
         <div className='flex place-items-center justify-between'>
