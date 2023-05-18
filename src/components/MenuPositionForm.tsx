@@ -23,7 +23,6 @@ import { getEntities } from 'utils/common';
 
 type MenuPositionFormProps = {
   closeCallback: () => void;
-  description: string;
   name: string;
   position: DenormalizedMenuPosition;
   ingredients: Ingredient[];
@@ -33,7 +32,6 @@ type MenuPositionFormProps = {
 
 export function MenuPositionForm({
   closeCallback,
-  description,
   name,
   position,
   ingredients: positionIngredients,
@@ -437,7 +435,9 @@ export function MenuPositionForm({
               <section className='bg-white/60 p-4 pt-7 backdrop-blur-xl md:mt-7 md:overflow-y-scroll md:bg-transparent md:px-6 md:pt-0 md:backdrop-blur-none'>
                 <h2 className='text-2xl font-semibold'>{name}</h2>
                 {!isNotCombo && (
-                  <span className='text-sm font-medium'>{description}</span>
+                  <span className='text-sm font-medium'>
+                    {position.description}
+                  </span>
                 )}
                 {contentByCategory}
               </section>

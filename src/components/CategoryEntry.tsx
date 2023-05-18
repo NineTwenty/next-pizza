@@ -27,14 +27,13 @@ export function CategoryEntry({ title, id }: CategoryProps) {
           products={products}
           key={positionId}
         >
-          {({ closeCallback, description, positionIngredients }) => (
+          {({ closeCallback, positionIngredients }) => (
             <MenuPositionForm
               position={position}
               name={position.menuPositionName}
               ingredients={positionIngredients}
               toppings={toppings}
               products={products}
-              description={description}
               closeCallback={closeCallback}
             />
           )}

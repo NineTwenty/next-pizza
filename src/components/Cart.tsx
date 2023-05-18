@@ -59,10 +59,6 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
     []
   );
 
-  const ingredientsDescription = positionIngredients
-    .map(({ ingredientName }) => ingredientName)
-    .join(', ');
-
   function makeSummaryEntry(order: (typeof orderEntry.order)[number]) {
     const product = products.entities[order.product];
     const entryState = order.byProductState.find(
@@ -186,7 +182,6 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
       </section>
       {isFormOpen ? (
         <MenuPositionForm
-          description={position.description || ingredientsDescription}
           position={position}
           ingredients={positionIngredients}
           products={products}
