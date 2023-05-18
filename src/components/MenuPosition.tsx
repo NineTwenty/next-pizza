@@ -7,7 +7,6 @@ import type {
   DenormalizedMenuPosition,
   DenormalizedProduct,
 } from 'types/server';
-import { capitalizeFirstLetter } from 'utils/common';
 import pizzaPic from 'assets/pizza-icon.svg';
 
 type MenuPositionProps = {
@@ -17,7 +16,6 @@ type MenuPositionProps = {
   ingredients: IngredientState;
   children: (props: {
     positionIngredients: Ingredient[];
-    description: string;
     closeCallback: () => void;
   }) => ReactNode;
 };
@@ -70,19 +68,11 @@ export function MenuPosition({
     [ingredients.entities, position.categoryMap, products.entities]
   );
 
-  // Assign description
-  const description =
-    position.description ??
-    capitalizeFirstLetter(
-      activeIngredients.map(({ ingredientName }) => ingredientName).join(', ')
-    );
-
   const Modal =
     typeof window === 'object' &&
     isOpen &&
     children({
       positionIngredients: activeIngredients,
-      description,
       closeCallback: () => {
         setIsOpen(false);
       },
@@ -102,7 +92,10 @@ export function MenuPosition({
       <article className='flex flex-col'>
         <h3 className='text-lg font-semibold md:mb-2 md:text-xl'>{name}</h3>
         <p className='text-xs font-medium tracking-tight text-gray-500 first-letter:capitalize md:h-24 md:text-base md:leading-5'>
-          {description}
+          {position.description ||
+            activeIngredients
+              .map(({ ingredientName }) => ingredientName)
+              .join(', ')}
         </p>
         <div className='flex place-items-center justify-between'>
           <span className='hidden font-semibold md:block'>
