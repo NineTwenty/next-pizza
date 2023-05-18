@@ -13,7 +13,6 @@ export function CategoryEntry({ title, id }: CategoryProps) {
 
   function populateMenuPositions({
     menuPositions,
-    ingredients,
     products,
     toppings,
   }: NonNullable<typeof data>) {
@@ -23,8 +22,6 @@ export function CategoryEntry({ title, id }: CategoryProps) {
         <MenuPosition
           name={position.menuPositionName}
           position={position}
-          ingredients={ingredients}
-          products={products}
           key={positionId}
         >
           {({ closeCallback, positionIngredients }) => (

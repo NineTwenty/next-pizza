@@ -2,37 +2,35 @@ import type { Ingredient } from '@prisma/client';
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
-import type { IngredientState, ProductState } from 'types/client';
 import type {
   DenormalizedMenuPosition,
   DenormalizedProduct,
 } from 'types/server';
 import pizzaPic from 'assets/pizza-icon.svg';
+import { useMenuPositions } from 'utils/apiHooks';
 
 type MenuPositionProps = {
   name: DenormalizedMenuPosition['menuPositionName'];
   position: DenormalizedMenuPosition;
-  products: ProductState;
-  ingredients: IngredientState;
   children: (props: {
     positionIngredients: Ingredient[];
     closeCallback: () => void;
   }) => ReactNode;
 };
 
-export function MenuPosition({
-  name,
-  position,
-  ingredients,
-  products,
-  children,
-}: MenuPositionProps) {
+export function MenuPosition({ name, position, children }: MenuPositionProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { data } = useMenuPositions({
+    category: position.categoryId,
+  });
+
   // Find initialy displayed position price
-  const [price] = useState(() =>
-    position.categoryMap.reduce((minPositionPrice, map) => {
+  const price = useMemo(() => {
+    if (!data) return 0;
+
+    return position.categoryMap.reduce((minPositionPrice, map) => {
       const includedProducts = map.products
-        .map((productId) => products.entities[productId])
+        .map((productId) => data.products.entities[productId])
         .filter((product): product is DenormalizedProduct => !!product);
 
       return (
@@ -45,28 +43,28 @@ export function MenuPosition({
           )
         )
       );
-    }, 0)
-  );
+    }, 0);
+  }, [data, position.categoryMap]);
 
-  const activeIngredients = useMemo(
-    () =>
-      position.categoryMap.reduce<Ingredient[]>(
-        (accIngredients, { defaultProduct: defaultProductId }) => {
-          const defaultProduct = products.entities[defaultProductId];
-          const defaultProductIngredients = defaultProduct?.ingredients
-            .map((id) => ingredients.entities[id])
-            .filter((ingredient): ingredient is Ingredient => !!ingredient);
+  const activeIngredients = useMemo(() => {
+    if (!data) return [];
 
-          if (!defaultProduct || !defaultProductIngredients) {
-            return [];
-          }
+    return position.categoryMap.reduce<Ingredient[]>(
+      (accIngredients, { defaultProduct: defaultProductId }) => {
+        const defaultProduct = data.products.entities[defaultProductId];
+        const defaultProductIngredients = defaultProduct?.ingredients
+          .map((id) => data.ingredients.entities[id])
+          .filter((ingredient): ingredient is Ingredient => !!ingredient);
 
-          return [...accIngredients, ...defaultProductIngredients];
-        },
-        []
-      ),
-    [ingredients.entities, position.categoryMap, products.entities]
-  );
+        if (!defaultProduct || !defaultProductIngredients) {
+          return [];
+        }
+
+        return [...accIngredients, ...defaultProductIngredients];
+      },
+      []
+    );
+  }, [data, position.categoryMap]);
 
   const Modal =
     typeof window === 'object' &&
