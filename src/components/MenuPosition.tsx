@@ -52,15 +52,15 @@ export function MenuPosition({ name, position, children }: MenuPositionProps) {
     return position.categoryMap.reduce<Ingredient[]>(
       (accIngredients, { defaultProduct: defaultProductId }) => {
         const defaultProduct = data.products.entities[defaultProductId];
-        const defaultProductIngredients = defaultProduct?.ingredients
-          .map((id) => data.ingredients.entities[id])
-          .filter((ingredient): ingredient is Ingredient => !!ingredient);
 
-        if (!defaultProduct || !defaultProductIngredients) {
-          return [];
-        }
+        defaultProduct?.ingredients.forEach((id) => {
+          const ingredient = data.ingredients.entities[id];
+          if (ingredient) {
+            accIngredients.push(ingredient);
+          }
+        });
 
-        return [...accIngredients, ...defaultProductIngredients];
+        return accIngredients;
       },
       []
     );
