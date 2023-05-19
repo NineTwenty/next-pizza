@@ -6,6 +6,7 @@ import Image from 'next/image';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
 import { MenuPositionModal } from 'components/MenuPositionModal';
+import type { PositionState } from 'hooks/usePositionForm';
 import { usePositionForm } from 'hooks/usePositionForm';
 import { IngredientsSection } from 'components/IngredientsSection';
 import { VariationsSection } from 'components/VariationsSection';
@@ -22,6 +23,7 @@ type MenuPositionFormProps = {
   ingredients: Ingredient[];
   toppings: ToppingState;
   products: ProductState;
+  orders?: PositionState[];
 };
 
 export function MenuPositionForm({
@@ -31,6 +33,7 @@ export function MenuPositionForm({
   ingredients: positionIngredients,
   toppings: positionToppings,
   products: positionProducts,
+  orders,
 }: MenuPositionFormProps) {
   const portalRootRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -59,6 +62,7 @@ export function MenuPositionForm({
   const { defaultFormValues: formValues, ...methods } = usePositionForm({
     categoryMaps: position.categoryMap,
     products: positionProducts,
+    orders,
   });
   const isNotCombo = formValues.length === 1;
 
