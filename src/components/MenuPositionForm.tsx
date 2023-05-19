@@ -55,7 +55,7 @@ export function MenuPositionForm({
     };
   }, []);
 
-  const { addOrder } = useOrders();
+  const { upsertOrder } = useOrders();
   const { defaultFormValues: formValues, ...methods } = usePositionForm({
     categoryMaps: position.categoryMap,
     products: positionProducts,
@@ -184,7 +184,7 @@ export function MenuPositionForm({
             className='grid h-full overflow-hidden bg-white md:grid-cols-[1.3fr_minmax(24rem,_1fr)] md:grid-rows-1 md:rounded-3xl'
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={methods.handleSubmit(({ categoryMaps }) =>
-              addOrder({
+              upsertOrder({
                 order: categoryMaps,
                 categoryId: position.categoryId,
                 positionId: position.id,
