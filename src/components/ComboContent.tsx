@@ -66,60 +66,6 @@ export function ComboContent({
 
       const variationInfo = `${defaultVariation?.size}, ${defaultVariation?.weight}`;
 
-      const comboItems = byProductState.map(
-        (productState, productStateIndex) => {
-          const { product: cardProductId } = productState;
-          const {
-            product: cardProduct,
-            ingredients: cardIngredients,
-            toppings: cardToppings,
-            variation: cardVariation,
-          } = getEntities(productState.product, productState, {
-            products: data.products,
-            ingredients: data.ingredients,
-            toppings: data.toppings,
-          });
-
-          const cardVariationInfo = `${cardVariation.size}, ${cardVariation.weight}`;
-          const priceDifference = cardVariation.price - defaultVariation.price;
-
-          return {
-            id: cardProductId,
-            content: (
-              <FlipCard
-                key={cardProductId}
-                renderFrontContent={({ flip }) => (
-                  <FrontCardContent
-                    fieldGroupId={positionStateIndex}
-                    productFieldIndex={productStateIndex}
-                    productId={cardProductId}
-                    productName={cardProduct.productName}
-                    priceDifference={priceDifference}
-                    variationInfo={cardVariationInfo}
-                    ingredients={cardIngredients}
-                    toppings={cardToppings}
-                    flip={flip}
-                  />
-                )}
-                renderBackContent={({ flip }) => (
-                  <BackCardContent
-                    fieldGroupId={positionStateIndex}
-                    productFieldIndex={productStateIndex}
-                    ingredients={cardIngredients}
-                    toppings={cardToppings}
-                    flip={flip}
-                  />
-                )}
-              />
-            ),
-          };
-        }
-      );
-
-      const productStateIndex = byProductState.findIndex(
-        (product) => product === defaultProductState
-      );
-
       return (
         <ComboEntry
           key={positionStateId}
@@ -153,6 +99,57 @@ export function ComboContent({
           variationInfo={variationInfo}
           render={() => {
             if (isMobile) {
+              const comboItems = byProductState.map(
+                (productState, productStateIndex) => {
+                  const { product: cardProductId } = productState;
+                  const {
+                    product: cardProduct,
+                    ingredients: cardIngredients,
+                    toppings: cardToppings,
+                    variation: cardVariation,
+                  } = getEntities(productState.product, productState, {
+                    products: data.products,
+                    ingredients: data.ingredients,
+                    toppings: data.toppings,
+                  });
+
+                  const cardVariationInfo = `${cardVariation.size}, ${cardVariation.weight}`;
+                  const priceDifference =
+                    cardVariation.price - defaultVariation.price;
+
+                  return {
+                    id: cardProductId,
+                    content: (
+                      <FlipCard
+                        key={cardProductId}
+                        renderFrontContent={({ flip }) => (
+                          <FrontCardContent
+                            fieldGroupId={positionStateIndex}
+                            productFieldIndex={productStateIndex}
+                            productId={cardProductId}
+                            productName={cardProduct.productName}
+                            priceDifference={priceDifference}
+                            variationInfo={cardVariationInfo}
+                            ingredients={cardIngredients}
+                            toppings={cardToppings}
+                            flip={flip}
+                          />
+                        )}
+                        renderBackContent={({ flip }) => (
+                          <BackCardContent
+                            fieldGroupId={positionStateIndex}
+                            productFieldIndex={productStateIndex}
+                            ingredients={cardIngredients}
+                            toppings={cardToppings}
+                            flip={flip}
+                          />
+                        )}
+                      />
+                    ),
+                  };
+                }
+              );
+
               return (
                 <Modal>
                   <div className='fixed inset-0 z-20 bg-black/60 backdrop-blur-2xl '>
@@ -172,6 +169,10 @@ export function ComboContent({
                 </Modal>
               );
             }
+
+            const productStateIndex = byProductState.findIndex(
+              (product) => product === defaultProductState
+            );
 
             return createPortal(
               <section className='relative grid h-full w-full rounded-l-3xl bg-white p-[1.875rem]'>
