@@ -24,6 +24,7 @@ type OrdersContextValue = {
   ordersIds: number[];
   addOrder: (order: OrderParams) => void;
   updateOrder: (order: OrderParams, amount?: number) => void;
+  upsertOrder: (order: OrderParams, amount?: number) => void;
   deleteOrder: (orderId: number) => void;
 };
 
@@ -100,6 +101,17 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
     [ordersIds]
   );
 
+  const upsertOrder = useCallback(
+    (orderParams: OrderParams, amount = 1) => {
+      if (ordersIds.includes(orderParams.positionId)) {
+        updateOrder(orderParams, amount);
+      } else {
+        addOrder(orderParams);
+      }
+    },
+    [ordersIds, addOrder, updateOrder]
+  );
+
   const deleteOrder = useCallback(
     (orderId: number) => {
       if (ordersIds.includes(orderId)) {
@@ -122,9 +134,10 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
       ordersIds,
       addOrder,
       updateOrder,
+      upsertOrder,
       deleteOrder,
     }),
-    [orders, ordersIds, addOrder, deleteOrder, updateOrder]
+    [orders, ordersIds, addOrder, deleteOrder, updateOrder, upsertOrder]
   );
 
   return (
