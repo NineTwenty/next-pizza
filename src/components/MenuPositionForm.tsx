@@ -1,25 +1,19 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { motion, useScroll } from 'framer-motion';
-import { ChevronLeft, X } from 'react-feather';
 import type { Ingredient } from '@prisma/client';
 import Image from 'next/image';
 import type { ProductState, ToppingState } from 'types/client';
 import type { DenormalizedMenuPosition } from 'types/server';
-import { FlipCard } from 'components/FlipCard';
-import { BackCardContent, FrontCardContent } from 'components/FlipCardContent';
 import { MenuPositionModal } from 'components/MenuPositionModal';
 import { usePositionForm } from 'hooks/usePositionForm';
 import { IngredientsSection } from 'components/IngredientsSection';
 import { VariationsSection } from 'components/VariationsSection';
 import { ToppingsSection } from 'components/ToppingsSection';
-import { ComboEntry } from 'components/ComboEntry';
-import { Carousel } from 'components/Carousel';
-import { Modal } from 'components/Modal';
+import { ComboContent } from 'components/ComboContent';
 import { useOrders } from 'hooks/useOrders';
-import { createPortal } from 'react-dom';
-import pizzaPic from 'assets/pizza-icon.svg';
 import { getEntities } from 'utils/common';
+import pizzaPic from 'assets/pizza-icon.svg';
 
 type MenuPositionFormProps = {
   closeCallback: () => void;
@@ -61,11 +55,6 @@ export function MenuPositionForm({
     };
   }, []);
 
-  // State of combo entries editing
-  const [isProductOpen, setIsProductOpen] = useState(false);
-  const [isExtraOpen, setIsExtraOpen] = useState(false);
-  const [openProduct, setOpenProduct] = useState<number>();
-
   const { addOrder } = useOrders();
   const { defaultFormValues: formValues, ...methods } = usePositionForm({
     categoryMaps: position.categoryMap,
@@ -73,8 +62,8 @@ export function MenuPositionForm({
   });
   const isNotCombo = formValues.length === 1;
 
-  const contentByCategory = formValues.map(
-    ({ id, product: productId, byProductState }, index) => {
+  const contentByCategory = isNotCombo ? (
+    formValues.map(({ id, product: productId, byProductState }, index) => {
       const defaultProductState = byProductState.find(
         (state) => state.product === productId
       );
@@ -87,7 +76,6 @@ export function MenuPositionForm({
         product: defaultProduct,
         toppings: defaultProductToppings,
         variation: defaultVariation,
-        ingredients: defaultProductIngredients,
       } = getEntities(productId, defaultProductState, {
         products: positionProducts,
         ingredients: positionIngredients,
@@ -96,62 +84,11 @@ export function MenuPositionForm({
 
       const variationInfo = `${defaultVariation?.size}, ${defaultVariation?.weight}`;
 
-      const comboItems = !isNotCombo
-        ? byProductState.map((productState, productStateIndex) => {
-            const { product: cardProductId } = productState;
-            const {
-              product: cardProduct,
-              ingredients: cardIngredients,
-              toppings: cardToppings,
-              variation: cardVariation,
-            } = getEntities(productState.product, productState, {
-              products: positionProducts,
-              ingredients: positionIngredients,
-              toppings: positionToppings,
-            });
-
-            const cardVariationInfo = `${cardVariation.size}, ${cardVariation.weight}`;
-            const priceDifference =
-              cardVariation.price - defaultVariation.price;
-
-            return {
-              id: cardProductId,
-              content: (
-                <FlipCard
-                  key={cardProductId}
-                  renderFrontContent={({ flip }) => (
-                    <FrontCardContent
-                      fieldGroupId={index}
-                      productFieldIndex={productStateIndex}
-                      productId={cardProductId}
-                      productName={cardProduct.productName}
-                      priceDifference={priceDifference}
-                      variationInfo={cardVariationInfo}
-                      ingredients={cardIngredients}
-                      toppings={cardToppings}
-                      flip={flip}
-                    />
-                  )}
-                  renderBackContent={({ flip }) => (
-                    <BackCardContent
-                      fieldGroupId={index}
-                      productFieldIndex={productStateIndex}
-                      ingredients={cardIngredients}
-                      toppings={cardToppings}
-                      flip={flip}
-                    />
-                  )}
-                />
-              ),
-            };
-          })
-        : [];
-
       const productStateIndex = byProductState.findIndex(
         (product) => product === defaultProductState
       );
 
-      return isNotCombo ? (
+      return (
         <Fragment key={id}>
           <div className='mb-1 text-sm font-medium text-gray-500'>
             {variationInfo}
@@ -172,167 +109,15 @@ export function MenuPositionForm({
             toppings={defaultProductToppings}
           />
         </Fragment>
-      ) : (
-        <ComboEntry
-          key={id}
-          description={defaultProductIngredients
-            .map(({ ingredientName }) => ingredientName)
-            .join(', ')}
-          disabled={isExtraOpen && openProduct !== id}
-          isExtraOpen={isExtraOpen && openProduct === id}
-          isProductOpen={isProductOpen && openProduct === id}
-          openExtra={() => {
-            if (!isProductOpen || openProduct !== id) {
-              setIsProductOpen(true);
-              setOpenProduct(id);
-            }
-            setIsExtraOpen(true);
-          }}
-          toggleProduct={() => {
-            setIsProductOpen(!(isProductOpen && openProduct === id));
-            setOpenProduct(
-              isProductOpen && openProduct === id ? undefined : id
-            );
-            if (isExtraOpen) {
-              setIsExtraOpen(false);
-            }
-          }}
-          productName={defaultProduct.productName}
-          variationInfo={variationInfo}
-          render={() => {
-            if (isMobile) {
-              return (
-                <Modal>
-                  <div className='fixed inset-0 z-20 bg-black/60 backdrop-blur-2xl '>
-                    <Carousel initialId={productId} items={comboItems} />
-                    <button
-                      aria-label='Закрыть'
-                      className='fixed right-2 top-2 z-50'
-                      type='button'
-                      onClick={() => {
-                        setIsProductOpen(false);
-                        setOpenProduct(undefined);
-                      }}
-                    >
-                      <X className='h-8 w-8 text-white' />
-                    </button>
-                  </div>
-                </Modal>
-              );
-            }
-
-            return createPortal(
-              <section className='relative grid h-full w-full rounded-l-3xl bg-white p-[1.875rem]'>
-                <section className='grid w-full auto-rows-min grid-cols-3 gap-4'>
-                  {byProductState.map(({ product, variation }) => {
-                    // Find initial product variation to have persistent price difference
-                    // no matter which product is actually selected
-                    const initialCategoryMap = position.categoryMap.find(
-                      (val) => val.id === id
-                    );
-
-                    if (!initialCategoryMap) {
-                      return null;
-                    }
-
-                    const initialProduct =
-                      positionProducts.entities[
-                        initialCategoryMap.defaultProduct
-                      ];
-                    const cardProduct = positionProducts.entities[product];
-
-                    if (!cardProduct || !initialProduct) {
-                      return null;
-                    }
-                    const cardVariation = cardProduct.variations.find(
-                      ({ id: variationId }) => variationId === variation
-                    );
-                    const initialVariation = initialProduct.variations[1];
-
-                    if (!cardVariation || !initialVariation) {
-                      return null;
-                    }
-
-                    const priceDifference =
-                      cardVariation.price - initialVariation.price;
-
-                    return (
-                      <button
-                        key={product}
-                        type='button'
-                        onClick={() =>
-                          methods.setValue(
-                            `categoryMaps.${index}.product`,
-                            product
-                          )
-                        }
-                        className={`${
-                          defaultProduct.id === product
-                            ? 'border-orange-600'
-                            : 'border-transparent'
-                        } flex flex-col place-items-center rounded-2xl border`}
-                      >
-                        <div className='w-full'>
-                          <Image
-                            className={`${
-                              defaultProduct.id === product
-                                ? 'scale-90 hover:scale-[.85]'
-                                : 'scale-100 hover:scale-95'
-                            } transition-transform`}
-                            alt=''
-                            src={pizzaPic as string}
-                          />
-                        </div>
-                        <p className='mt-2 font-bold'>
-                          {cardProduct.productName}
-                        </p>
-                        {priceDifference !== 0 ? (
-                          <p className='mb-3 mt-1 w-fit rounded-full bg-orange-100 px-2 text-sm font-medium tracking-tighter text-orange-600'>
-                            {`${
-                              priceDifference > 0 ? '+' : ''
-                            }${priceDifference} ₽`}
-                          </p>
-                        ) : null}
-                      </button>
-                    );
-                  })}
-                </section>
-                {isExtraOpen && (
-                  <section className='absolute h-full w-full overflow-y-auto rounded-l-3xl bg-white p-6'>
-                    <div className='flex place-items-center text-4xl tracking-tight'>
-                      <button
-                        type='button'
-                        onClick={() => {
-                          setIsExtraOpen(false);
-                        }}
-                        className='mr-6 rounded-full bg-white shadow-[rgba(0,0,0,0.12)_0px_0px_12px]'
-                      >
-                        <ChevronLeft className='h-12 w-12' />
-                      </button>
-                      <h2 className='font-bold'>Меняйте на свой вкус</h2>
-                    </div>
-                    <h3 className='my-4 text-xl font-bold'>Можно удалить</h3>
-                    <IngredientsSection
-                      onlyOptional
-                      productId={productStateIndex}
-                      fieldGroupId={index}
-                      ingredients={defaultProductIngredients}
-                    />
-                    <hr className='mt-6' />
-                    <ToppingsSection
-                      productId={productStateIndex}
-                      fieldGroupId={index}
-                      toppings={defaultProductToppings}
-                    />
-                  </section>
-                )}
-              </section>,
-              portalRootRef.current!
-            );
-          }}
-        />
       );
-    }
+    })
+  ) : (
+    <ComboContent
+      position={position}
+      positionStates={formValues}
+      isMobile={isMobile}
+      portalRootRef={portalRootRef}
+    />
   );
 
   const categoryMapsFormValues = methods.watch('categoryMaps');
