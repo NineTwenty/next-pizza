@@ -188,6 +188,7 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
           toppings={toppings}
           name={orderEntry.positionName}
           closeCallback={() => setIsFormOpen(false)}
+          orders={orderEntry.order}
         />
       ) : null}
     </section>
