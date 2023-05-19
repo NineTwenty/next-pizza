@@ -22,41 +22,45 @@ export type PositionFormState = {
 export function usePositionForm({
   categoryMaps,
   products,
+  orders,
 }: {
   categoryMaps: DenormalizedCategoryMap[];
   products: ProductState;
+  orders?: PositionState[];
 }) {
   const methods = useForm<PositionFormState>({
     defaultValues: {
-      categoryMaps: categoryMaps.map((categoryMap) => {
-        const defaultProduct = products.entities[categoryMap.defaultProduct];
+      categoryMaps:
+        orders ??
+        categoryMaps.map((categoryMap) => {
+          const defaultProduct = products.entities[categoryMap.defaultProduct];
 
-        if (!defaultProduct) {
-          throw new Error('Attempt to access missing default product');
-        }
+          if (!defaultProduct) {
+            throw new Error('Attempt to access missing default product');
+          }
 
-        return {
-          id: categoryMap.id,
-          product: defaultProduct.id,
-          byProductState: categoryMap.products.map((id) => {
-            const { variations } = products.entities[id] ?? {};
+          return {
+            id: categoryMap.id,
+            product: defaultProduct.id,
+            byProductState: categoryMap.products.map((id) => {
+              const { variations } = products.entities[id] ?? {};
 
-            if (!variations) {
-              throw new Error(
-                'Attempt to access missing product while making initial form value'
-              );
-            }
+              if (!variations) {
+                throw new Error(
+                  'Attempt to access missing product while making initial form value'
+                );
+              }
 
-            return {
-              product: id,
-              includedToppings: [],
-              excludedIngredients: [],
-              variation:
-                variations.length > 1 ? variations[1]?.id : variations[0]?.id,
-            };
-          }),
-        };
-      }),
+              return {
+                product: id,
+                includedToppings: [],
+                excludedIngredients: [],
+                variation:
+                  variations.length > 1 ? variations[1]?.id : variations[0]?.id,
+              };
+            }),
+          };
+        }),
     },
   });
 
