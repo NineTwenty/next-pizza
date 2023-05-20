@@ -127,38 +127,37 @@ export function MenuPositionForm({
   const categoryMapsFormValues = methods.watch('categoryMaps');
   const totalPrice = categoryMapsFormValues.reduce(
     (comboPrice, { product: productId, byProductState }) => {
-      const defaultProduct = positionProducts.entities[productId];
       const defaultProductState = byProductState.find(
         ({ product }) => product === productId
       );
 
-      if (!defaultProduct || !defaultProductState) {
+      if (!defaultProductState) {
         throw new Error(
           `Required entity is missing, cannot calculate total position price`
         );
       }
-      const defaultVariation = defaultProduct.variations.find(
-        (productVariation) =>
-          productVariation.id === defaultProductState.variation
+
+      const { variation: defaultVariation } = getEntities(
+        productId,
+        defaultProductState,
+        {
+          ingredients: positionIngredients,
+          toppings: positionToppings,
+          products: positionProducts,
+        }
       );
 
-      if (!defaultVariation) {
-        throw new Error(
-          `Required entity is missing, cannot calculate total position price`
-        );
-      }
-
-      const productToppingsPrice = defaultProductState.includedToppings
-        .map(
-          (toppingId) =>
-            positionToppings.entities[parseInt(`${toppingId}`, 10)]?.price ?? 0
-        )
-        .reduce((toppingsPrice, price) => {
-          if (toppingsPrice >= 0 && price) {
-            return toppingsPrice + price;
+      const productToppingsPrice = defaultProductState.includedToppings.reduce(
+        (toppingsPrice, toppingId) => {
+          const topping =
+            positionToppings.entities[parseInt(`${toppingId}`, 10)];
+          if (topping) {
+            return toppingsPrice + topping.price;
           }
-          return 0;
-        }, 0);
+          return toppingsPrice;
+        },
+        0
+      );
 
       return comboPrice + defaultVariation.price + productToppingsPrice;
     },
