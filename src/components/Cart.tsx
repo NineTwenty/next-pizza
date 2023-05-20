@@ -1,4 +1,4 @@
-import type { Ingredient, Topping } from '@prisma/client';
+import type { Ingredient } from '@prisma/client';
 import { useState } from 'react';
 import Image from 'next/image';
 import { MenuPositionForm } from 'components/MenuPositionForm';
@@ -7,6 +7,7 @@ import { useOrders } from 'hooks/useOrders';
 import { ChevronRight, Minus, Plus, X } from 'react-feather';
 import { useMenuPositions } from 'utils/apiHooks';
 import pizzaPic from 'assets/pizza-icon.svg';
+import { getEntities } from 'utils/common';
 
 function getNoun(number: number, one: string, two: string, five: string) {
   let n = Math.abs(number);
@@ -60,30 +61,24 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
   );
 
   function makeSummaryEntry(order: (typeof orderEntry.order)[number]) {
-    const product = products.entities[order.product];
     const entryState = order.byProductState.find(
       ({ product: productId }) => productId === order.product
     );
 
-    if (!entryState || !product) {
+    if (!entryState) {
       throw new Error('Cannot render CartItem. Required entity is missing.');
     }
 
-    const entryVariation = product.variations.find(
-      ({ id }) => id === entryState.variation
-    );
-    const entryIngredients = entryState.excludedIngredients
-      .map((id) => ingredients.entities[id])
-      .filter(
-        (ingredient): ingredient is Ingredient => !!ingredient?.ingredientName
-      );
-    const entryToppings = entryState.includedToppings
-      .map((id) => toppings.entities[id])
-      .filter((topping): topping is Topping => !!topping?.toppingName);
-
-    if (!entryVariation) {
-      throw new Error('Cannot render CartItem. Required entity is missing.');
-    }
+    const {
+      product,
+      ingredients: entryIngredients,
+      variation: entryVariation,
+      toppings: entryToppings,
+    } = getEntities(order.product, entryState, {
+      ingredients,
+      products,
+      toppings,
+    });
 
     return (
       <div key={order.id} className='mb-2 text-xs last:mb-0'>
