@@ -216,6 +216,11 @@ export function Cart() {
     0
   );
 
+  const orderAmount = orders.reduce(
+    (amount, order) => amount + order.amount,
+    0
+  );
+
   const orderItems = orders.map((orderEntry) => (
     <CartItem orderEntry={orderEntry} />
   ));
@@ -223,8 +228,8 @@ export function Cart() {
   return (
     <div className='h-full border-t bg-white'>
       <h2 className='p-4 text-2xl'>
-        {`${orders.length} ${getNoun(
-          orders.length,
+        {`${orderAmount} ${getNoun(
+          orderAmount,
           'товар',
           'товара',
           'товаров'
@@ -241,8 +246,8 @@ export function Cart() {
         </div>
         <div className='border-y py-4 text-xs font-medium'>
           <p className='flex justify-between'>
-            {`${orders.length} `}
-            {getNoun(orders.length, 'товар', 'товара', 'товаров')}
+            {`${orderAmount} `}
+            {getNoun(orderAmount, 'товар', 'товара', 'товаров')}
             <span>{orderPrice}</span>
           </p>
           <p className='flex justify-between py-2'>
