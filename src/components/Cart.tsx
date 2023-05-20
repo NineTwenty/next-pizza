@@ -141,7 +141,9 @@ function CartItem({ orderEntry }: { orderEntry: OrderEntry }) {
         </section>
       </section>
       <section className='flex place-items-center border-t pt-4'>
-        <span className='mr-auto font-medium'>{orderEntry.totalPrice} ₽</span>
+        <span className='mr-auto font-medium'>
+          {orderEntry.totalPrice * orderEntry.amount} ₽
+        </span>
         <button
           className='mr-3 text-sm font-bold text-orange-500'
           type='button'
@@ -210,7 +212,7 @@ export function Cart() {
   }
 
   const orderPrice = orders.reduce(
-    (price, order) => price + order.totalPrice,
+    (price, order) => price + order.totalPrice * order.amount,
     0
   );
 
