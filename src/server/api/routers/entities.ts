@@ -1,7 +1,4 @@
-import type {
-  GetPositionsResponse,
-  DenormalizedCategoryMap,
-} from 'types/server';
+import type { GetPositionsResponse, CategoryMap } from 'types/server';
 import { z } from 'zod';
 import { uniqueObjArray } from 'utils/common';
 import { createTRPCRouter, publicProcedure } from 'server/api/trpc';
@@ -37,46 +34,44 @@ export const entitiesRouter = createTRPCRouter({
           acc.menuPositions.push({
             ...currPosition,
             // Map & denormalize categoryMaps
-            categoryMap: currPosition.categoryMap.map(
-              (ctgMap): DenormalizedCategoryMap => {
-                // Map & denormalize products
-                const positionProducts = ctgMap.products.map((product) => {
-                  // Map & denormalize ingredient
-                  const productIngredients = product.ingredients.map(
-                    (ingredient) => {
-                      // Save ingredients
-                      acc.ingredients.push(ingredient);
-                      return ingredient.id;
-                    }
-                  );
+            categoryMap: currPosition.categoryMap.map((ctgMap): CategoryMap => {
+              // Map & denormalize products
+              const positionProducts = ctgMap.products.map((product) => {
+                // Map & denormalize ingredient
+                const productIngredients = product.ingredients.map(
+                  (ingredient) => {
+                    // Save ingredients
+                    acc.ingredients.push(ingredient);
+                    return ingredient.id;
+                  }
+                );
 
-                  // Map & denormalize toppings
-                  const productToppings = product.toppings.map((toppings) => {
-                    // Save toppings
-                    acc.toppings.push(toppings);
-                    return toppings.id;
-                  });
-
-                  // Save denormalized product
-                  acc.products.push({
-                    ...product,
-                    ingredients: productIngredients,
-                    toppings: productToppings,
-                  });
-
-                  // Return id to map
-                  return product.id;
+                // Map & denormalize toppings
+                const productToppings = product.toppings.map((toppings) => {
+                  // Save toppings
+                  acc.toppings.push(toppings);
+                  return toppings.id;
                 });
 
-                // Make denormalized categoryMap
-                return {
-                  ...ctgMap,
-                  categoryDiscount: ctgMap.categoryDiscount?.discountSize || 0,
-                  products: positionProducts,
-                  defaultProduct: ctgMap.productId,
-                };
-              }
-            ),
+                // Save denormalized product
+                acc.products.push({
+                  ...product,
+                  ingredients: productIngredients,
+                  toppings: productToppings,
+                });
+
+                // Return id to map
+                return product.id;
+              });
+
+              // Make denormalized categoryMap
+              return {
+                ...ctgMap,
+                categoryDiscount: ctgMap.categoryDiscount?.discountSize || 0,
+                products: positionProducts,
+                defaultProduct: ctgMap.productId,
+              };
+            }),
           });
           return acc;
         },

@@ -2,16 +2,13 @@ import type { Ingredient } from '@prisma/client';
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
-import type {
-  DenormalizedMenuPosition,
-  DenormalizedProduct,
-} from 'types/server';
+import type { NormalizedMenuPosition, NormalizedProduct } from 'types/server';
 import pizzaPic from 'assets/pizza-icon.svg';
 import { useMenuPositions } from 'utils/apiHooks';
 
 type MenuPositionProps = {
-  name: DenormalizedMenuPosition['menuPositionName'];
-  position: DenormalizedMenuPosition;
+  name: NormalizedMenuPosition['menuPositionName'];
+  position: NormalizedMenuPosition;
   children: (props: {
     positionIngredients: Ingredient[];
     closeCallback: () => void;
@@ -31,7 +28,7 @@ export function MenuPosition({ name, position, children }: MenuPositionProps) {
     return position.categoryMap.reduce((minPositionPrice, map) => {
       const includedProducts = map.products
         .map((productId) => data.products.entities[productId])
-        .filter((product): product is DenormalizedProduct => !!product);
+        .filter((product): product is NormalizedProduct => !!product);
 
       return (
         minPositionPrice +

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ChevronLeft } from 'react-feather';
 import Image from 'next/image';
-import type { DenormalizedMenuPosition } from 'types/server';
+import type { NormalizedMenuPosition } from 'types/server';
 import type { PositionState } from 'hooks/usePositionForm';
 import { usePositionFormContext } from 'hooks/usePositionForm';
 import { useMenuPositions } from 'utils/apiHooks';
@@ -18,7 +18,7 @@ import { ToppingsSection } from 'components/ToppingsSection';
 import pizzaPic from 'assets/pizza-icon.svg';
 
 type ComboContentProps = {
-  position: DenormalizedMenuPosition;
+  position: NormalizedMenuPosition;
   positionStates: PositionState[];
   isMobile: boolean;
   portalRootRef: RefObject<HTMLElement>;

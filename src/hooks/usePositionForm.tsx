@@ -1,6 +1,6 @@
 import { useForm, useFormContext } from 'react-hook-form';
 import type { ProductState } from 'types/client';
-import type { DenormalizedCategoryMap } from 'types/server';
+import type { CategoryMap } from 'types/server';
 
 export type PositionProductState = {
   product: number;
@@ -24,7 +24,7 @@ export function usePositionForm({
   products,
   orders,
 }: {
-  categoryMaps: DenormalizedCategoryMap[];
+  categoryMaps: CategoryMap[];
   products: ProductState;
   orders?: PositionState[];
 }) {

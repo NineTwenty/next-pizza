@@ -4,7 +4,7 @@ import { motion, useScroll } from 'framer-motion';
 import type { Ingredient } from '@prisma/client';
 import Image from 'next/image';
 import type { ProductState, ToppingState } from 'types/client';
-import type { DenormalizedMenuPosition } from 'types/server';
+import type { NormalizedMenuPosition } from 'types/server';
 import { MenuPositionModal } from 'components/MenuPositionModal';
 import type { PositionState } from 'hooks/usePositionForm';
 import { usePositionForm } from 'hooks/usePositionForm';
@@ -19,7 +19,7 @@ import pizzaPic from 'assets/pizza-icon.svg';
 type MenuPositionFormProps = {
   closeCallback: () => void;
   name: string;
-  position: DenormalizedMenuPosition;
+  position: NormalizedMenuPosition;
   ingredients: Ingredient[];
   toppings: ToppingState;
   products: ProductState;
