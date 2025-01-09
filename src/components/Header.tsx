@@ -26,8 +26,10 @@ export function Header({
   if (!isMenuOpen) {
     return (
       <header
-        className={`flex h-12  max-w-7xl items-center font-medium md:mx-auto md:h-fit md:min-h-[5.375rem] md:w-5/6 md:pb-4 md:pt-6 ${
-          isMenuOpen ? 'border-b border-white/20 bg-black text-white' : ''
+        className={`sticky top-0 flex h-12  max-w-7xl items-center font-medium md:static md:mx-auto md:h-fit md:min-h-[5.375rem] md:w-5/6 md:pb-4 md:pt-6 ${
+          isMenuOpen ? 'border-b border-white/20 bg-black text-white' : '' 
+        } ${
+          showCloseButton ? 'z-10 bg-white md:z-0' : ''
         }`}
       >
         {showCloseButton ? (
