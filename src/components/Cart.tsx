@@ -221,7 +221,7 @@ export function Cart() {
   ));
 
   return (
-    <div className='h-full border-t bg-white'>
+    <div className='h-full max-h-[calc(100vh-3rem)] overflow-y-auto border-t bg-white md:max-h-screen'>
       <h2 className='p-4 text-2xl'>
         {`${orderAmount} ${getNoun(
           orderAmount,
